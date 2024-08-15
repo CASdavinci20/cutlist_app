@@ -1,0 +1,164 @@
+import 'package:cutlist/profilesetting/profilesettingpage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
+class ProfileMenu {
+
+
+  Widget  profileMenuCard({
+    required Image icon,
+    required String title,
+    required VoidCallback onTap
+  }){
+
+    return SizedBox(
+      width: 350,
+      child: Column(
+        children: [
+      Padding(
+        padding: EdgeInsets.all(10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+         
+                icon,
+           SizedBox(
+            width: 200,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style:const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFFE0f2851),
+                  ),
+                )  
+              ],
+            ),
+          ),
+    
+       IconButton(
+      onPressed: onTap,
+        icon: Icon(
+            Icons.arrow_forward_ios,
+            color: Colors.black,
+            size: 20,
+          )
+       )
+        ],
+      ),
+      ),
+
+     const Divider(height: 0.5, color: Colors.grey,)
+        ]
+      )
+
+    );
+
+  }
+
+
+  Widget  profileMenu({required BuildContext context}){
+    return Container(
+      height:550,
+       decoration: BoxDecoration(
+      color:Color(0xFFEffffff) ,
+      borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        children: [
+          profileMenuCard(
+            icon: Image.asset(
+              'assets/username.png',
+              height: 30,
+            ), 
+            title: 'Personal Data', 
+            onTap: (){
+              Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                            builder: (context) =>const ProfileSettingPage(),
+                      ),
+                  ); 
+
+            }
+          ),
+
+            profileMenuCard(
+            icon: Image.asset(
+              'assets/policy.png',
+              height: 30,
+              color: Color(0xFFEb0b2c3),
+            ), 
+            title: 'Project', 
+            onTap: (){
+              
+            }
+          ),
+
+
+            profileMenuCard(
+            icon: Image.asset(
+              'assets/contact.png',
+              height: 30,
+            ), 
+            title: 'Credit Subscription', 
+            onTap: (){
+              
+            }
+          ),
+
+            profileMenuCard(
+            icon: Image.asset(
+              'assets/support.png',
+              height: 30,
+            ), 
+            title: 'Sign-in & Secuirity', 
+            onTap: (){
+              
+            }
+          ),
+
+            profileMenuCard(
+            icon: Image.asset(
+              'assets/policy.png',
+              height: 30,
+              color: Color(0xFFEb0b2c3),
+            ), 
+            title: 'FeedBack', 
+            onTap: (){
+              
+            }
+          ),
+
+            profileMenuCard(
+            icon: Image.asset(
+              'assets/contact.png',
+              height: 30,
+            ), 
+            title: 'Contact Us', 
+            onTap: (){
+              
+            }
+          ),
+
+           profileMenuCard(
+            icon: Image.asset(
+              'assets/username.png',
+              height: 30,
+            ), 
+            title: 'Log Out', 
+            onTap: (){
+              
+            }
+          )
+        ],
+      ),
+
+    );
+  }
+}
