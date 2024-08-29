@@ -183,6 +183,7 @@ class HomePageState extends State<HomePage>{
       bottomNavigationBar:bottomNav.bottomNave(context) ,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          Navigator.of(context).pop();
           context;
              addTask.addTask(
               projectName: _controllerProjectName, 

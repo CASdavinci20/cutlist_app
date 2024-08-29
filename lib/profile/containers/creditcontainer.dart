@@ -1,3 +1,5 @@
+import 'package:cutlist/purchasecredit/purchasecredit.dart';
+import 'package:cutlist/transactions/transactionspage.dart';
 import 'package:flutter/material.dart';
 
 
@@ -5,6 +7,7 @@ class CreditContainer{
   Widget credit(
     {
       required int numCoin,
+      required BuildContext context
     }
   ){
 
@@ -72,6 +75,12 @@ class CreditContainer{
               children: [
                 InkWell(
                   onTap: (){
+                      Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                            builder: (context) =>const TransactionsPage(),
+                      ),
+                  ); 
 
                   },
                  child:  Image.asset(
@@ -83,6 +92,12 @@ class CreditContainer{
             
                GestureDetector(
                 onTap: (){
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                            builder: (context) =>const PurchaseCreditPage(),
+                      ),
+                  ); 
 
                 },
                 child: Row(

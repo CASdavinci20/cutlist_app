@@ -88,6 +88,7 @@ class ProfilePageState  extends State<ProfilePage>{
             const  SizedBox(height: 10,),
 
               credit.credit(
+                context: context,
                 numCoin: 45
                 ),
 

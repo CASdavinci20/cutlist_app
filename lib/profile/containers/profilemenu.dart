@@ -1,4 +1,8 @@
+import 'package:cutlist/contactus/contactuspage.dart';
+import 'package:cutlist/creditsub/creditsubpage.dart';
+import 'package:cutlist/feedback/feedbackpage.dart';
 import 'package:cutlist/profilesetting/profilesettingpage.dart';
+import 'package:cutlist/singin_secuirity/signinaecuiritypage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -108,6 +112,12 @@ class ProfileMenu {
             ), 
             title: 'Credit Subscription', 
             onTap: (){
+               Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                            builder: (context) =>const CreditSubPage(),
+                      ),
+                  ); 
               
             }
           ),
@@ -119,6 +129,14 @@ class ProfileMenu {
             ), 
             title: 'Sign-in & Secuirity', 
             onTap: (){
+              context;
+               Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                            builder: (context) =>const SigninAndSecurityPage(),
+                      ),
+                  ); 
+              
               
             }
           ),
@@ -131,6 +149,13 @@ class ProfileMenu {
             ), 
             title: 'FeedBack', 
             onTap: (){
+              context;
+               Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                            builder: (context) =>const FeedBackPage(),
+                      ),
+                  ); 
               
             }
           ),
@@ -142,6 +167,13 @@ class ProfileMenu {
             ), 
             title: 'Contact Us', 
             onTap: (){
+               context;
+               Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                            builder: (context) =>const ContactUsPage(),
+                      ),
+                  ); 
               
             }
           ),

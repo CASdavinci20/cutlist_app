@@ -41,8 +41,7 @@ class MyList {
               Image.asset(
                 'assets/policy.png',
                 height: 30,
-              ),
-               
+              ), 
                SizedBox(
                 height: 55,
                 width: 150,
@@ -58,7 +57,6 @@ class MyList {
                     fontWeight: FontWeight.w600,
                  ), 
                   ),
-
                   Text(
                     '$todoTotal List',
                     style: const TextStyle(
