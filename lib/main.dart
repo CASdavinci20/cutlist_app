@@ -1,4 +1,4 @@
-import 'package:cutlist/login/loginpage.dart';
+import 'package:cutlist/login/createaccount.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -90,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       onTap: (){
                             Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const LoginPage()),
+                      MaterialPageRoute(builder: (context) => const CreateAccountPage()),
                     );
                       },
                       child: Image.asset(

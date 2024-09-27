@@ -1,3 +1,4 @@
+import 'package:cutlist/home/containers/bottomnav.dart';
 import 'package:cutlist/home/homepage.dart';
 import 'package:cutlist/login/container/verificationInput.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +86,7 @@ class VerificationPageState  extends State<VerificationPage>{
                verificationInput.verificationInput(
                inputNumber:  _number5
               ),
-                             verificationInput.verificationInput(
+              verificationInput.verificationInput(
                inputNumber:  _number6
               ),
             ],
@@ -135,7 +136,7 @@ class VerificationPageState  extends State<VerificationPage>{
                           context;
              Navigator.push(
              context,
-             MaterialPageRoute(builder: (context) => const HomePage()),
+             MaterialPageRoute(builder: (context) => const BottomNav()),
             );
               },
               child: SizedBox(

@@ -1,5 +1,4 @@
 import 'package:cutlist/home/containers/addingtask.dart';
-import 'package:cutlist/home/containers/bottomnav.dart';
 import 'package:cutlist/home/containers/projects.dart';
 import 'package:cutlist/home/containers/todolist.dart';
 import 'package:cutlist/home/containers/user.dart';
@@ -9,7 +8,8 @@ import 'package:flutter/widgets.dart';
 
 
 class HomePage extends StatefulWidget {
-  const HomePage ({super.key});
+  final scaffoldKey;
+  const HomePage ({Key? key, this.scaffoldKey}): super(key: key);
 
   @override
   HomePageState createState()=> HomePageState();
@@ -20,7 +20,7 @@ class HomePageState extends State<HomePage>{
   final UserContainer userContainer = UserContainer();
   final Projects  projects =Projects();
   final ToDoList   todoList = ToDoList();
-  final BottomNav   bottomNav = BottomNav();
+  // final BottomNav   bottomNav = BottomNav();
   final AddTask addTask = AddTask();
 
   TextEditingController _controllerProjectName = TextEditingController();
@@ -180,22 +180,7 @@ class HomePageState extends State<HomePage>{
 
       ) ,
       ),
-      bottomNavigationBar:bottomNav.bottomNave(context) ,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-          context;
-             addTask.addTask(
-              projectName: _controllerProjectName, 
-              context: context
-              );
-        },
-        child: const Icon(Icons.add,size: 30,),
-        backgroundColor: Color(0xFFE0f2c94c),
-        shape: CircleBorder()
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      
+
     );
     
   }

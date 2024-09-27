@@ -5,7 +5,8 @@ import 'package:cutlist/home/containers/addingtask.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget{
-  const ProfilePage({super.key});
+  final scaffoldKey;
+  const ProfilePage({super.key, this.scaffoldKey});
   
   @override
   ProfilePageState createState()=> ProfilePageState();
@@ -101,20 +102,6 @@ class ProfilePageState  extends State<ProfilePage>{
           ),
           ),
       ),
-       bottomNavigationBar:bottomNav.bottomNave(context) ,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context;
-             addTask.addTask(
-              projectName: _controllerProjectName, 
-              context: context
-              );
-        },
-        child: const Icon(Icons.add,size: 30,),
-        backgroundColor: Color(0xFFE0f2c94c),
-        shape: CircleBorder()
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

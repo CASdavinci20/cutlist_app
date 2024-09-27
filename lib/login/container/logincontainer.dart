@@ -2,6 +2,7 @@
 
 import 'dart:ffi';
 
+import 'package:cutlist/login/login.dart';
 import 'package:cutlist/login/verificationpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -140,6 +141,47 @@ class LoginContainer{
       ),
    )
     ),
+      SizedBox(height: 40,),
+      
+    
+
+    Center(
+     child:  RichText(
+        text: TextSpan(
+          children:[
+           TextSpan(
+            text: 'Already have an account',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: Colors.black
+            )
+          ),
+          WidgetSpan(
+            child: InkWell(
+              onTap: (){
+                context;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context)=>  Loginpage())
+                );
+                  
+              },
+       child: Text(
+             ' Login here.',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFFE0f2c94c),
+            )
+          )
+            )
+          )
+    
+          ]
+        )
+        )
+    )
           ],
         ),
       );

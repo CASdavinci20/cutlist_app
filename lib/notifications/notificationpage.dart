@@ -4,7 +4,8 @@ import 'package:cutlist/notifications/containers/notifications.dart';
 import 'package:cutlist/home/containers/addingtask.dart';
 
 class NotificationPage extends StatefulWidget{
-  const NotificationPage ({super.key});
+  final scaffoldKey;
+  const NotificationPage ({super.key,  this.scaffoldKey});
 
 
   @override
@@ -47,20 +48,6 @@ class NotificationPageState extends State<NotificationPage>{
           ),
           ),
       ),
-
-       bottomNavigationBar:bottomNav.bottomNave(context) ,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-             addTask.addTask(
-              projectName: __controllerProjectName, 
-              context: context
-              );
-        },
-        child: const Icon(Icons.add,size: 30,),
-        backgroundColor: Color(0xFFE0f2c94c),
-        shape: CircleBorder()
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 

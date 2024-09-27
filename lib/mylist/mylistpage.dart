@@ -3,7 +3,8 @@ import 'package:cutlist/mylist/containers/mylist.dart';
 import 'package:flutter/material.dart';
 
 class MyListPage extends StatefulWidget{
-  const MyListPage ({super.key});
+  final scaffoldKey;
+  const MyListPage ({super.key, this.scaffoldKey});
   
   @override
   MyListPageState createState()=> MyListPageState();
@@ -52,7 +53,6 @@ class MyListPageState  extends State<MyListPage>{
                                   
                 }
                 ),
-
 
             ],
           ),
