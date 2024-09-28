@@ -1,13 +1,7 @@
-<<<<<<< HEAD
 import 'package:cutlist/home/containers/bottomnav.dart';
-import 'package:cutlist/home/homepage.dart';
-=======
->>>>>>> a455c19773faf30a22e4f4382b68659522f7a1c6
 import 'package:cutlist/login/container/verificationInput.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
-import '../base_page.dart';
 
 class VerificationPage extends StatefulWidget {
   const VerificationPage({super.key});
@@ -73,25 +67,13 @@ class VerificationPageState extends State<VerificationPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-              verificationInput.verificationInput(
-               inputNumber:  _number1
-              ),
-               verificationInput.verificationInput(
-               inputNumber:  _number2
-              ),
-               verificationInput.verificationInput(
-               inputNumber:  _number3
-              ),
-                verificationInput.verificationInput(
-               inputNumber:  _number4
-              ),
-               verificationInput.verificationInput(
-               inputNumber:  _number5
-              ),
-              verificationInput.verificationInput(
-               inputNumber:  _number6
-              ),
-            ],
+                verificationInput.verificationInput(inputNumber: _number1),
+                verificationInput.verificationInput(inputNumber: _number2),
+                verificationInput.verificationInput(inputNumber: _number3),
+                verificationInput.verificationInput(inputNumber: _number4),
+                verificationInput.verificationInput(inputNumber: _number5),
+                verificationInput.verificationInput(inputNumber: _number6),
+              ],
             ),
             SizedBox(
               height: 20,
@@ -129,21 +111,12 @@ class VerificationPageState extends State<VerificationPage> {
               height: 200,
             ),
             GestureDetector(
-<<<<<<< HEAD
-              onTap: (){
-                          context;
-             Navigator.push(
-             context,
-             MaterialPageRoute(builder: (context) => const BottomNav()),
-            );
-=======
               onTap: () {
                 context;
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const BasePage()),
+                  MaterialPageRoute(builder: (context) => const BottomNav()),
                 );
->>>>>>> a455c19773faf30a22e4f4382b68659522f7a1c6
               },
               child: SizedBox(
                 width: 200,
