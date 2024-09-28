@@ -9,7 +9,7 @@ class PublicVar {
       accountApproved = false;
 
   //Defaults
-  static int primaryColor = 0XFF329F74,
+  static int primaryColor = 0XFFF2C94C,
       primaryDark = 0XFF329F74,
       textPrimaryDark = 0XFF329F74,
       white = 0XFFFFFFFF,
