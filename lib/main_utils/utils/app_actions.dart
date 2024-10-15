@@ -46,6 +46,30 @@ class AppActions {
     return internet;
   }
 
+
+ Future<bool> checkForOtp(String dataInput) async {
+  bool otp = false;
+
+  // Check if the input is empty
+  if (dataInput == null || dataInput.isEmpty) {
+    throw Exception('Input data cannot be empty.');
+  }
+
+  try {
+    final result = await InternetAddress.lookup('google.com')
+        .timeout(Duration(seconds: 10));
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      otp = true; // Mark OTP as true if the internet check passes
+    }
+  } on SocketException catch (e) {
+    // Handle network-related exceptions
+    otp = false;
+  }
+
+  return otp;
+}
+
+
   convertDate({data}) {
     var date = DateTime.fromMillisecondsSinceEpoch(data);
     var month, day;

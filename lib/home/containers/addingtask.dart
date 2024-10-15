@@ -6,6 +6,7 @@ class AddTask {
   Future addTask({
     required TextEditingController projectName,
     required BuildContext context,
+    required VoidCallback onTap 
   }) {
     return showDialog(
       context: context,
@@ -59,14 +60,7 @@ class AddTask {
                     SizedBox(height: 30),
                     Center(
                       child: GestureDetector(
-                        onTap: () {
-                          context;
-                           Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const MyListPage()),
-                            );
-                                          
-                        },
+                        onTap:onTap,
                         child: Image.asset(
                           'assets/createtaskbutton.png',
                           height: 100,

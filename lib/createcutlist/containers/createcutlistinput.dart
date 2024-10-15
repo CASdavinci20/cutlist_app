@@ -37,7 +37,7 @@ class CreateCutListInput {
 
 
 
-  Widget cutInput(context){
+   cutInput(context){
       return  Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [   

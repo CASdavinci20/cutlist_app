@@ -19,6 +19,12 @@ class AppBloc extends ChangeNotifier {
       _durations = [],
       _currencies = [],
       _withdrawalMethods = [],
+      _cutCategories =[],
+       _cutProject = [],
+       _cutAllTask = [],
+       _cutList = [],
+     
+      
       _messages = DataModels.messages;
   bool _hasResources = false,
       _hasCategoryResources = false,
@@ -32,11 +38,19 @@ class AppBloc extends ChangeNotifier {
       _regIndividual = {},
        _resourcesOne={},
       _regBusiness = {},
+      // _cutProject = {},
+      
+       
       _userDetails = {},
       _createResources ={},
       _appVersion = {};
+     
 
   get myMessages => _myMesssages;
+  get cutCategories => _cutCategories;
+  get cutAllTask=> _cutAllTask;
+  get cutList => _cutList;
+  get cutProject => _cutProject;
   get mycreatedResources => _createResources;
   get sentMessages => _sentMessages;
   get publicResources => _publicResources;
@@ -73,6 +87,26 @@ class AppBloc extends ChangeNotifier {
 
   set myMessages(value) {
     _myMesssages = value;
+    notifyListeners();
+  }
+
+  set cutCategories(value) {
+    _cutCategories = value;
+    notifyListeners();
+  }
+
+  set cutProject(value){
+    _cutProject = value;
+    notifyListeners();
+  }
+
+  set cutAllTask(value){
+    _cutAllTask = value;
+    notifyListeners();
+  }
+
+  set cutList(value){
+    _cutList = value;
     notifyListeners();
   }
 

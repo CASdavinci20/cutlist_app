@@ -5,7 +5,7 @@ class MyList {
 
    Widget myListCard({
     required String  todoTitle,
-    required int  todoTotal,
+    required String  todoTotal,
     required VoidCallback onTap
   }){
 

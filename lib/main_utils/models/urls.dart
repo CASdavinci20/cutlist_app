@@ -1,5 +1,6 @@
 class Urls {
   static String domain = 'https://moniat60.com.ng',
+        cutlist ='https://cutlist.onrender.com/api/v1',
       test = "http://localhost:8000/api",
       appVersion = "1.0.0",
       port30 = ":3000",
@@ -12,6 +13,17 @@ class Urls {
 
   static String login = "$ip$port30/users/public/login",
       register = "$ip$port30/users/new-public-user",
+      cutUsers = "$cutlist/account/user-register",
+      cutCreateProject ="$cutlist/create-project",
+      cutFeedback = "$cutlist/feedback/user-reply",
+      allCutList = "$cutlist/tasks",
+      cutLogin ="$cutlist/account/login",
+      cutPreview ="$cutlist/task/preview",
+      createCutlist ="$cutlist/task/save",
+      cutCategories ="$cutlist/all-cat",
+      cutProjects = "$cutlist/get-projects",
+      cutVerification ="$cutlist/account/verify-otp",
+      cutResendOTP = "$cutlist/account/regenerate-otp",
       passwordResetRequest = "$ip$port30/users/reset-password-request",
       passwordReset = "$ip$port30/users/password-reset/",
       updateUser = "$ip$port30/users/public/update/",
@@ -47,4 +59,5 @@ class Urls {
       reinvest = "$ip/reinvest",
       updatePassword = "$ip/update-password",
       messages = "$ip/messages";
+      
 }

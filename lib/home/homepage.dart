@@ -3,7 +3,15 @@ import 'package:cutlist/home/containers/projects.dart';
 import 'package:cutlist/home/containers/todolist.dart';
 import 'package:cutlist/home/containers/user.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../main_utils/bloc/app_bloc.dart';
+import '../main_utils/bloc/server.dart';
+import '../main_utils/models/PublicVar.dart';
+import '../main_utils/models/urls.dart';
+import '../main_utils/utils/app_actions.dart';
+import '../main_utils/utils/next_page.dart';
+import '../mylist/mylistpage.dart';
 import 'containers/bottomnav.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,18 +34,54 @@ class HomePageState extends State<HomePage> {
   final ToDoList todoList = ToDoList();
 
   final AddTask addTask = AddTask();
+   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late AppBloc appBloc;
 
   TextEditingController _controllerProjectName = TextEditingController();
 
+  createProject()async{
+    FocusScope.of(context).unfocus();
+    if(_formKey.currentState!.validate()){
+      _formKey.currentState!.save();
+
+     if (await AppActions().checkInternetConnection()) {
+      sendToSever();
+     }else{
+      AppActions().showErrorToast(
+        text: PublicVar.checkInternet,
+        context: context,
+      );
+     }
+    }
+   }
+    sendToSever() async{
+     Map projectName= {
+      "name":'${_controllerProjectName.text}',
+      "userId": "${PublicVar.userAppID}"
+    };
+    print(projectName);
+    if(await Server().postAction(url:Urls.cutCreateProject,data:projectName,bloc:appBloc)){
+      print(appBloc.mapSuccess);
+        
+      NextPage().nextRoute(context, MyListPage());
+
+    }
+
+   }
+
+
   @override
   Widget build(BuildContext context) {
+    appBloc =Provider.of<AppBloc>(context);
     return Scaffold(
       backgroundColor: const Color(0xFFEf1f1fc),
       body: SingleChildScrollView(
+        child:Form(
+          key: _formKey,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
           child: Column(children: [
-            userContainer.userContainer(userName: 'Kelechi Onaha'),
+            userContainer.userContainer(userName: '${PublicVar.userName}'),
             SizedBox(
               height: 40,
             ),
@@ -128,7 +172,11 @@ class HomePageState extends State<HomePage> {
                       onTap: () {
                         addTask.addTask(
                             projectName: _controllerProjectName,
-                            context: context);
+                            context: context,
+                            onTap: (){
+                              createProject();
+                            }
+                            );
                       },
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -162,11 +210,7 @@ class HomePageState extends State<HomePage> {
           ]),
         ),
       ),
-
-
-
-
-
+      )
     );
   }
 }

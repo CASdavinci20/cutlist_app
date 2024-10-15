@@ -1,34 +1,59 @@
 
 import 'package:cutlist/createcutlist/createcutlistpage.dart';
+import 'package:cutlist/main_utils/models/PublicVar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+
+import '../main_utils/bloc/app_bloc.dart';
+import '../main_utils/bloc/server.dart';
+import '../main_utils/models/urls.dart';
+import '../mylist/containers/mylist.dart';
 
 
 class AddCutListPage extends StatefulWidget{
-  const AddCutListPage({super.key});
+  final projectName;
+  final projectID;
+  final projectIndex;
+  const AddCutListPage({super.key, this.projectName, this.projectID, this.projectIndex});
    
 
    @override
    AddCutListPageState createState()=> AddCutListPageState();
 }
-
 class AddCutListPageState  extends State<AddCutListPage>{
+  final MyList myList = MyList();
+  late AppBloc appBloc;
+  late bool isloading = false;
+
+
+  loadAllTask()async{
+     await Server().getAction(appBloc:appBloc, url: Urls.allCutList); 
+      appBloc.cutAllTask = appBloc.mapSuccess; 
+      print(appBloc.cutAllTask);
+    
+  }
 
   
   @override
   Widget build(BuildContextcontext){
+    appBloc = Provider.of<AppBloc>(context);
+    if(!isloading){
+      loadAllTask();
+      isloading = true;
+    }
     return Scaffold(
-      backgroundColor: Color(0xFFffffff), 
+      backgroundColor:const Color(0xFFffffff), 
 
       body: SingleChildScrollView(
-          padding: EdgeInsets.all(20),
+          padding:const EdgeInsets.symmetric(horizontal: 10,vertical: 30),
         child: Column(
           children: [
             SizedBox(
               width: 300,
               child: Row(
                 children: [
-                  GestureDetector(
+                  GestureDetector( 
                     onTap: (){
                       Navigator.pop(context);
                     },
@@ -37,10 +62,10 @@ class AddCutListPageState  extends State<AddCutListPage>{
                       height: 50,
                     ),
                   ),
-                 SizedBox(width: 20,),
+               const  SizedBox(width: 20,),
                   Text(
-                    'Dele Bungalow ',
-                    style: TextStyle(
+                    '${widget.projectName} ',
+                    style:const TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFFE0f2851),
@@ -48,7 +73,27 @@ class AddCutListPageState  extends State<AddCutListPage>{
                   )
                 ],
               ),
-            )
+            ),
+
+            const SizedBox(height: 20,),
+
+            appBloc.cutAllTask.isEmpty ? const Center(child:CircularProgressIndicator(color: Colors.grey,),)
+            :ListView.builder(
+              physics: ScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: appBloc.cutAllTask.length,
+              itemBuilder:(cxt,i){
+                 var tasks =appBloc.cutAllTask[i]['cutlist'] as List<dynamic>;
+                 var cutData= appBloc.cutAllTask[i];
+                return myList.myListCard(
+                  todoTitle:cutData['name'],   
+                  todoTotal: "${tasks.length}",
+                  onTap:(){
+
+                  }
+                  );
+              } 
+              )
           ],
         ),
       ),
@@ -57,15 +102,16 @@ class AddCutListPageState  extends State<AddCutListPage>{
           context;
             Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const CreateCutListPage()),
+            MaterialPageRoute(builder: (context) =>  CreateCutListPage(projectID: widget.projectID,)),
             );
             
         },
-        child: const Icon(Icons.add,size: 30,),
+        child:  Icon(Icons.add,size: 30,),
         backgroundColor: Color(0xFFE0f2c94c),
-        shape: CircleBorder()
+        shape:const CircleBorder()
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
+
 }

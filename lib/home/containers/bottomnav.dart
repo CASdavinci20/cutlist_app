@@ -1,7 +1,14 @@
 import 'package:cutlist/home/containers/addingtask.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 // import 'package:cutlist/home/containers/addingtask.dart';
 
+import '../../main_utils/bloc/app_bloc.dart';
+import '../../main_utils/bloc/server.dart';
+import '../../main_utils/models/PublicVar.dart';
+import '../../main_utils/models/urls.dart';
+import '../../main_utils/utils/app_actions.dart';
+import '../../main_utils/utils/next_page.dart';
 import '../../mylist/mylistpage.dart';
 import '../../notifications/notificationpage.dart';
 import '../../profile/profilepage.dart';
@@ -20,6 +27,42 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   final AddTask addTask = AddTask();
   TextEditingController _controllerProjectName = TextEditingController();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late AppBloc appBloc;
+
+   createProject()async{
+    FocusScope.of(context).unfocus();
+    if(_formKey.currentState!.validate()){
+      _formKey.currentState!.save();
+
+     if (await AppActions().checkInternetConnection()) {
+      sendToSever();
+     }else{
+      AppActions().showErrorToast(
+        text: PublicVar.checkInternet,
+        context: context,
+      );
+     }
+    }
+   }
+
+    sendToSever() async{
+     Map projectName= {
+      "name":'${_controllerProjectName.text}',
+      "userId": "${PublicVar.userAppID}"
+    };
+    print(projectName);
+    if(await Server().postAction(url:Urls.cutCreateProject,data:projectName,bloc:appBloc)){
+      print(appBloc.mapSuccess);
+        
+      NextPage().nextRoute(context, MyListPage());
+
+    }
+
+   }
+
+
+
 
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
  GlobalKey _fabKey = GlobalObjectKey("fab");
@@ -91,11 +134,15 @@ class _BottomNavState extends State<BottomNav> {
 
   @override 
   Widget build(BuildContext context) {
+     appBloc = Provider.of<AppBloc>(context);
     return  Scaffold(
       key: _scaffoldKey,
       body: PageStorage(
         bucket: bucket, 
+        child:Form(
+          key: _formKey,
       child: currentPage
+      ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         key: _fabKey,
@@ -126,11 +173,15 @@ class _BottomNavState extends State<BottomNav> {
         ),
           floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pop();
+        
+        
           context;
              addTask.addTask(
               projectName: _controllerProjectName, 
-              context: context
+              context: context,
+              onTap: (){
+               createProject();
+              }
               );
         },
         child: const Icon(Icons.add,size: 30,),
