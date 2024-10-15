@@ -99,6 +99,41 @@ if(await Server().postAction(url:Urls.cutFeedback ,data: feedBackData,bloc: appB
 
               const SizedBox(height: 50,),
 
+              // SizedBox(
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.start,
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       TextFormField(
+              //         controller: _controlleremail,
+              //         decoration: InputDecoration(
+              //           labelText: 'Your email*',
+              //           fillColor: Color(0xFFE0fafaff),
+              //           filled: true,
+              //           labelStyle: const TextStyle(
+              //               fontSize: 12,
+              //               color: Color(0xFFE0cacacf),
+              //               fontWeight: FontWeight.w700),
+              //           enabledBorder: OutlineInputBorder(
+              //               borderSide: const BorderSide(
+              //                   color: Color(0xFFE0b1b2b4), width: 2.0),
+              //               borderRadius: BorderRadius.circular(15)),
+              //           hintStyle: const TextStyle(fontSize: 16),
+              //         ),
+              //       ),
+              //       const SizedBox(height: 10,),
+              //       const Text(
+              //         '*This is a required field',
+              //         style: TextStyle(
+              //           color: Color(0xFFE0cacacf),
+              //           fontSize: 12,
+              //           fontWeight: FontWeight.w500,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              //  const SizedBox(height: 20,),
               SizedBox(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
