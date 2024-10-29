@@ -157,7 +157,9 @@ class FeedBackPageState extends State<FeedBackPage> {
                   Row(
                     children: [
                       InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            pickImages();
+                          },
                           child: Image.asset(
                             'assets/feedbutton.png',
                             height: 50,
@@ -217,106 +219,7 @@ class FeedBackPageState extends State<FeedBackPage> {
                       ))
                 ],
               ),
-<<<<<<< HEAD
-
-              const SizedBox(height: 50,),
-
-            
-            
-              SizedBox(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFormField(
-                      controller: _controllerMessage,
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        labelText: 'Describe your issue or suggestion',
-                        fillColor: Color(0xFFE0fafaff),
-                        filled: true,
-                        labelStyle: const TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFFE0cacacf),
-                            fontWeight: FontWeight.w600),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color(0xFFE0b1b2b4), width: 2.0),
-                            borderRadius: BorderRadius.circular(15)),
-                        hintStyle: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    const SizedBox(height: 10,),
-                    const Text(
-                      'Please enter at least 10 characters',
-                      style: TextStyle(
-                        color: Color(0xFFE0cacacf),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 30,),
-              Row(
-                children: [
-                  InkWell(
-                      onTap: () {},
-                      child: Image.asset(
-                        'assets/feedbutton.png',
-                        height: 50,
-                      )),
-                    const  SizedBox(width: 10,),
-                  const Text(
-                    'Upload a screenshot (optional)',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFFE0cacacf),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              const Divider(
-                height: 2,
-                color: Colors.black,
-              ),
-              const SizedBox(height: 5,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Checkbox(
-                    value: isChecked,
-                    onChanged: (bool? value) {},
-                  ),
-               const SizedBox(
-                width: 270,
-                    child: Text(
-                        'By continuing you accept our Privacy Policy and Term of Use'),
-                  )
-                ],
-              ),
-             const SizedBox(height: 30,),
-
-             InkWell(
-              onTap: (){
-                validateFeedback();
-              },
-            child:   Image.asset(
-                'assets/submitbutton.png',
-                height: 60,
-              )
-             )
-            
-            ],
-
-=======
             ),
->>>>>>> 1475e417f38006b4df9650ff0aa88c38441140a9
           ),
         ));
   }

@@ -28,6 +28,7 @@ class PublicVar {
       forGotStage = "",
       latitude = "",
       appToken = "",
+      creditAmount=0,
       defaultLogo = "assets/logo.png",
       defaultProfileImage = "assets/default-user.png",
       defaultPlaceImage = "assets/placeholder.jpg",

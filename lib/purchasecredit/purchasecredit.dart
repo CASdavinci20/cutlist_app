@@ -1,5 +1,10 @@
 import 'package:cutlist/purchasecredit/containers/credittypes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../main_utils/bloc/app_bloc.dart';
+import '../main_utils/bloc/server.dart';
+import '../main_utils/models/urls.dart';
 
 
 
@@ -13,10 +18,24 @@ class PurchaseCreditPage extends StatefulWidget {
 class PurchaseCreditPageState extends State<PurchaseCreditPage> {
 
   final CreditTypeContainer  creditType = CreditTypeContainer();
+  late AppBloc appBloc;
+  late bool isLoading = false;
+
+  
+    loadCreditPackage()async{
+      await Server().getAction(appBloc:appBloc, url: Urls.cutCreditPackages); 
+      appBloc.cutCreditPackage = appBloc.mapSuccess; 
+      print(appBloc.cutAllTask);
+    }
 
 
   @override
   Widget build(BuildContext context) {
+    appBloc = Provider.of<AppBloc>(context);
+    if(!isLoading){
+      loadCreditPackage();
+      isLoading = true;
+    }
     return Scaffold(
       backgroundColor:Color(0xFFEfafaff) ,
       body: SingleChildScrollView(
@@ -76,15 +95,22 @@ class PurchaseCreditPageState extends State<PurchaseCreditPage> {
               SizedBox(height: 30,),
 
               Padding(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    creditType.creditType(
-                      creditAmount: 30, 
-                      price: 1500
-                      )
-                  ],
-                ),
+                padding: EdgeInsets.symmetric(vertical:10),
+              child:   ListView.builder(
+                  physics: ScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: appBloc.cutCreditPackage.length,
+                  itemBuilder: (cxt,i){
+                    return  creditType.creditType(
+                      creditAmount: appBloc.cutCreditPackage['data'][i]['amount'], 
+                      price: appBloc.cutCreditPackage['data'][i]['price'],
+                      ontap: (){
+                        
+                      }
+
+                    );
+                  }
+                  )
                 )
             ],
           ),

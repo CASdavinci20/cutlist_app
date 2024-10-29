@@ -1,8 +1,14 @@
 import 'package:cutlist/home/containers/bottomnav.dart';
+import 'package:cutlist/main_utils/models/PublicVar.dart';
 import 'package:cutlist/profile/containers/creditcontainer.dart';
 import 'package:cutlist/profile/containers/profilemenu.dart';
 import 'package:cutlist/home/containers/addingtask.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../main_utils/bloc/app_bloc.dart';
+import '../main_utils/bloc/server.dart';
+import '../main_utils/models/urls.dart';
 
 class ProfilePage extends StatefulWidget{
   final scaffoldKey;
@@ -19,11 +25,24 @@ class ProfilePageState  extends State<ProfilePage>{
   final BottomNav  bottomNav = BottomNav();
     final AddTask addTask = AddTask();
     TextEditingController _controllerProjectName = TextEditingController();
+    late AppBloc appBloc;
+    late bool isLoading = false;
+
+    // loadCredit()async{
+    //   await Server().getAction(appBloc:appBloc, url: Urls.cutCreditStat); 
+    //   appBloc.cutCredit = appBloc.mapSuccess; 
+    //   print(appBloc.cutAllTask);
+    // }
 
   
 
   @override
   Widget build(BuildContext context){
+    appBloc = Provider.of<AppBloc>(context);
+    // if(!isLoading){
+    //   loadCredit();
+    //   isLoading = false;
+    // }
     return Scaffold(
       backgroundColor: Color(0xFFEfafaff),
       body: SingleChildScrollView(
@@ -90,7 +109,8 @@ class ProfilePageState  extends State<ProfilePage>{
 
               credit.credit(
                 context: context,
-                numCoin: 45
+                numCoin:PublicVar.creditAmount
+                // numCoin: appBloc.cutCredit['data']['user']['credits']
                 ),
 
                const SizedBox(height: 20,),

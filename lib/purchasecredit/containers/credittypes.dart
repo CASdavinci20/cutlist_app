@@ -6,10 +6,11 @@ class CreditTypeContainer{
     {
       required int creditAmount,
       required int price,
+      required VoidCallback ontap
     }
   ){
     return Container(
-      width: 300,
+      width: 350,
       height: 80,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
@@ -17,6 +18,8 @@ class CreditTypeContainer{
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+        child:InkWell(
+          onTap: ontap,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -75,6 +78,7 @@ class CreditTypeContainer{
             )
           ],
         ),
+      )
         ),
     );
   }

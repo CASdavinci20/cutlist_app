@@ -1,11 +1,9 @@
-import 'package:cutlist/addcutlist/addcutlistpage.dart';
 import 'package:cutlist/cutlistsummary/containers/mesurmentcontainer.dart';
 import 'package:cutlist/mylist/mylistpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/provider.dart';
-import 'package:provider/provider.dart';
+
 
 import '../createcutlist/createcutlistpage.dart';
 import '../main_utils/bloc/app_bloc.dart';
@@ -147,6 +145,7 @@ if(await Server().postAction(url:Urls.createCutlist ,data: cutListData,bloc: app
   itemCount:widget.cutData['task']['cutlist'].length,
   itemBuilder: (context, i) {
     final cutItem = widget.cutData['task']['cutlist'][i];
+    print("this is it ${widget.cutData}");
     if (cutItem != null) {
       return mesurement.mesurementContainer(
         cutType: cutItem["part"].toString(), 

@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
+import '../cutlistsummary/cutlistsummarypage.dart';
 import '../main_utils/bloc/app_bloc.dart';
 import '../main_utils/bloc/server.dart';
 import '../main_utils/models/urls.dart';
+import '../main_utils/utils/next_page.dart';
 import '../mylist/containers/mylist.dart';
 
 
@@ -85,12 +87,16 @@ class AddCutListPageState  extends State<AddCutListPage>{
               itemBuilder:(cxt,i){
                  var tasks =appBloc.cutAllTask[i]['cutlist'] as List<dynamic>;
                  var cutData= appBloc.cutAllTask[i];
-                return myList.myListCard(
+                 var cutList = cutData ['cutlist'];
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+              child:   myList.myListCard(
                   todoTitle:cutData['name'],   
                   todoTotal: "${tasks.length}",
                   onTap:(){
-
+                  NextPage().nextRoute(context, CutListSummaryPage(cutData: cutList,));
                   }
+              )
                   );
               } 
               )
