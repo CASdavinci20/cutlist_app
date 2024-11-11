@@ -89,7 +89,7 @@ class MesurementContainer {
                   text: TextSpan(   
                   children: [
                      const  TextSpan(
-                        text: 'Q - ',
+                        text: 'D - ',
                         style: TextStyle(
                           fontSize: 10,
                           color:Color(0xFFEf5af71),

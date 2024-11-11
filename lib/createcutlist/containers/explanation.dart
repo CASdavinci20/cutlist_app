@@ -42,20 +42,20 @@ class Explanation {
     return Column(
       children: [
         explainationCard(
-          word: 'LNG ', 
-          meaning: '- Means(Long).'
+          word: 'Height ', 
+          meaning: '- Means(height of the door).'
           ),
           const SizedBox(height: 10,),
        
         explainationCard(
-          word: 'F-E-T ', 
-          meaning: '- Means(full edge tape),'
+          word: 'Width ', 
+          meaning: '- Means(Width of the door),'
           ),
           const SizedBox(height: 10,),
 
            explainationCard(
-          word: '& ', 
-          meaning: '- Means(and).'
+          word: 'Depth ', 
+          meaning: '- Means(Wall thickness).'
           ),
           const SizedBox(height: 10,),
       ],

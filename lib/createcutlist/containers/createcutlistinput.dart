@@ -16,6 +16,7 @@ class CreateCutListInput {
         padding: const EdgeInsets.symmetric(horizontal: 0.0), 
         child: TextFormField(
           controller: cutData,
+          keyboardType: TextInputType.numberWithOptions(decimal: true),
           decoration: InputDecoration(
             labelText: title,
             fillColor: const Color(0xFFE0fafaff),

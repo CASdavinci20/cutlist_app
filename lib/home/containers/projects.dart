@@ -10,8 +10,9 @@ class Projects {
     required  Color  backgroundColor,
     required  Color iconBackgroundColor
   }){
-    return
-          Container(
+    return  Padding(
+      padding:EdgeInsets.all(7),
+       child:   Container(
             height:150 ,
             width: 120,
             
@@ -84,6 +85,7 @@ class Projects {
               ],
             ),
           )
+       )
     );
 
   }

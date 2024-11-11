@@ -17,7 +17,8 @@ class AddCutListPage extends StatefulWidget{
   final projectName;
   final projectID;
   final projectIndex;
-  const AddCutListPage({super.key, this.projectName, this.projectID, this.projectIndex});
+  final cutData;
+  const AddCutListPage({super.key, this.projectName, this.projectID, this.projectIndex, this.cutData});
    
 
    @override
@@ -85,7 +86,7 @@ class AddCutListPageState  extends State<AddCutListPage>{
               shrinkWrap: true,
               itemCount: appBloc.cutAllTask.length,
               itemBuilder:(cxt,i){
-                 var tasks =appBloc.cutAllTask[i]['cutlist'] as List<dynamic>;
+                 var tasks = appBloc.cutAllTask[i]['cutlist'] as List<dynamic>;
                  var cutData= appBloc.cutAllTask[i];
                  var cutList = cutData ['cutlist'];
                 return Padding(
@@ -94,7 +95,7 @@ class AddCutListPageState  extends State<AddCutListPage>{
                   todoTitle:cutData['name'],   
                   todoTotal: "${tasks.length}",
                   onTap:(){
-                  NextPage().nextRoute(context, CutListSummaryPage(cutData: cutList,));
+                  NextPage().nextRoute(context, CutListSummaryPage(cutData: PublicVar.allList,));
                   }
               )
                   );

@@ -5,6 +5,7 @@ import 'package:cutlist/home/containers/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../cutlistsummary/cutlistsummarypage.dart';
 import '../main_utils/bloc/app_bloc.dart';
 import '../main_utils/bloc/server.dart';
 import '../main_utils/models/PublicVar.dart';
@@ -36,6 +37,7 @@ class HomePageState extends State<HomePage> {
   final AddTask addTask = AddTask();
    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late AppBloc appBloc;
+  late bool isloading = false;
 
   TextEditingController _controllerProjectName = TextEditingController();
 
@@ -70,9 +72,30 @@ class HomePageState extends State<HomePage> {
    }
 
 
+   loadMyProject() async {
+    await Server().getAction(appBloc: appBloc, url: Urls.cutProjects); 
+      appBloc.cutProject = appBloc.mapSuccess; 
+      print(appBloc.cutProject);
+  }
+
+
+    loadAllTask()async{
+     await Server().getAction(appBloc:appBloc, url: Urls.allCutList); 
+      appBloc.cutAllTask = appBloc.mapSuccess; 
+      print(appBloc.cutAllTask);
+    
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
-    appBloc =Provider.of<AppBloc>(context);
+    appBloc = Provider.of<AppBloc>(context);
+    if(!isloading){
+      loadMyProject();
+      loadAllTask();
+      isloading= true;
+    }
     return Scaffold(
       backgroundColor: const Color(0xFFEf1f1fc),
       body: SingleChildScrollView(
@@ -123,34 +146,31 @@ class HomePageState extends State<HomePage> {
             const SizedBox(
               height: 10,
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    projects.projects(
-                        projectName: 'Housing project',
-                        totalproject: 56,
+            ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: 150,
+                ),
+                child: SizedBox(
+                  width: 350,
+              child: appBloc.cutProject.isEmpty ? const Center(child: CircularProgressIndicator(color: Colors.grey,),)
+                  :  ListView.builder(
+                    physics: ClampingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: appBloc.cutProject.length,
+                    itemBuilder: (cxt, i) {
+                      var project = appBloc.cutProject[i];  
+                      var tasks = project['tasks'] as List<dynamic>; 
+                      return projects.projects(
+                        projectName: project['name'],  
+                        totalproject: tasks.length,
                         backgroundColor: Color(0xFFE0fbecc4),
-                        iconBackgroundColor: Color(0xFFE0f2d382)),
-                    const SizedBox(
-                      width: 20,
+                        iconBackgroundColor: Color(0xFFE0f2d382),
+                        );
+                    
+                      },
                     ),
-                    projects.projects(
-                        projectName: 'Housing project',
-                        totalproject: 56,
-                        backgroundColor: Color(0xFFE0c9ebed),
-                        iconBackgroundColor: Color(0xFFE099d7db)),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    projects.projects(
-                        projectName: 'Housing project',
-                        totalproject: 56,
-                        backgroundColor: Color(0xFFE0f7ecef),
-                        iconBackgroundColor: Color(0xFFE0f4c3c5))
-                  ]),
-            ),
+                  ),
+                ),
             const SizedBox(
               height: 30,
             ),
@@ -200,15 +220,106 @@ class HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            todoList.todoListCard(
-                todoTitle: 'Omega 3', todoTotal: 65, onTap: () {}),
-            const SizedBox(
-              height: 10,
-            ),
-            todoList.todoListCard(
-                todoTitle: 'Femi Oluye Zone', todoTotal: 65, onTap: () {})
+
+  SizedBox(
+    height: 320,
+        child:     appBloc.cutAllTask.isEmpty 
+  ? Center(child: CircularProgressIndicator(color: Colors.grey,))
+  : SingleChildScrollView(
+    child: Column(
+     children: [
+  todoList.todoListCard(
+      todoTitle: appBloc.cutAllTask[0]['name'], 
+      todoTotal: appBloc.cutAllTask[0]['cutlist'].length,
+      onTap: () {
+        NextPage().nextRoute(
+          context, 
+          CutListSummaryPage(cutData: appBloc.cutAllTask[0]),
+        );
+      },
+    ),
+    const SizedBox(height: 15,),
+      todoList.todoListCard(
+      todoTitle: appBloc.cutAllTask[1]['name'], 
+      todoTotal: appBloc.cutAllTask[1]['cutlist'].length,
+      onTap: () {
+        NextPage().nextRoute(
+          context, 
+          CutListSummaryPage(cutData: appBloc.cutAllTask[1]),
+        );
+      },
+    ),
+     const SizedBox(height: 15,),
+      todoList.todoListCard(
+      todoTitle: appBloc.cutAllTask[2]['name'], 
+      todoTotal: appBloc.cutAllTask[2]['cutlist'].length,
+      onTap: () {
+        NextPage().nextRoute(
+          context, 
+          CutListSummaryPage(cutData: appBloc.cutAllTask[2]),
+        );
+      },
+    ),
+     const SizedBox(height: 15,),
+      todoList.todoListCard(
+      todoTitle: appBloc.cutAllTask[3]['name'], 
+      todoTotal: appBloc.cutAllTask[3]['cutlist'].length,
+      onTap: () {
+        NextPage().nextRoute(
+          context, 
+          CutListSummaryPage(cutData: appBloc.cutAllTask[3]),
+        );
+      },
+    ),
+     const SizedBox(height: 15,),
+        todoList.todoListCard(
+      todoTitle: appBloc.cutAllTask[4]['name'], 
+      todoTotal: appBloc.cutAllTask[4]['cutlist'].length,
+      onTap: () {
+        NextPage().nextRoute(
+          context, 
+          CutListSummaryPage(cutData: appBloc.cutAllTask[4]),
+        );
+      },
+    ),
+     const SizedBox(height: 15,),
+     ]
+    )
+  )
+
+
+                 
+                //  appBloc.cutAllTask.isEmpty ? Center(child: CircularProgressIndicator(color: Colors.grey,),)
+                //  : ListView.builder(
+                //   physics: ScrollPhysics(),
+                //   shrinkWrap: true,
+                //   itemCount: appBloc.cutAllTask.length,
+                //   itemBuilder: (cxt,i){
+                //  var tasks =appBloc.cutAllTask[0]['cutlist'] as List<dynamic>;
+                //  var cutData= appBloc.cutAllTask[i];
+                //  var cutList = cutData ['cutlist'];
+                //      todoList.todoListCard(
+                // todoTitle: cutData['name'],   
+                //  todoTotal: tasks.length,
+                //   onTap:(){
+                //   NextPage().nextRoute(context, CutListSummaryPage(cutData: double.parse(cutList),));
+                //   }
+                // );
+
+                //   }
+                //   )
+
+            // todoList.todoListCard(
+            //     todoTitle: 'Omega 3', todoTotal: 65, onTap: () {}),
+            // const SizedBox(
+            //   height: 10,
+            // ),
+            // todoList.todoListCard(
+            //     todoTitle: 'Femi Oluye Zone', todoTotal: 65, onTap: () {})
+  )
           ]),
         ),
+        
       ),
       )
     );

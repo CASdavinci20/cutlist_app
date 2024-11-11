@@ -1,5 +1,6 @@
 
 
+import 'package:cutlist/addcutlist/addcutlistpage.dart';
 import 'package:cutlist/createcutlist/containers/cuttypecard.dart';
 import 'package:cutlist/createcutlist/containers/createcutlistinput.dart';
 import 'package:cutlist/createcutlist/containers/explanation.dart';
@@ -70,9 +71,9 @@ class CreateCutListPageState extends State<CreateCutListPage> {
     "categoryId": categoryId,
     "name": categoryName,
     "measurement": {
-        "height":_height.text,
-        "width": _width.text,
-        "depth": _depth.text
+        "height":double.parse(_height.text),
+        "width": double.parse(_width.text),
+        "depth": double.parse(_depth.text)
     },
     "material": "Plywood"
 };
@@ -81,9 +82,12 @@ if(await Server().postAction(url:Urls.cutPreview ,data: cutListData,bloc: appBlo
    print(appBloc.mapSuccess);
    PublicVar.allList = appBloc.mapSuccess;
    print("my all things ${PublicVar.allList}");
-   NextPage().nextRoute(context, CutListSummaryPage(cutData: PublicVar.allList,));
+   NextPage().nextRoute(context, AddCutListPage(cutData: PublicVar.allList,));
+    // NextPage().nextRoute(context, CutListSummaryPage(cutData: PublicVar.allList,));
 }
   }
+
+  
   
 
 
@@ -137,7 +141,7 @@ if(await Server().postAction(url:Urls.cutPreview ,data: cutListData,bloc: appBlo
            const   SizedBox(height: 70), 
            const   Center(
                 child: Text(
-                  'Create Cut List',
+                  'Create New Door',
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.w800,
@@ -199,6 +203,7 @@ if(await Server().postAction(url:Urls.cutPreview ,data: cutListData,bloc: appBlo
                 width: 350,
                 height: 500,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
               const    SizedBox(
                     child: Row(
@@ -224,7 +229,15 @@ if(await Server().postAction(url:Urls.cutPreview ,data: cutListData,bloc: appBlo
                       ],
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 5),
+               const   Text(
+                    'All measurement should be in c.m',
+                    style: TextStyle(
+                      fontSize: 10
+                    ),
+                  ),
+
+                  const SizedBox(height: 5),
                     Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [   
