@@ -83,7 +83,6 @@ if(await Server().postAction(url:Urls.cutPreview ,data: cutListData,bloc: appBlo
    PublicVar.allList = appBloc.mapSuccess;
    print("my all things ${PublicVar.allList}");
    NextPage().nextRoute(context, AddCutListPage(cutData: PublicVar.allList,));
-    // NextPage().nextRoute(context, CutListSummaryPage(cutData: PublicVar.allList,));
 }
   }
 

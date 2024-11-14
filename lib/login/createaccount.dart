@@ -77,6 +77,11 @@ GlobalKey <FormState> _formKey = GlobalKey<FormState>();
       print("Full mapSuccess: ${appBloc.mapSuccess}");
         // PublicVar.userPhone=appBloc.mapSuccess["data"]["user"]["phoneNumber"];
         // PublicVar.userName=appBloc.mapSuccess["data"]["user"]["fullName"];
+         CircularProgressIndicator();
+      AppActions().showErrorToast(
+        text: 'Registration Successful',
+        context: context,
+      );
 
       NextPage().nextRoute(context, VerificationPage());
 

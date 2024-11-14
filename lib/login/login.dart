@@ -31,9 +31,10 @@ class _LoginpageState extends State<Loginpage> {
       _formKey.currentState!.save();
 
      if (await AppActions().checkInternetConnection()) {
-      sendToSever();
+      sendToSever();  
      }else{
       // showLoading();
+      LinearProgressIndicator();
       AppActions().showErrorToast(
         text: PublicVar.checkInternet,
         context: context,
@@ -57,6 +58,11 @@ class _LoginpageState extends State<Loginpage> {
         //  PublicVar.creditAmount=appBloc.mapSuccess["data"]["user"]["credits"];
         // PublicVar.userOtp = appBloc.mapSuccess["data"]["user"]["otp"];
         print(PublicVar.userOtp);
+         CircularProgressIndicator();
+      AppActions().showErrorToast(
+        text: 'Login Successful',
+        context: context,
+      );
       NextPage().nextRoute(context, VerificationPage());
 
     }

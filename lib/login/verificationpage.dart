@@ -59,9 +59,19 @@ class VerificationPageState extends State<VerificationPage> {
     print(verificationData);
     if(await Server().postAction(url:Urls.cutVerification,data:verificationData,bloc:appBloc)){
       print(appBloc.mapSuccess);
+       CircularProgressIndicator();
+      AppActions().showErrorToast(
+        text: 'Login Successfull',
+        context: context,
+      );
         
       NextPage().nextRoute(context, BottomNav());
 
+    }else{
+       AppActions().showErrorToast(
+        text: PublicVar.verfECode,
+        context: context,
+      );
     }
 
    }

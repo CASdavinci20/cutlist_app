@@ -32,10 +32,13 @@ class AddCutListPageState  extends State<AddCutListPage>{
 
   loadAllTask()async{
      await Server().getAction(appBloc:appBloc, url: Urls.allCutList); 
-      appBloc.cutAllTask = appBloc.mapSuccess; 
+          appBloc.cutAllTask = appBloc.mapSuccess.where((item) {
+      return item['project'] == widget.projectID;
+    }).toList();
       print(appBloc.cutAllTask);
     
   }
+
 
   
   @override
@@ -95,7 +98,7 @@ class AddCutListPageState  extends State<AddCutListPage>{
                   todoTitle:cutData['name'],   
                   todoTotal: "${tasks.length}",
                   onTap:(){
-                  NextPage().nextRoute(context, CutListSummaryPage(cutData: PublicVar.allList,));
+                  NextPage().nextRoute(context, CutListSummaryPage(cutData: PublicVar.allList));
                   }
               )
                   );

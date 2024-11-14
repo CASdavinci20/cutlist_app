@@ -245,7 +245,7 @@ class HomePageState extends State<HomePage> {
       onTap: () {
         NextPage().nextRoute(
           context, 
-          CutListSummaryPage(cutData: appBloc.cutAllTask[1]),
+          CutListSummaryPage(cutData:  PublicVar.allList[1]),
         );
       },
     ),
@@ -256,7 +256,7 @@ class HomePageState extends State<HomePage> {
       onTap: () {
         NextPage().nextRoute(
           context, 
-          CutListSummaryPage(cutData: appBloc.cutAllTask[2]),
+          CutListSummaryPage(cutData: PublicVar.allList[2]),
         );
       },
     ),
@@ -267,7 +267,7 @@ class HomePageState extends State<HomePage> {
       onTap: () {
         NextPage().nextRoute(
           context, 
-          CutListSummaryPage(cutData: appBloc.cutAllTask[3]),
+          CutListSummaryPage(cutData:PublicVar.allList[3]),
         );
       },
     ),
@@ -278,7 +278,7 @@ class HomePageState extends State<HomePage> {
       onTap: () {
         NextPage().nextRoute(
           context, 
-          CutListSummaryPage(cutData: appBloc.cutAllTask[4]),
+          CutListSummaryPage(cutData: PublicVar.allList[4]),
         );
       },
     ),
@@ -286,36 +286,6 @@ class HomePageState extends State<HomePage> {
      ]
     )
   )
-
-
-                 
-                //  appBloc.cutAllTask.isEmpty ? Center(child: CircularProgressIndicator(color: Colors.grey,),)
-                //  : ListView.builder(
-                //   physics: ScrollPhysics(),
-                //   shrinkWrap: true,
-                //   itemCount: appBloc.cutAllTask.length,
-                //   itemBuilder: (cxt,i){
-                //  var tasks =appBloc.cutAllTask[0]['cutlist'] as List<dynamic>;
-                //  var cutData= appBloc.cutAllTask[i];
-                //  var cutList = cutData ['cutlist'];
-                //      todoList.todoListCard(
-                // todoTitle: cutData['name'],   
-                //  todoTotal: tasks.length,
-                //   onTap:(){
-                //   NextPage().nextRoute(context, CutListSummaryPage(cutData: double.parse(cutList),));
-                //   }
-                // );
-
-                //   }
-                //   )
-
-            // todoList.todoListCard(
-            //     todoTitle: 'Omega 3', todoTotal: 65, onTap: () {}),
-            // const SizedBox(
-            //   height: 10,
-            // ),
-            // todoList.todoListCard(
-            //     todoTitle: 'Femi Oluye Zone', todoTotal: 65, onTap: () {})
   )
           ]),
         ),
