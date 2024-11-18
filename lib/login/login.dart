@@ -55,8 +55,12 @@ class _LoginpageState extends State<Loginpage> {
        PublicVar.userAppID=appBloc.mapSuccess["data"]["user"]["_id"];
       PublicVar.userPhone=appBloc.mapSuccess["data"]["user"]["phoneNumber"];
         // PublicVar.userName=appBloc.mapSuccess["data"]["user"]["fullName"];
-         PublicVar.creditAmount=appBloc.mapSuccess["data"]["user"]["credits"];
         // PublicVar.userOtp = appBloc.mapSuccess["data"]["user"]["otp"];
+        
+        double creditValue= appBloc.mapSuccess["data"]["user"]["credits"];
+          PublicVar.creditAmount= creditValue.roundToDouble();
+
+        
         print(PublicVar.userOtp);
         print(PublicVar.creditAmount);
          CircularProgressIndicator();
@@ -139,9 +143,7 @@ class _LoginpageState extends State<Loginpage> {
       child: GestureDetector(
         onTap: (){
            validationFields();
-          // Navigator.push(context, 
-          // MaterialPageRoute(builder: (context)=> VerificationPage())
-          // );
+
         },
         child: Image.asset(
           'assets/submitbutton.png'

@@ -33,7 +33,7 @@ class CreditContainer{
 
               SizedBox(
                 height: 80,
-                width: 200,
+                width: 120,
             child:  Column(
                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +60,7 @@ class CreditContainer{
                     style:const TextStyle(
                   color: Color(0xFFE0f2851),
                   fontWeight: FontWeight.w600,
-                  fontSize: 20,
+                  fontSize: 23,
                 ), 
                   )
                 ],
