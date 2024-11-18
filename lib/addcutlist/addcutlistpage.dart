@@ -32,7 +32,7 @@ class AddCutListPageState  extends State<AddCutListPage>{
 
   loadAllTask()async{
      await Server().getAction(appBloc:appBloc, url: Urls.allCutList); 
-          appBloc.cutAllTask = appBloc.mapSuccess.where((item) {
+          appBloc.cutlistData = appBloc.mapSuccess.where((item) {
       return item['project'] == widget.projectID;
     }).toList();
       print(appBloc.cutAllTask);
@@ -49,7 +49,7 @@ class AddCutListPageState  extends State<AddCutListPage>{
       isloading = true;
     }
     return Scaffold(
-      backgroundColor:const Color(0xFFffffff), 
+      backgroundColor:const Color(0xFFEf1f1fc),
 
       body: SingleChildScrollView(
           padding:const EdgeInsets.symmetric(horizontal: 10,vertical: 30),
@@ -65,32 +65,70 @@ class AddCutListPageState  extends State<AddCutListPage>{
                     },
                     child: Image.asset(
                       'assets/arrow_left.png',
-                      height: 50,
+                      height: 40,
                     ),
                   ),
                const  SizedBox(width: 20,),
                   Text(
                     '${widget.projectName} ',
                     style:const TextStyle(
-                      fontSize: 25,
+                      fontSize: 20,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFFE0f2851),
                     ),
-                  )
+                  ),
+
+                
+
                 ],
               ),
             ),
 
+        
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                            SizedBox(
+                    height: 30,
+                    width: 60,
+                 child: ElevatedButton(
+                  
+                   style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFEf2c94c),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),   
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 4,vertical: 4)
+                  ),  
+                    onPressed: (){
+                    
+
+                    }, 
+                    child:const Center(
+                  child:   Text(
+                      'Export',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black
+                      ),
+                    )
+                    )
+                    )
+                  )
+            ],),
+          
+
             const SizedBox(height: 20,),
 
-            appBloc.cutAllTask.isEmpty ? const Center(child:CircularProgressIndicator(color: Colors.grey,),)
+            appBloc.cutlistData == null ? const Center(child:CircularProgressIndicator(color: Colors.grey,),)
+            : appBloc.cutlistData.isEmpty ? const Center(child: Text('No list created'),)
             :ListView.builder(
               physics: ScrollPhysics(),
               shrinkWrap: true,
-              itemCount: appBloc.cutAllTask.length,
+              itemCount: appBloc.cutlistData.length,
               itemBuilder:(cxt,i){
-                 var tasks = appBloc.cutAllTask[i]['cutlist'] as List<dynamic>;
-                 var cutData= appBloc.cutAllTask[i];
+                 var tasks = appBloc.cutlistData[i]['cutlist'] as List<dynamic>;
+                 var cutData= appBloc.cutlistData[i];
                  var cutList = cutData ['cutlist'];
                 return Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
@@ -98,7 +136,7 @@ class AddCutListPageState  extends State<AddCutListPage>{
                   todoTitle:cutData['name'],   
                   todoTotal: "${tasks.length}",
                   onTap:(){
-                  NextPage().nextRoute(context, CutListSummaryPage(cutData: PublicVar.allList));
+                  NextPage().nextRoute(context, CutListSummaryPage(cutData: cutData));
                   }
               )
                   );

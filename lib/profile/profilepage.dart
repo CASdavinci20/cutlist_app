@@ -109,8 +109,7 @@ class ProfilePageState  extends State<ProfilePage>{
 
               credit.credit(
                 context: context,
-                numCoin:PublicVar.creditAmount
-                // numCoin: appBloc.cutCredit['data']['user']['credits']
+                numCoin:PublicVar.creditAmount,
                 ),
 
                const SizedBox(height: 20,),

@@ -26,39 +26,6 @@ class CutListSummaryPageState extends State<CutListSummaryPage>{
   final MesurementContainer  mesurement = MesurementContainer();
   late AppBloc appBloc;
 
-   validateTaskList()async{
-    FocusScope.of(context).unfocus();
-    if(widget.cutData != null){
-      if(await AppActions().checkInternetConnection()){
-        saveTask();
-      }else{
-         AppActions().showErrorToast(
-        text: PublicVar.checkInternet,
-        context: context,
-      );
-     }
-    }
-  }
-
-  saveTask()async{
-  Map cutListData ={
-    "projectId": widget.cutData['task']['projectId'],
-    "categoryId": widget.cutData['task']['categoryId'],
-    "name": widget.cutData['task']['name'],
-    "measurement": {
-        "height":widget.cutData['task']['measurement']['height'],
-        "width":widget.cutData['task']['measurement']['width'],
-        "depth": widget.cutData['task']['measurement']['depth'],
-    },
-    "material": "Plywood"
-};
-print('all cutlisdata:${cutListData}');
-if(await Server().postAction(url:Urls.createCutlist ,data: cutListData,bloc: appBloc)){
-   print(appBloc.mapSuccess);
-   NextPage().nextRoute(context, MyListPage());
-}
-  }
- 
 
 
   
@@ -67,6 +34,7 @@ if(await Server().postAction(url:Urls.createCutlist ,data: cutListData,bloc: app
   @override
   Widget build(BuildContext context){
     appBloc =Provider.of<AppBloc>(context);
+    print(widget.cutData);
     return Scaffold(
           backgroundColor: Color(0xFFffffff),
       body: SingleChildScrollView(
@@ -104,36 +72,9 @@ if(await Server().postAction(url:Urls.createCutlist ,data: cutListData,bloc: app
                         ],
                       ),
                     ),
- 
 
-                  SizedBox(
-                    height: 35,
-                    width: 35,
-                 child: ElevatedButton(
-                  
-                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFEf2c94c),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),   
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 4,vertical: 4)
-                  ),  
-                    onPressed: (){
-                      NextPage().nextRoute(context, CreateCutListPage());
-
-                    }, 
-                    child:const Center(
-                  child:   Text(
-                      'Edit',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.black
-                      ),
-                    )
-                    )
-                    )
-                  )
                   ],
+          
                 ),
               ),
 
@@ -142,10 +83,10 @@ if(await Server().postAction(url:Urls.createCutlist ,data: cutListData,bloc: app
             ListView.builder(
   physics: ScrollPhysics(),
   shrinkWrap: true,
-  itemCount:widget.cutData['task']['cutlist'].length,
+  itemCount: widget.cutData["cutlist"].length,
   itemBuilder: (context, i) {
-    final cutItem = widget.cutData['task']['cutlist'][i];
-    print("this is it ${widget.cutData}");
+    final cutItem = widget.cutData["cutlist"][i];
+    print("this is it ${cutItem}");
     if (cutItem != null) {
       return mesurement.mesurementContainer(
         cutType: cutItem["part"].toString(), 
@@ -158,18 +99,6 @@ if(await Server().postAction(url:Urls.createCutlist ,data: cutListData,bloc: app
 ),
 
             const  SizedBox(height: 20,),
-            GestureDetector(
-              onTap: (){
-                validateTaskList();
-              },
-
-           child:  Image.asset(
-              'assets/savebutton.png',
-              height: 70,
-              width: 300,
-            )
-            )
-
             ],
           ),
           ),

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class CreditContainer{
   Widget credit(
     {
-      required int numCoin,
+      required double numCoin,
       required BuildContext context
     }
   ){
@@ -33,6 +33,7 @@ class CreditContainer{
 
               SizedBox(
                 height: 80,
+                width: 200,
             child:  Column(
                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +43,7 @@ class CreditContainer{
                 style: TextStyle(
                   color: Color(0xFFE0f2851),
                   fontWeight: FontWeight.w400,
-                  fontSize: 20,
+                  fontSize: 16,
                 ),
               ),
 
@@ -51,15 +52,15 @@ class CreditContainer{
                 children: [
                   Image.asset(
                     'assets/coin.png',
-                    height: 30,
+                    height: 25,
                   ),
-
+                 
                   Text(
                     "$numCoin",
                     style:const TextStyle(
                   color: Color(0xFFE0f2851),
                   fontWeight: FontWeight.w600,
-                  fontSize: 25,
+                  fontSize: 20,
                 ), 
                   )
                 ],

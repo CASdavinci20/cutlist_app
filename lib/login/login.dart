@@ -55,9 +55,10 @@ class _LoginpageState extends State<Loginpage> {
        PublicVar.userAppID=appBloc.mapSuccess["data"]["user"]["_id"];
       PublicVar.userPhone=appBloc.mapSuccess["data"]["user"]["phoneNumber"];
         // PublicVar.userName=appBloc.mapSuccess["data"]["user"]["fullName"];
-        //  PublicVar.creditAmount=appBloc.mapSuccess["data"]["user"]["credits"];
+         PublicVar.creditAmount=appBloc.mapSuccess["data"]["user"]["credits"];
         // PublicVar.userOtp = appBloc.mapSuccess["data"]["user"]["otp"];
         print(PublicVar.userOtp);
+        print(PublicVar.creditAmount);
          CircularProgressIndicator();
       AppActions().showErrorToast(
         text: 'Login Successful',

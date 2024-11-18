@@ -22,6 +22,7 @@ class AppBloc extends ChangeNotifier {
       _cutCategories =[],
        _cutProject = [],
        _cutAllTask = [],
+       _cutlistData = [],
        _cutList = [],
        
      
@@ -52,6 +53,7 @@ class AppBloc extends ChangeNotifier {
   get myMessages => _myMesssages;
   get cutCategories => _cutCategories;
   get cutAllTask=> _cutAllTask;
+  get cutlistData => _cutlistData;
   get cutNotifications => _cutNotifications;
   get cutList => _cutList;
   get cutCredit => _cutCredit;
@@ -103,6 +105,11 @@ class AppBloc extends ChangeNotifier {
 
   set cutCategories(value) {
     _cutCategories = value;
+    notifyListeners();
+  }
+
+  set cutlistData(value){
+    _cutlistData = value;
     notifyListeners();
   }
 

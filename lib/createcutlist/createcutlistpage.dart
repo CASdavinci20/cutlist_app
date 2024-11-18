@@ -78,13 +78,14 @@ class CreateCutListPageState extends State<CreateCutListPage> {
     "material": "Plywood"
 };
 print('all cutlisdata:${cutListData}');
-if(await Server().postAction(url:Urls.cutPreview ,data: cutListData,bloc: appBloc)){
-   print(appBloc.mapSuccess);
-   PublicVar.allList = appBloc.mapSuccess;
-   print("my all things ${PublicVar.allList}");
-   NextPage().nextRoute(context, AddCutListPage(cutData: PublicVar.allList,));
+if(await Server().postAction(url:Urls.createCutlist ,data: cutListData,bloc: appBloc)){
+   print(' map success${appBloc.mapSuccess}');
+  
+   NextPage().nextRoute(context, AddCutListPage());
 }
   }
+
+
 
   
   

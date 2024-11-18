@@ -16,14 +16,14 @@ class MyList {
       height: 80,
       decoration:BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-       boxShadow:[
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5), 
-        spreadRadius: 5, 
-        blurRadius: 10, 
-        offset: Offset(0, 3),
-      ),
-    ], 
+    //    boxShadow:[
+    //   // BoxShadow(
+    //   //   color: Colors.grey.withOpacity(0.5), 
+    //   //   spreadRadius: 5, 
+    //   //   blurRadius: 10, 
+    //   //   offset: Offset(0, 3),
+    //   // ),
+    // ], 
       color:const Color(0xFFEf9f9f9) ,
        ),
       child: Padding(

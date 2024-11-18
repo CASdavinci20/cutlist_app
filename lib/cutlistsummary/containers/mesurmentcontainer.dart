@@ -32,7 +32,9 @@ class MesurementContainer {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                     RichText(
+                    SizedBox(
+                      width: 80,
+                   child:   RichText(
                   text: TextSpan(
                     children: [
                     const  TextSpan(
@@ -54,10 +56,13 @@ class MesurementContainer {
                       ),
                     ]
                   )
+                   )
                 ),
               const  SizedBox(width: 20,),
 
-                  RichText(
+                  SizedBox(
+                    width: 80,
+                child:   RichText(
                   text: TextSpan(   
                   children: [
                     
@@ -78,14 +83,15 @@ class MesurementContainer {
                         )
 
                       ),
-
-
                     ]
                   )
+                  )
                   ),
-                  const  SizedBox(width: 100,),
-
-                   RichText(
+                  const  SizedBox(width: 60,),
+                   
+                   SizedBox(
+                    width: 50,
+                child:  RichText(
                   text: TextSpan(   
                   children: [
                      const  TextSpan(
@@ -103,14 +109,14 @@ class MesurementContainer {
                         color:Color(0xFFE0f2851),
                         fontWeight: FontWeight.w600
                         )
-
                       ),
-                    
                     ]
                   )
                   )
+                   )
 
                   ],
+                
                 ),
 
                 Transform.translate(

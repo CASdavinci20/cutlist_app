@@ -5,6 +5,7 @@ import 'package:cutlist/home/containers/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../addcutlist/addcutlistpage.dart';
 import '../cutlistsummary/cutlistsummarypage.dart';
 import '../main_utils/bloc/app_bloc.dart';
 import '../main_utils/bloc/server.dart';
@@ -165,6 +166,9 @@ class HomePageState extends State<HomePage> {
                         totalproject: tasks.length,
                         backgroundColor: Color(0xFFE0fbecc4),
                         iconBackgroundColor: Color(0xFFE0f2d382),
+                        onTap: (){
+                          NextPage().nextRoute(context, AddCutListPage(projectName: project['name'],projectID: project['_id'], ));
+                        }
                         );
                     
                       },

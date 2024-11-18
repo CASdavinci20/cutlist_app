@@ -37,7 +37,7 @@ class MyListPageState extends State<MyListPage> {
       isloading = true;
     }
     return Scaffold(
-      backgroundColor: const Color(0xFFffffff),
+      backgroundColor: const Color(0xFFEf1f1fc),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),

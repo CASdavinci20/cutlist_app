@@ -8,10 +8,13 @@ class Projects {
     required String projectName,
     required int totalproject,
     required  Color  backgroundColor,
-    required  Color iconBackgroundColor
+    required  Color iconBackgroundColor,
+    required VoidCallback onTap
   }){
     return  Padding(
       padding:EdgeInsets.all(7),
+      child: GestureDetector(
+        onTap: onTap,
        child:   Container(
             height:150 ,
             width: 120,
@@ -86,6 +89,7 @@ class Projects {
             ),
           )
        )
+      )
     );
 
   }

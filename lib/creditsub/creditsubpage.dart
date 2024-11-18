@@ -1,4 +1,5 @@
 import 'package:cutlist/creditsub/container/carddetails.dart';
+import 'package:cutlist/main_utils/models/PublicVar.dart';
 import 'package:cutlist/profile/containers/creditcontainer.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +37,7 @@ class CreditSubPageState extends State<CreditSubPage> {
             const  SizedBox(height: 20,),
             creditContainer.credit(
               context: context,
-              numCoin: 60
+              numCoin: PublicVar.creditAmount,
             ),
          const   SizedBox(height: 50,),
 
