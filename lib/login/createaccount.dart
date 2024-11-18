@@ -187,7 +187,7 @@ GlobalKey <FormState> _formKey = GlobalKey<FormState>();
           validationFields();
         },
         child: Image.asset(
-          'assets/button.png'
+          'assets/submitbutton.png'
         ),
       ),
    )

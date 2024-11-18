@@ -249,7 +249,7 @@ class HomePageState extends State<HomePage> {
       onTap: () {
         NextPage().nextRoute(
           context, 
-          CutListSummaryPage(cutData:  PublicVar.allList[1]),
+          CutListSummaryPage(cutData:  appBloc.cutAllTask[1]),
         );
       },
     ),
@@ -260,7 +260,7 @@ class HomePageState extends State<HomePage> {
       onTap: () {
         NextPage().nextRoute(
           context, 
-          CutListSummaryPage(cutData: PublicVar.allList[2]),
+          CutListSummaryPage(cutData: appBloc.cutAllTask[2]),
         );
       },
     ),
@@ -271,7 +271,7 @@ class HomePageState extends State<HomePage> {
       onTap: () {
         NextPage().nextRoute(
           context, 
-          CutListSummaryPage(cutData:PublicVar.allList[3]),
+          CutListSummaryPage(cutData:appBloc.cutAllTask[3]),
         );
       },
     ),
@@ -282,7 +282,7 @@ class HomePageState extends State<HomePage> {
       onTap: () {
         NextPage().nextRoute(
           context, 
-          CutListSummaryPage(cutData: PublicVar.allList[4]),
+          CutListSummaryPage(cutData:appBloc.cutAllTask[4]),
         );
       },
     ),
