@@ -21,10 +21,12 @@ class ProfileMenu {
 
     return SizedBox(
       width: 350,
+      child: GestureDetector(
+        onTap: onTap,
       child: Column(
         children: [
       Padding(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.symmetric(vertical: 20,horizontal: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -48,20 +50,20 @@ class ProfileMenu {
             ),
           ),
     
-       IconButton(
-      onPressed: onTap,
-        icon: Icon(
+     
+        const Icon(
             Icons.arrow_forward_ios,
             color: Colors.black,
             size: 20,
           )
-       )
+       
         ],
       ),
       ),
 
      const Divider(height: 0.5, color: Colors.grey,)
         ]
+      )
       )
 
     );
