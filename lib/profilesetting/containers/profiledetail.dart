@@ -3,10 +3,7 @@ import 'package:flutter/widgets.dart';
 
 
 class ProfileDetailsInput {
-  final TextEditingController _controllerName = TextEditingController();
-  final TextEditingController _controllerUseName = TextEditingController();
-  final TextEditingController _controllerEmail = TextEditingController();
-  final TextEditingController _controllerPhone = TextEditingController();
+
 
   Widget profileDetailsInputCard({
     required String title,
@@ -46,35 +43,36 @@ class ProfileDetailsInput {
   }
 
 
-  Widget  profilDetailsInput(){
-    return Column(
-      children: [
-        profileDetailsInputCard(
-          title: 'Name', 
-          profileData: _controllerName
+  Widget profileTile({
+    required String title,
+    required String value
+  }){
+
+    return SizedBox(
+      height: 100,
+              child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+                      color:  Colors.grey[500],
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ), 
           ),
-
-          const SizedBox(height: 10,),
-
-           profileDetailsInputCard(
-          title: 'Username', 
-          profileData: _controllerUseName
-          ),
-
-           const SizedBox(height: 10,),
-
-            profileDetailsInputCard(
-          title: 'Email', 
-          profileData: _controllerEmail
-          ),
-
-           const SizedBox(height: 10,),
-
-            profileDetailsInputCard(
-          title: 'Phone Number', 
-          profileData: _controllerPhone
-          ),
-      ],
+          Text(
+            value,
+            style:const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFFE0f2851),
+            ),
+          )
+        ],
+      ),
     );
+
   }
 }

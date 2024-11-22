@@ -1,28 +1,21 @@
-import 'package:cutlist/profilesetting/containers/profiledetail.dart';
 import 'package:flutter/material.dart';
 
+import 'containers/profiledetail.dart';
 
-
-class ProfileSettingPage extends StatefulWidget{
-  const ProfileSettingPage ({super.key});
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
 
   @override
-  ProfileSettingPageState createState()=> ProfileSettingPageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class ProfileSettingPageState extends State<ProfileSettingPage>{
-  final ProfileDetailsInput profileInput = ProfileDetailsInput();
-
-    final TextEditingController _controllerName = TextEditingController();
-  final TextEditingController _controllerUseName = TextEditingController();
-  final TextEditingController _controllerEmail = TextEditingController();
-  final TextEditingController _controllerPhone = TextEditingController();
-
+class _ProfilePageState extends State<ProfilePage> {
+  ProfileDetailsInput _profileTile = ProfileDetailsInput();
 
   @override
-  Widget build(BuildContext context){
-    return Scaffold(
-      backgroundColor:Color(0xFFEfafaff),
+  Widget build(BuildContext context) {
+    return  Scaffold(
+            backgroundColor:Color(0xFFEfafaff),
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20,vertical: 30),
@@ -87,45 +80,25 @@ class ProfileSettingPageState extends State<ProfileSettingPage>{
       ],
     ),
 
-    SizedBox(height: 20,),
+    _profileTile.profileTile(
+      title: 'Name :', 
+      value: ''),
 
-        Column(
-      children: [
-       profileInput.profileDetailsInputCard(
-          title: 'Name', 
-          profileData: _controllerName
-          ),
-
-          const SizedBox(height: 10,),
-
-          profileInput.profileDetailsInputCard(
-          title: 'Username', 
-          profileData: _controllerUseName
-          ),
-
-           const SizedBox(height: 10,),
-
-           profileInput.profileDetailsInputCard(
-          title: 'Email', 
-          profileData: _controllerEmail
-          ),
-
-           const SizedBox(height: 10,),
-
-           profileInput.profileDetailsInputCard(
-          title: 'Phone Number', 
-          profileData: _controllerPhone
-          ),
-      ],
-    )
+          _profileTile.profileTile(
+      title: 'Email :', 
+      value: ''),
+      
+          _profileTile.profileTile(
+      title: 'Phonenumber :', 
+      value: ''),
                     ]
                   )
                 )
-              ],
-            ),
-            ),
-        ),
+              ]
+            )
+          )
+        )
+
     );
   }
 }
-
