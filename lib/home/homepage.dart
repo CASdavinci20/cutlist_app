@@ -14,15 +14,10 @@ import '../main_utils/models/urls.dart';
 import '../main_utils/utils/app_actions.dart';
 import '../main_utils/utils/next_page.dart';
 import '../mylist/mylistpage.dart';
-import 'containers/bottomnav.dart';
 
 class HomePage extends StatefulWidget {
-
   final scaffoldKey;
-  const HomePage ({Key? key, this.scaffoldKey}): super(key: key);
-
-
-
+  const HomePage({Key? key, this.scaffoldKey}) : super(key: key);
 
   @override
   HomePageState createState() => HomePageState();
@@ -31,271 +26,262 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   final UserContainer userContainer = UserContainer();
 
-
   final Projects projects = Projects();
   final ToDoList todoList = ToDoList();
 
   final AddTask addTask = AddTask();
-   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late AppBloc appBloc;
   late bool isloading = false;
 
   TextEditingController _controllerProjectName = TextEditingController();
 
-  createProject()async{
+  createProject() async {
     FocusScope.of(context).unfocus();
-    if(_formKey.currentState!.validate()){
+    if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-     if (await AppActions().checkInternetConnection()) {
-      sendToSever();
-     }else{
-      AppActions().showErrorToast(
-        text: PublicVar.checkInternet,
-        context: context,
-      );
-     }
+      if (await AppActions().checkInternetConnection()) {
+        sendToSever();
+      } else {
+        AppActions().showErrorToast(
+          text: PublicVar.checkInternet,
+          context: context,
+        );
+      }
     }
-   }
-    sendToSever() async{
-     Map projectName= {
-      "name":'${_controllerProjectName.text}',
+  }
+
+  sendToSever() async {
+    Map projectName = {
+      "name": '${_controllerProjectName.text}',
       "userId": "${PublicVar.userAppID}"
     };
     print(projectName);
-    if(await Server().postAction(url:Urls.cutCreateProject,data:projectName,bloc:appBloc)){
+    if (await Server().postAction(
+        url: Urls.cutCreateProject, data: projectName, bloc: appBloc)) {
       print(appBloc.mapSuccess);
-        
+
       NextPage().nextRoute(context, MyListPage());
-
     }
-
-   }
-
-
-   loadMyProject() async {
-    await Server().getAction(appBloc: appBloc, url: Urls.cutProjects); 
-      appBloc.cutProject = appBloc.mapSuccess; 
-      print(appBloc.cutProject);
   }
 
-
-    loadAllTask()async{
-     await Server().getAction(appBloc:appBloc, url: Urls.allCutList); 
-      appBloc.cutAllTask = appBloc.mapSuccess; 
-      print(appBloc.cutAllTask);
-    
+  loadMyProject() async {
+    await Server().getAction(appBloc: appBloc, url: Urls.cutProjects);
+    appBloc.cutProject = appBloc.mapSuccess;
+    print(appBloc.cutProject);
   }
 
-
+  loadAllTask() async {
+    await Server().getAction(appBloc: appBloc, url: Urls.allCutList);
+    appBloc.cutAllTask = appBloc.mapSuccess;
+    print(appBloc.cutAllTask);
+  }
 
   @override
   Widget build(BuildContext context) {
     appBloc = Provider.of<AppBloc>(context);
-    if(!isloading){
+    if (!isloading) {
       loadMyProject();
       loadAllTask();
-      isloading= true;
+      isloading = true;
     }
     return Scaffold(
-      backgroundColor: const Color(0xFFEf1f1fc),
-      body: SingleChildScrollView(
-        child:Form(
-          key: _formKey,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
-          child: Column(children: [
-            userContainer.userContainer(userName: '${PublicVar.userName}'),
-            SizedBox(
-              height: 40,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Recent Projects',
-                  style: TextStyle(
-                    color: Color(0xFFE0f2851),
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
+        backgroundColor: const Color(0xFFEf1f1fc),
+        body: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
+              child: Column(children: [
+                userContainer.userContainer(userName: '${PublicVar.userName}'),
+                SizedBox(
+                  height: 40,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Recent Projects',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: 150,
                   ),
+                  child: SizedBox(
+                    width: 350,
+                    child: appBloc.cutProject.isEmpty
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.grey,
+                            ),
+                          )
+                        : ListView.builder(
+                            physics: ClampingScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: appBloc.cutProject.length,
+                            itemBuilder: (cxt, i) {
+                              var project = appBloc.cutProject[i];
+                              var tasks = project['tasks'] as List<dynamic>;
+                              return projects.projects(
+                                  projectName: project['name'],
+                                  totalproject: tasks.length,
+                                  backgroundColor: Color(0xFFE0fbecc4),
+                                  iconBackgroundColor: Color(0xFFE0f2d382),
+                                  onTap: () {
+                                    NextPage().nextRoute(
+                                        context,
+                                        AddCutListPage(
+                                          projectName: project['name'],
+                                          projectID: project['_id'],
+                                        ));
+                                  });
+                            },
+                          ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Recent list',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          addTask.addTask(
+                              projectName: _controllerProjectName,
+                              context: context,
+                              onTap: () {
+                                createProject();
+                              });
+                        },
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Image.asset(
+                                'assets/add.png',
+                                height: 15,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              const Text(
+                                'Add project',
+                                style: TextStyle(
+                                  color: Color(0xFFE0333333),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              )
+                            ]))
+                  ],
                 ),
                 SizedBox(
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                          child: Image.asset(
-                        'assets/calendar.png',
-                        height: 20,
-                      )),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Text(
-                        'Weekly',
-                        style: TextStyle(
-                          color: Color(0xFFE0828282),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: 150,
-                ),
-                child: SizedBox(
-                  width: 350,
-              child: appBloc.cutProject.isEmpty ? const Center(child: CircularProgressIndicator(color: Colors.grey,),)
-                  :  ListView.builder(
-                    physics: ClampingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: appBloc.cutProject.length,
-                    itemBuilder: (cxt, i) {
-                      var project = appBloc.cutProject[i];  
-                      var tasks = project['tasks'] as List<dynamic>; 
-                      return projects.projects(
-                        projectName: project['name'],  
-                        totalproject: tasks.length,
-                        backgroundColor: Color(0xFFE0fbecc4),
-                        iconBackgroundColor: Color(0xFFE0f2d382),
-                        onTap: (){
-                          NextPage().nextRoute(context, AddCutListPage(projectName: project['name'],projectID: project['_id'], ));
-                        }
-                        );
-                    
-                      },
-                    ),
-                  ),
-                ),
-            const SizedBox(
-              height: 30,
-            ),
-            SizedBox(
-              width: 300,
-              height: 40,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'To-do list',
-                    style: TextStyle(
-                      color: Color(0xFFE0f2851),
-                      fontSize: 25,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  GestureDetector(
-                      onTap: () {
-                        addTask.addTask(
-                            projectName: _controllerProjectName,
-                            context: context,
-                            onTap: (){
-                              createProject();
-                            }
-                            );
-                      },
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Image.asset(
-                              'assets/add.png',
+                    height: 320,
+                    child: appBloc.cutAllTask.isEmpty
+                        ? Center(
+                            child: CircularProgressIndicator(
+                            color: Colors.grey,
+                          ))
+                        : SingleChildScrollView(
+                            child: Column(children: [
+                            todoList.todoListCard(
+                              todoTitle: appBloc.cutAllTask[0]['name'],
+                              todoTotal:
+                                  appBloc.cutAllTask[0]['cutlist'].length,
+                              onTap: () {
+                                NextPage().nextRoute(
+                                  context,
+                                  CutListSummaryPage(
+                                      cutData: appBloc.cutAllTask[0]),
+                                );
+                              },
+                            ),
+                            const SizedBox(
                               height: 15,
                             ),
-                            SizedBox(
-                              width: 5,
+                            todoList.todoListCard(
+                              todoTitle: appBloc.cutAllTask[1]['name'],
+                              todoTotal:
+                                  appBloc.cutAllTask[1]['cutlist'].length,
+                              onTap: () {
+                                NextPage().nextRoute(
+                                  context,
+                                  CutListSummaryPage(
+                                      cutData: appBloc.cutAllTask[1]),
+                                );
+                              },
                             ),
-                            const Text(
-                              'Add project',
-                              style: TextStyle(
-                                color: Color(0xFFE0333333),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            )
-                          ]))
-                ],
-              ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            todoList.todoListCard(
+                              todoTitle: appBloc.cutAllTask[2]['name'],
+                              todoTotal:
+                                  appBloc.cutAllTask[2]['cutlist'].length,
+                              onTap: () {
+                                NextPage().nextRoute(
+                                  context,
+                                  CutListSummaryPage(
+                                      cutData: appBloc.cutAllTask[2]),
+                                );
+                              },
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            todoList.todoListCard(
+                              todoTitle: appBloc.cutAllTask[3]['name'],
+                              todoTotal:
+                                  appBloc.cutAllTask[3]['cutlist'].length,
+                              onTap: () {
+                                NextPage().nextRoute(
+                                  context,
+                                  CutListSummaryPage(
+                                      cutData: appBloc.cutAllTask[3]),
+                                );
+                              },
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            todoList.todoListCard(
+                              todoTitle: appBloc.cutAllTask[4]['name'],
+                              todoTotal:
+                                  appBloc.cutAllTask[4]['cutlist'].length,
+                              onTap: () {
+                                NextPage().nextRoute(
+                                  context,
+                                  CutListSummaryPage(
+                                      cutData: appBloc.cutAllTask[4]),
+                                );
+                              },
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                          ])))
+              ]),
             ),
-
-  SizedBox(
-    height: 320,
-        child:     appBloc.cutAllTask.isEmpty 
-  ? Center(child: CircularProgressIndicator(color: Colors.grey,))
-  : SingleChildScrollView(
-    child: Column(
-     children: [
-  todoList.todoListCard(
-      todoTitle: appBloc.cutAllTask[0]['name'], 
-      todoTotal: appBloc.cutAllTask[0]['cutlist'].length,
-      onTap: () {
-        NextPage().nextRoute(
-          context, 
-          CutListSummaryPage(cutData: appBloc.cutAllTask[0]),
-        );
-      },
-    ),
-    const SizedBox(height: 15,),
-      todoList.todoListCard(
-      todoTitle: appBloc.cutAllTask[1]['name'], 
-      todoTotal: appBloc.cutAllTask[1]['cutlist'].length,
-      onTap: () {
-        NextPage().nextRoute(
-          context, 
-          CutListSummaryPage(cutData:  appBloc.cutAllTask[1]),
-        );
-      },
-    ),
-     const SizedBox(height: 15,),
-      todoList.todoListCard(
-      todoTitle: appBloc.cutAllTask[2]['name'], 
-      todoTotal: appBloc.cutAllTask[2]['cutlist'].length,
-      onTap: () {
-        NextPage().nextRoute(
-          context, 
-          CutListSummaryPage(cutData: appBloc.cutAllTask[2]),
-        );
-      },
-    ),
-     const SizedBox(height: 15,),
-      todoList.todoListCard(
-      todoTitle: appBloc.cutAllTask[3]['name'], 
-      todoTotal: appBloc.cutAllTask[3]['cutlist'].length,
-      onTap: () {
-        NextPage().nextRoute(
-          context, 
-          CutListSummaryPage(cutData:appBloc.cutAllTask[3]),
-        );
-      },
-    ),
-     const SizedBox(height: 15,),
-        todoList.todoListCard(
-      todoTitle: appBloc.cutAllTask[4]['name'], 
-      todoTotal: appBloc.cutAllTask[4]['cutlist'].length,
-      onTap: () {
-        NextPage().nextRoute(
-          context, 
-          CutListSummaryPage(cutData:appBloc.cutAllTask[4]),
-        );
-      },
-    ),
-     const SizedBox(height: 15,),
-     ]
-    )
-  )
-  )
-          ]),
-        ),
-        
-      ),
-      )
-    );
+          ),
+        ));
   }
 }
