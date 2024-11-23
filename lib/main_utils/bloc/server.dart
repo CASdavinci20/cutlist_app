@@ -12,6 +12,14 @@ import 'app_bloc.dart';
 class Server {
   PubRequest _request = PubRequest();
 
+
+  loadMyProject({AppBloc? appBloc, context}) async {
+    await Server().getAction(appBloc: appBloc, url: Urls.cutProjects);
+    var data= appBloc!.mapSuccess;
+    appBloc.cutProject=data.reversed.toList();
+
+  }
+
   loadResources({AppBloc? appBloc, context}) async {
     var hasResult = false;
     if (await Server().getAction(url: Urls.resourcesPublic, appBloc: appBloc)) {
@@ -74,6 +82,8 @@ class Server {
     }
     return hasResult;
   }
+
+
 
   loadCategories({AppBloc? appBloc, context}) async {
     var hasResult = false;
@@ -178,6 +188,9 @@ class Server {
       }).timeout(Duration(seconds: 15));
 
       if (getDataType(data) && data["error"] != null) {
+        sent = false;
+        appBloc!.errorMsg = data["error"];
+      }else if(getDataType(data) && data["type"] == "UNAUTHORIZED"){
         sent = false;
         appBloc!.errorMsg = data["error"];
       } else {

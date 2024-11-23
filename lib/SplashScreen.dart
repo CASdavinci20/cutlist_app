@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
 
-    Timer(const Duration(seconds: 6), () {
+    Timer(const Duration(seconds: 3), () {
       checkStore();
     });
     super.initState();
@@ -47,6 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
  
 
   checkStore() async {
+
     if (await SharedStore().getData(type: 'bool', key: 'accountApproved') !=
         null) {
       PublicVar.accountApproved =
@@ -62,10 +63,10 @@ class _SplashScreenState extends State<SplashScreen> {
       await SharedStore().getData(key: 'access_token', type: "string");
     }
 
-    if (PublicVar.accountApproved == false) {
+    if (await SharedStore().getData(type: 'bool', key: 'accountApproved') ==null) {
       //NextPage().clearPages(context, Login());
       NextPage().nextRoute(context, WelcomePage());
-    } else {
+    } else if(await SharedStore().getData(type: 'bool', key: 'accountApproved') !=null) {
       //extPage().clearPages(context, Login());
       //NextPage().clearPages(context, Base());
       NextPage().clearPages(context, BottomNav());

@@ -57,25 +57,23 @@ class HomePageState extends State<HomePage> {
       "name": '${_controllerProjectName.text}',
       "userId": "${PublicVar.userAppID}"
     };
-    print(projectName);
+
     if (await Server().postAction(
         url: Urls.cutCreateProject, data: projectName, bloc: appBloc)) {
-      print(appBloc.mapSuccess);
+      await loadMyProject();
+      AppActions().showSuccessToast(context: context, text: "Project Saved");
 
-      NextPage().nextRoute(context, MyListPage());
     }
   }
 
   loadMyProject() async {
-    await Server().getAction(appBloc: appBloc, url: Urls.cutProjects);
-    appBloc.cutProject = appBloc.mapSuccess;
-    print(appBloc.cutProject);
+    await Server().loadMyProject(appBloc: appBloc, context: context);
   }
 
   loadAllTask() async {
     await Server().getAction(appBloc: appBloc, url: Urls.allCutList);
     appBloc.cutAllTask = appBloc.mapSuccess;
-    print(appBloc.cutAllTask);
+
   }
 
   @override
@@ -130,6 +128,7 @@ class HomePageState extends State<HomePage> {
                             physics: ClampingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             itemCount: appBloc.cutProject.length,
+
                             itemBuilder: (cxt, i) {
                               var project = appBloc.cutProject[i];
                               var tasks = project['tasks'] as List<dynamic>;
@@ -170,7 +169,11 @@ class HomePageState extends State<HomePage> {
                               projectName: _controllerProjectName,
                               context: context,
                               onTap: () {
+                                AppActions().showLoadingToast(context: context, text: "Creating Project ...");
+                                Navigator.pop(context);
                                 createProject();
+
+
                               });
                         },
                         child: Row(

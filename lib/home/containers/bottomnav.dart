@@ -47,12 +47,12 @@ class _BottomNavState extends State<BottomNav> {
    }
 
     sendToSever() async{
-     Map projectName= {
+     Map projectData= {
       "name":'${_controllerProjectName.text}',
       "userId": "${PublicVar.userAppID}"
     };
-    print(projectName);
-    if(await Server().postAction(url:Urls.cutCreateProject,data:projectName,bloc:appBloc)){
+    print(projectData);
+    if(await Server().postAction(url:Urls.cutCreateProject,data:projectData,bloc:appBloc)){
       print(appBloc.mapSuccess);
         
       NextPage().nextRoute(context, MyListPage());

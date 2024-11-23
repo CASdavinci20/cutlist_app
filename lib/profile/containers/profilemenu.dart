@@ -13,6 +13,8 @@ import 'package:flutter/widgets.dart';
 
 import '../../main_utils/utils/next_page.dart';
 
+
+
 class ProfileMenu {
 
 
@@ -72,6 +74,7 @@ class ProfileMenu {
     );
 
   }
+
 
 
   Widget  profileMenu({required BuildContext context}){
@@ -197,11 +200,10 @@ class ProfileMenu {
               PublicVar.appToken = "";
               PublicVar.userAppID = "";
               PublicVar.userPhone = "";
+
               await SharedStore().removeData( key: 'accountApproved');
               await SharedStore().removeData( key: "user_id");
               await SharedStore().removeData( key: "access_token");
-
-
 
               NextPage().nextRoute(context, SplashScreen());
             }
@@ -211,4 +213,6 @@ class ProfileMenu {
 
     );
   }
+
+
 }

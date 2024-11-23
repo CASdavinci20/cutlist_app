@@ -13,7 +13,7 @@ class CutTypeCard{
     child: Container(
       decoration:BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-      color:const Color(0xFFEf0f1f9) ,
+      color: Colors.grey ,
        ),
        child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -23,7 +23,7 @@ class CutTypeCard{
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
-            color: Color(0xFFE0f2851),
+            color: Colors.white,
           ),
         ),
       ),

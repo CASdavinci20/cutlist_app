@@ -31,6 +31,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late List<String> cutList = [];
 
+  final TextEditingController _name = TextEditingController();
   final TextEditingController _height = TextEditingController();
   final TextEditingController _width = TextEditingController();
   final TextEditingController _depth = TextEditingController();
@@ -60,7 +61,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
     Map cutListData = {
       "projectId": '${widget.projectID}',
       "categoryId": categoryId,
-      "name": categoryName,
+      "name": _name.text,
       "measurement": {
         "height": double.parse(_height.text),
         "width": double.parse(_width.text),
@@ -171,6 +172,13 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                               Row(children: [
+                                 cutListInput.createCutListCard(
+                                   title: 'Door Name',
+                                   cutData: _name,
+                                 ),
+                               ],),
+                                SizedBox(height: 20,),
                                 const SizedBox(
                                   child: Row(
                                     mainAxisAlignment:
@@ -221,7 +229,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                                       )
                                     ]),
                                 SizedBox(
-                                  height: 200,
+                                  height: 50,
                                 ),
                                 Divider(height: 5, color: Color(0xFFE0b1b2b4)),
                                 const SizedBox(

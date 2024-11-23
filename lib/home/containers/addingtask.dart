@@ -64,29 +64,25 @@ class AddTask {
                     ),
                     SizedBox(height: 30),
                     Center(
-                      child: ButtonWidget(
-                          onPress: () {
-                            if(!loading){
-                            onTap;
-                            }
-                          },
-                          width: double.infinity,
-                          height: 50.0,
-                        radius: 50.0,
-                          txColor: Colors.black,
-                          bgColor: Color(PublicVar.primaryColor),
-                          loading: loading,
-                          text: "Save",
-                          addIconBG: false,
-                        ),
-                      
-                      // child: GestureDetector(
-                      //   onTap:onTap,
-                      //   child: Image.asset(
-                      //     'assets/createtaskbutton.png',
-                      //     height: 100,
+                      // child: ButtonWidget(
+                      //     onPress:()=> onTap,
+                      //     width: double.infinity,
+                      //     height: 50.0,
+                      //   radius: 50.0,
+                      //     txColor: Colors.black,
+                      //     bgColor: Color(PublicVar.primaryColor),
+                      //     loading: loading,
+                      //     text: "Save",
+                      //     addIconBG: false,
                       //   ),
-                      // ),
+                      
+                      child: GestureDetector(
+                        onTap:onTap,
+                        child: Image.asset(
+                          'assets/createtaskbutton.png',
+                          height: 100,
+                        ),
+                      ),
                     ),
                   ],
                 ),
