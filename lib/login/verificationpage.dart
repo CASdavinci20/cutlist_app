@@ -11,6 +11,7 @@ import '../main_utils/models/PublicVar.dart';
 import '../main_utils/models/urls.dart';
 import '../main_utils/utils/app_actions.dart';
 import '../main_utils/utils/next_page.dart';
+import '../main_utils/widgets/global_widgets.dart';
 
 class VerificationPage extends StatefulWidget {
   const VerificationPage({super.key});
@@ -31,11 +32,23 @@ class VerificationPageState extends State<VerificationPage> {
   final GlobalKey <FormState> _formKey = GlobalKey<FormState>();
 
    late AppBloc appBloc;
+    late bool loading = false;
+
+  showLoading() {
+    if (loading) {
+      loading = false;
+    } else {
+      loading = true;
+    }
+    setState(() {});
+  }
+
    
    validationFields()async{
     FocusScope.of(context).unfocus();
     if(_formKey.currentState!.validate()){
       _formKey.currentState!.save();
+      showLoading();
 
      if (await AppActions().checkInternetConnection()) {
       sendVerification();
@@ -61,7 +74,7 @@ class VerificationPageState extends State<VerificationPage> {
       print(appBloc.mapSuccess);
        CircularProgressIndicator();
       AppActions().showErrorToast(
-        text: 'Login Successfull',
+        text: 'Welcome Back',
         context: context,
       );
         
@@ -184,22 +197,24 @@ class VerificationPageState extends State<VerificationPage> {
             const SizedBox(
               height: 200,
             ),
-            GestureDetector(
-              onTap: () {
-                // validationFields();
-
-                Navigator.push(context,
-                 MaterialPageRoute(builder: (context)=> BottomNav())
-                );
-              
+              Padding(
+            padding: EdgeInsets.symmetric(
+                vertical: 20.0, horizontal: 20.0),
+            child: ButtonWidget(
+              onPress: () {
+                if (!loading) {
+                  validationFields();
+                }
               },
-              child: SizedBox(
-                width: 200,
-                child: Image.asset(
-                  'assets/button2.png',
-                ),
-              ),
-            )
+              width: double.infinity,
+              height: 50.0,
+              txColor: Colors.black,
+              bgColor: Color(PublicVar.primaryColor),
+              loading: loading,
+              text: "Continue",
+              addIconBG: false,
+            ),
+          ),
           ],
         ),
       ),

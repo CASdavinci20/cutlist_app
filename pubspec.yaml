@@ -46,6 +46,7 @@ dependencies:
   flutter_launcher_icons:
   dio:
   custom_rating_bar:
+ 
 
 
   # The following adds the Cupertino Icons font to your application.

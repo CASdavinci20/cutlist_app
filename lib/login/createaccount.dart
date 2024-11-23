@@ -9,6 +9,7 @@ import '../main_utils/models/PublicVar.dart';
 import '../main_utils/models/urls.dart';
 import '../main_utils/utils/app_actions.dart';
 import '../main_utils/utils/next_page.dart';
+import '../main_utils/widgets/global_widgets.dart';
 import 'login.dart';
 import 'verificationpage.dart';
 
@@ -30,17 +31,26 @@ class CreateAccountPageState extends State<CreateAccountPage>{
 GlobalKey <FormState> _formKey = GlobalKey<FormState>();
  late AppBloc appBloc;
   bool isChecked = false;
+   late bool loading = false;
+
+  showLoading() {
+    if (loading) {
+      loading = false;
+    } else {
+      loading = true;
+    }
+    setState(() {});
+  }
 
   
     validationFields()async{
     FocusScope.of(context).unfocus();
     if(_formKey.currentState!.validate()){
       _formKey.currentState!.save();
-
+         showLoading();
      if (await AppActions().checkInternetConnection()) {
       sendToSever();
      }else{
-      // showLoading();
       AppActions().showErrorToast(
         text: PublicVar.checkInternet,
         context: context,
@@ -57,11 +67,11 @@ GlobalKey <FormState> _formKey = GlobalKey<FormState>();
     ? withoutCountryCode.substring(1) 
     : withoutCountryCode;
      if (formattedPhoneNumber == null || formattedPhoneNumber.isEmpty) {
-    throw Exception('Username cannot be empty');
+    throw Exception('Phonenumber cannot be empty');
   }
 
   if (_fullNameController.text == null || _fullNameController.text.isEmpty) {
-    throw Exception('Password cannot be empty');
+    throw Exception('Name cannot be empty');
   }else{
     print('IT IS THE ${formattedPhoneNumber} ${_fullNameController}');
   }
@@ -179,19 +189,24 @@ GlobalKey <FormState> _formKey = GlobalKey<FormState>();
 
     SizedBox(height: 40,),
     
-    Center(
-   child:  SizedBox(
-      width: 200,
-      child: GestureDetector(
-        onTap: (){
-          validationFields();
-        },
-        child: Image.asset(
-          'assets/submitbutton.png'
+   Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: 20.0, horizontal: 20.0),
+          child: ButtonWidget(
+            onPress: () {
+              if (!loading) {
+                validationFields();
+              }
+            },
+            width: double.infinity,
+            height: 50.0,
+            txColor: Colors.black,
+            bgColor: Color(PublicVar.primaryColor),
+            loading: loading,
+            text: "Register",
+            addIconBG: false,
+          ),
         ),
-      ),
-   )
-    ),
       SizedBox(height: 40,),
       
     

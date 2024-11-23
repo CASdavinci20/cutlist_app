@@ -2,12 +2,16 @@ import 'package:cutlist/mylist/mylistpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../main_utils/models/PublicVar.dart';
+import '../../main_utils/widgets/global_widgets.dart';
+
 class AddTask {
   Future addTask({
     required TextEditingController projectName,
     required BuildContext context,
     required VoidCallback onTap 
   }) {
+    late bool loading = false;
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -59,13 +63,28 @@ class AddTask {
                     ),
                     SizedBox(height: 30),
                     Center(
-                      child: GestureDetector(
-                        onTap:onTap,
-                        child: Image.asset(
-                          'assets/createtaskbutton.png',
-                          height: 100,
+                      child: ButtonWidget(
+                          onPress: () {
+                            if(!loading){
+                            onTap;
+                            }
+                          },
+                          width: double.infinity,
+                          height: 50.0,
+                          txColor: Colors.black,
+                          bgColor: Color(PublicVar.primaryColor),
+                          loading: loading,
+                          text: "Login",
+                          addIconBG: false,
                         ),
-                      ),
+                      
+                      // child: GestureDetector(
+                      //   onTap:onTap,
+                      //   child: Image.asset(
+                      //     'assets/createtaskbutton.png',
+                      //     height: 100,
+                      //   ),
+                      // ),
                     ),
                   ],
                 ),
