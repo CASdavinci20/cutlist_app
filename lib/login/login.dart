@@ -1,3 +1,4 @@
+import 'package:app_framework/app_framework.dart';
 import 'package:cutlist/login/container/logincontainer.dart';
 import 'package:cutlist/main_utils/widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +62,10 @@ class _LoginpageState extends State<Loginpage> {
       PublicVar.appToken = appBloc.mapSuccess["data"]["access_token"];
       PublicVar.userAppID = appBloc.mapSuccess["data"]["user"]["_id"];
       PublicVar.userPhone = appBloc.mapSuccess["data"]["user"]["phoneNumber"];
+      await SharedStore()
+          .setData(type: 'bool', data: true, key: 'accountApproved');
+      await SharedStore()
+          .setData(type: 'string', data: PublicVar.userAppID, key: "user_id");
       // PublicVar.userName=appBloc.mapSuccess["data"]["user"]["fullName"];
       // PublicVar.userOtp = appBloc.mapSuccess["data"]["user"]["otp"];
 
@@ -130,10 +135,8 @@ class _LoginpageState extends State<Loginpage> {
                               height: 10,
                             ),
                           ])),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      const Divider(height: 4, color: Color(0xFFE0b1b2b4)),
+
+
                       const SizedBox(
                         height: 20,
                       ),
