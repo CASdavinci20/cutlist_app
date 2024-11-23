@@ -1,3 +1,4 @@
+import 'package:cutlist/base_page.dart';
 import 'package:cutlist/home/containers/bottomnav.dart';
 import 'package:cutlist/home/homepage.dart';
 import 'package:cutlist/login/container/verificationInput.dart';
@@ -116,8 +117,8 @@ class VerificationPageState extends State<VerificationPage> {
            Text(
               'Verify - ${PublicVar.userPhone}',
               style:const TextStyle(
-                color: Color(0xFFE0f2851),
-                fontSize: 22,
+                color: Colors.black,
+                fontSize: 25,
                 letterSpacing: 1,
                 fontWeight: FontWeight.w500,
               ),

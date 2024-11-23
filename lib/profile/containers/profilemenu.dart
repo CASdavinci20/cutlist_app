@@ -1,6 +1,9 @@
+import 'package:app_framework/app_framework.dart';
+import 'package:cutlist/SplashScreen.dart';
 import 'package:cutlist/contactus/contactuspage.dart';
 import 'package:cutlist/creditsub/creditsubpage.dart';
 import 'package:cutlist/feedback/feedbackpage.dart';
+import 'package:cutlist/main_utils/models/PublicVar.dart';
 import 'package:cutlist/mylist/mylistpage.dart';
 import 'package:cutlist/profilesetting/profilesettingpage.dart';
 import 'package:cutlist/singin_secuirity/signinaecuiritypage.dart';
@@ -190,8 +193,17 @@ class ProfileMenu {
               height: 30,
             ), 
             title: 'Log Out', 
-            onTap: (){
-              
+            onTap: ()async{
+              PublicVar.appToken = "";
+              PublicVar.userAppID = "";
+              PublicVar.userPhone = "";
+              await SharedStore().removeData( key: 'accountApproved');
+              await SharedStore().removeData( key: "user_id");
+              await SharedStore().removeData( key: "access_token");
+
+
+
+              NextPage().nextRoute(context, SplashScreen());
             }
           )
         ],

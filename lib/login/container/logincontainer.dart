@@ -8,7 +8,7 @@ class LoginContainer {
       {required String title,
       required String textLabel,
       required TextEditingController inputData,
-      required Icon icon}) {
+      required Icon icon,keyboardType }) {
     return SizedBox(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -24,9 +24,11 @@ class LoginContainer {
           ),
           TextFormField(
             controller: inputData,
+            keyboardType:keyboardType=="number"? TextInputType.numberWithOptions(decimal: true):TextInputType.text,
             decoration: InputDecoration(
               prefixIcon: icon,
               labelText: textLabel,
+
               fillColor: Color(0xFFE0fafaff),
               filled: true,
               labelStyle: const TextStyle(

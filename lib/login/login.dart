@@ -1,5 +1,7 @@
 import 'package:app_framework/app_framework.dart';
+import 'package:cutlist/base_page.dart';
 import 'package:cutlist/login/container/logincontainer.dart';
+import 'package:cutlist/login/createaccount.dart';
 import 'package:cutlist/main_utils/widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -54,7 +56,18 @@ class _LoginpageState extends State<Loginpage> {
   }
 
   sendToSever() async {
-    Map postdata = {"phoneNumber": _phoneNumber.text}; //"+2349133456765"
+    String phoneNumber = '+234${_phoneNumber.text.trim()}';
+    String withoutCountryCode = phoneNumber.replaceFirst('+234', '');
+
+    String formattedPhoneNumber = withoutCountryCode.length > 1
+        ? withoutCountryCode.substring(1)
+        : withoutCountryCode;
+    if (formattedPhoneNumber == null || formattedPhoneNumber.isEmpty) {
+      throw Exception('Phonenumber cannot be empty');
+    }
+
+
+    Map postdata = {"phoneNumber": "+234${formattedPhoneNumber}"}; //"+2349133456765"
     print(postdata);
     if (await Server()
         .postAction(url: Urls.cutLogin, data: postdata, bloc: appBloc)) {
@@ -66,6 +79,8 @@ class _LoginpageState extends State<Loginpage> {
           .setData(type: 'bool', data: true, key: 'accountApproved');
       await SharedStore()
           .setData(type: 'string', data: PublicVar.userAppID, key: "user_id");
+      await SharedStore()
+          .setData(type: 'string', data: PublicVar.appToken, key: "access_token");
       // PublicVar.userName=appBloc.mapSuccess["data"]["user"]["fullName"];
       // PublicVar.userOtp = appBloc.mapSuccess["data"]["user"]["otp"];
 
@@ -82,6 +97,10 @@ class _LoginpageState extends State<Loginpage> {
       NextPage().nextRoute(context, BottomNav());
     } else {
       showLoading();
+      AppActions().showErrorToast(
+        text: appBloc.errorMsg,
+        context: context,
+      );
     }
   }
 
@@ -117,9 +136,9 @@ class _LoginpageState extends State<Loginpage> {
                       const Text(
                         'will need to verify your phone number',
                         style: TextStyle(
-                          color: Color(0xFFE0333333),
+                          color: Colors.black,
                           fontSize: 14,
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       Padding(
@@ -128,6 +147,7 @@ class _LoginpageState extends State<Loginpage> {
                           child: Column(children: [
                             loginContainer.loginContainer(
                                 title: 'Phone Number',
+                                keyboardType: "number",
                                 textLabel: 'Enter your Phone',
                                 inputData: _phoneNumber,
                                 icon: Icon(Icons.phone_outlined)),
@@ -145,7 +165,7 @@ class _LoginpageState extends State<Loginpage> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            vertical: 20.0, horizontal: 20.0),
+                            vertical: 20.0, horizontal: 0.0),
                         child: ButtonWidget(
                           onPress: () {
                             if (!loading) {
@@ -160,6 +180,49 @@ class _LoginpageState extends State<Loginpage> {
                           text: "Login",
                           addIconBG: false,
                         ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Center(
+                          child:  RichText(
+                              text: TextSpan(
+                                  children:[
+                                    const TextSpan(
+                                        text: 'New here?',
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black
+                                        )
+                                    ),
+                                    WidgetSpan(
+                                        child: InkWell(
+                                            onTap: (){
+                                              context;
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context)=>  CreateAccountPage())
+                                              );
+
+                                            },
+                                            child: Text(
+                                                ' Create Account.',
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w800,
+                                                  color: Color(PublicVar.primaryColor),
+                                                )
+                                            )
+                                        )
+                                    )
+
+                                  ]
+                              )
+                          )
+                      ),
+                      SizedBox(
+                        height: 40,
                       ),
                     ],
                   ),

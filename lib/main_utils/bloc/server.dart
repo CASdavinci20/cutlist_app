@@ -111,11 +111,16 @@ class Server {
     }
     try {
       await _request.post(url!, data, (res) {
-        if (getDataType(res) && res["message"] != null) {
-          bloc!.errorMsg = res["message"];
+        print(res);
+        if (getDataType(res) && res["error"] != null ) {
+          bloc!.errorMsg = res["error"];
           sent = false;
-        } else if (getDataType(res) && res["errors"] != null) {
-          bloc!.errorMsg = res["errors"][0]["msg"];
+        } else if ( res["msg"]!=null && res["data"] == null) {
+          bloc!.errorMsg = res["msg"];
+          sent = false;
+        } else if ( res["msg"]!=null && res["type"] != "SUCCESS" && res["code"] != null) {
+
+          bloc!.errorMsg = res["msg"];
           sent = false;
         } else {
           bloc!.mapSuccess = res;
@@ -139,9 +144,9 @@ class Server {
     try {
       await _request.put(url!, data, (res) {
         if (!PublicVar.onProduction) print(res);
-        if (getDataType(res) && res["message"] != null) {
+        if (getDataType(res) && res["error"] != null) {
           sent = false;
-          bloc!.errorMsg = res["message"];
+          bloc!.errorMsg = res["error"];
         } else {
           sent = true;
         }
@@ -172,9 +177,9 @@ class Server {
         "authorization": "token ${PublicVar.appToken}"
       }).timeout(Duration(seconds: 15));
 
-      if (getDataType(data) && data["message"] != null) {
+      if (getDataType(data) && data["error"] != null) {
         sent = false;
-        appBloc!.errorMsg = data["message"];
+        appBloc!.errorMsg = data["error"];
       } else {
         appBloc!.mapSuccess = data;
         sent = true;
@@ -233,7 +238,7 @@ class Server {
         if (getDataType(res) &&
             ErrorMessages().getStatus(status: res["type"])) {
           sent = false;
-          appBloc!.errorMsg = res["message"];
+          appBloc!.errorMsg = res["error"];
         } else {
           appBloc!.mapSuccess = data;
           if (!PublicVar.onProduction) print('=========>>delete Success $res');

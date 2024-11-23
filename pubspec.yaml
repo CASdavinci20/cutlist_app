@@ -24,12 +24,7 @@ dependencies:
   path:
   url_launcher:
   flutter_launcher_icons:
-<<<<<<< Updated upstream
-  dio:
-  custom_rating_bar:
- 
-=======
->>>>>>> Stashed changes
+
 
 
   # The following adds the Cupertino Icons font to your application.

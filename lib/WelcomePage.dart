@@ -23,7 +23,7 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: const Color(0xFFEf9f9f9),
-        body: SizedBox(
+        body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 100, 20, 20),
               child: Center(
@@ -47,7 +47,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         style: TextStyle(
                           color: Color(0xFFE0f2851),
                           fontSize: 30,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     ),
@@ -55,12 +55,12 @@ class _WelcomePageState extends State<WelcomePage> {
                       width: 400,
                       height: 30,
                       child: Text(
-                        'Perfect cut lists at your fingertips',
+                        'Perfect cut lists at your fingertips.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Color(0xFFE0f2851),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),

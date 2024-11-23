@@ -96,7 +96,7 @@ class HomePageState extends State<HomePage> {
               child: Column(children: [
                 userContainer.userContainer(userName: '${PublicVar.userName}'),
                 SizedBox(
-                  height: 40,
+                  height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -186,14 +186,15 @@ class HomePageState extends State<HomePage> {
                               const Text(
                                 'Add project',
                                 style: TextStyle(
-                                  color: Color(0xFFE0333333),
+                                  color: Colors.black87,
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               )
                             ]))
                   ],
                 ),
+                SizedBox(height: 10,),
                 SizedBox(
                     height: 320,
                     child: appBloc.cutAllTask.isEmpty

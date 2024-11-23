@@ -37,6 +37,7 @@ class AddTask {
                     SizedBox(height: 20),
                     TextFormField(
                       controller: projectName,
+                      textCapitalization: TextCapitalization.words,
                       decoration: InputDecoration(
                         prefixIcon: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
@@ -56,7 +57,7 @@ class AddTask {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: const BorderSide(color: Color(0xFFB1B2B4), width: 2.0),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                         hintStyle: const TextStyle(fontSize: 16),
                       ),
@@ -71,10 +72,11 @@ class AddTask {
                           },
                           width: double.infinity,
                           height: 50.0,
+                        radius: 50.0,
                           txColor: Colors.black,
                           bgColor: Color(PublicVar.primaryColor),
                           loading: loading,
-                          text: "Login",
+                          text: "Save",
                           addIconBG: false,
                         ),
                       
