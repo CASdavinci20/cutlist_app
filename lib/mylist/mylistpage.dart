@@ -22,9 +22,8 @@ class MyListPageState extends State<MyListPage> {
   late bool isloading = false;
 
   loadMyProject() async {
-    await Server().getAction(appBloc: appBloc, url: Urls.cutProjects);
-    appBloc.cutProject = appBloc.mapSuccess;
-    print(appBloc.cutProject);
+    await Server().loadMyProject(appBloc: appBloc, context: context);
+
   }
 
   @override
@@ -41,7 +40,7 @@ class MyListPageState extends State<MyListPage> {
         centerTitle: false,
         leading: SizedBox(),
         title: Text(
-          'My List',
+          'My Projects',
           style: TextStyle(fontWeight: FontWeight.w700),
         ),
       ),
@@ -52,7 +51,7 @@ class MyListPageState extends State<MyListPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              appBloc.cutProject.isEmpty
+              appBloc.hasProjects==false
                   ? const Center(
                       child: CircularProgressIndicator(
                         color: Colors.grey,

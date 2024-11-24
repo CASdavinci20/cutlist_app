@@ -17,7 +17,25 @@ class Server {
     await Server().getAction(appBloc: appBloc, url: Urls.cutProjects);
     var data= appBloc!.mapSuccess;
     appBloc.cutProject=data.reversed.toList();
+    appBloc.hasProjects=true;
 
+  }
+
+  loadAllTask({AppBloc? appBloc, context,projectID}) async {
+    await Server().getAction(appBloc: appBloc, url: Urls.allCutList);
+    var respond=[];
+    if(projectID!=null){
+      respond= appBloc?.mapSuccess.where((item) {
+        return item['project'] == projectID;
+      }).toList();
+      appBloc?.cutlistData=respond.reversed.toList();
+    }else{
+      respond=appBloc?.mapSuccess;
+      appBloc?.cutAllTask=respond.reversed.toList();
+    }
+
+
+    appBloc?.hasTasks=true;
   }
 
 

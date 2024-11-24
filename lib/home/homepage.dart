@@ -78,8 +78,7 @@ class HomePageState extends State<HomePage> {
   }
 
   loadAllTask() async {
-    await Server().getAction(appBloc: appBloc, url: Urls.allCutList);
-    appBloc.cutAllTask = appBloc.mapSuccess;
+    await Server().loadAllTask(appBloc: appBloc, context: context);
 
   }
 
@@ -134,7 +133,7 @@ class HomePageState extends State<HomePage> {
                   ),
                   child: SizedBox(
                     width: 350,
-                    child: appBloc.cutProject.isEmpty
+                    child: appBloc.hasProjects==false
                         ? const Center(
                             child: CircularProgressIndicator(
                               color: Colors.grey,
@@ -231,12 +230,13 @@ class HomePageState extends State<HomePage> {
                 SizedBox(height: 10,),
                 SizedBox(
                     height: 320,
-                    child: appBloc.cutAllTask.isEmpty
+                    child: appBloc.hasTasks==false
                         ? Center(
                             child: CircularProgressIndicator(
                             color: Colors.grey,
                           ))
-                        : SingleChildScrollView(
+                        :
+                         SingleChildScrollView(
                             child: Column(children: [
                             todoList.todoListCard(
                               todoTitle: appBloc.cutAllTask[0]['name'],

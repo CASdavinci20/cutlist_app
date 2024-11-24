@@ -34,13 +34,11 @@ class AddCutListPageState extends State<AddCutListPage> {
   late AppBloc appBloc;
   late bool isloading = false;
 
-  loadAllTask() async {
-    await Server().getAction(appBloc: appBloc, url: Urls.allCutList);
-    appBloc.cutlistData = appBloc.mapSuccess.where((item) {
-      return item['project'] == widget.projectID;
-    }).toList();
-    print(appBloc.cutlistData);
+  loadAllTask()async{
+    appBloc.hasTasks=false;
+    await Server().loadAllTask(appBloc: appBloc, context: context, projectID: widget.projectID);
   }
+
 
   @override
   Widget build(BuildContextcontext) {
@@ -86,8 +84,8 @@ class AddCutListPageState extends State<AddCutListPage> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
         child: Column(
           children: [
-             
-            appBloc.cutlistData == null
+
+            appBloc.hasTasks==false
                 ? const Center(
                     child: CircularProgressIndicator(
                       color: Colors.grey,

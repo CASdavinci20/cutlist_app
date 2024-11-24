@@ -77,7 +77,7 @@ class _BottomNavState extends State<BottomNav> {
   late Widget currentPage;
   List bottomItems =[
     {'icons': Icons.home,'text': "Home"},
-    {'icons': Icons.folder,'text': "List"},
+    {'icons': Icons.folder,'text': "Project"},
     {'icons': Icons.notifications,'text': "Notification"},
     {'icons': Icons.person,'text': "Profile"},
   ];

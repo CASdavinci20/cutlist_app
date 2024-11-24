@@ -28,8 +28,8 @@ class AppBloc extends ChangeNotifier {
      
       
       _messages = DataModels.messages;
-  bool _hasResources = false,
-      _hasCategoryResources = false,
+  bool _hasProjects = false,
+      _hasTasks = false,
       _hasInvoices = false,
       _hasSearch = false,
       _hasPartners = false,
@@ -70,8 +70,8 @@ class AppBloc extends ChangeNotifier {
   get messages => _messages;
   get durations => _durations;
   get currencies => _currencies;
-  get hasResources => _hasResources;
-  get hasCategoryResources => _hasCategoryResources;
+  get hasProjects => _hasProjects;
+  get hasTasks => _hasTasks;
   get hasInvoices => _hasInvoices;
   get hasSearch => _hasSearch;
   get hasPartners => _hasPartners;
@@ -205,13 +205,13 @@ class AppBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  set hasResources(value) {
-    _hasResources = value;
+  set hasProjects(value) {
+    _hasProjects = value;
     notifyListeners();
   }
 
-  set hasCategoryResources(value) {
-    _hasCategoryResources = value;
+  set hasTasks(value) {
+    _hasTasks = value;
     notifyListeners();
   }
 
