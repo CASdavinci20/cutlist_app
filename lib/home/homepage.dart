@@ -60,8 +60,15 @@ class HomePageState extends State<HomePage> {
 
     if (await Server().postAction(
         url: Urls.cutCreateProject, data: projectName, bloc: appBloc)) {
+      var projectID=appBloc.mapSuccess["_id"];
       await loadMyProject();
       AppActions().showSuccessToast(context: context, text: "Project Saved");
+      NextPage().nextRoute(
+          context,
+          AddCutListPage(
+            projectName: _controllerProjectName.text,
+            projectID: projectID,
+          ));
 
     }
   }
@@ -74,6 +81,15 @@ class HomePageState extends State<HomePage> {
     await Server().getAction(appBloc: appBloc, url: Urls.allCutList);
     appBloc.cutAllTask = appBloc.mapSuccess;
 
+  }
+
+  deleteProject({projectID})async{
+    if(await Server().deleteAction(appBloc: appBloc, url: Urls.cutProjectUrl+"/$projectID", data: {"projectId":projectID})){
+      print(appBloc.mapSuccess);
+      await Server().loadMyProject(appBloc: appBloc, context: context);
+    }else{
+      AppActions().showErrorToast(context: context, text: appBloc.errorMsg);
+    }
   }
 
   @override
@@ -137,6 +153,7 @@ class HomePageState extends State<HomePage> {
                                   totalproject: tasks.length,
                                   backgroundColor: Color(0xFFE0fbecc4),
                                   iconBackgroundColor: Color(0xFFE0f2d382),
+
                                   onTap: () {
                                     NextPage().nextRoute(
                                         context,
@@ -144,7 +161,23 @@ class HomePageState extends State<HomePage> {
                                           projectName: project['name'],
                                           projectID: project['_id'],
                                         ));
-                                  });
+                                  },
+                                onLongPress: (){
+                                  AppActions().showAppDialog(
+                                    context,
+                                    title: "Do you want to delete ${project['name']} - Project",
+                                    descp:
+                                    "Please note!!! when you delete a project, all data with the project will be lost.",
+                                    okText: "Confirm",
+                                    cancleText: "Cancel",
+                                    danger: true,
+                                    okAction: () async {
+                                      Navigator.pop(context);
+                                      deleteProject(projectID:project['_id'] );
+                                    },
+                                  );
+                                }
+                              );
                             },
                           ),
                   ),
@@ -172,8 +205,6 @@ class HomePageState extends State<HomePage> {
                                 AppActions().showLoadingToast(context: context, text: "Creating Project ...");
                                 Navigator.pop(context);
                                 createProject();
-
-
                               });
                         },
                         child: Row(

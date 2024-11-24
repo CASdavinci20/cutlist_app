@@ -92,6 +92,8 @@ class CreateAccountPageState extends State<CreateAccountPage> {
       await SharedStore()
           .setData(type: 'string', data: PublicVar.userAppID, key: "user_id");
       await SharedStore()
+          .setData(type: 'string', data: PublicVar.userName, key: "fullName");
+      await SharedStore()
           .setData(type: 'string', data: PublicVar.appToken, key: "access_token");
 
       AppActions().showSuccessToast(

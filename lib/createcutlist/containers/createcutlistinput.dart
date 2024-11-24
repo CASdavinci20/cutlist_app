@@ -8,7 +8,8 @@ class CreateCutListInput {
 
   Widget createCutListCard({
     required String title,
-    required TextEditingController cutData
+    required TextEditingController cutData,
+     keyboardType
 
   }){
      return Expanded(
@@ -16,9 +17,11 @@ class CreateCutListInput {
         padding: const EdgeInsets.symmetric(horizontal: 0.0), 
         child: TextFormField(
           controller: cutData,
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
+          textCapitalization: TextCapitalization.words,
+          keyboardType: keyboardType=="text"?TextInputType.text:TextInputType.numberWithOptions(decimal: true),
           decoration: InputDecoration(
             labelText: title,
+
             fillColor: const Color(0xFFE0fafaff),
             filled: true,
             labelStyle: const TextStyle(
@@ -50,10 +53,8 @@ class CreateCutListInput {
                  createCutListCard(
                 title: 'Width', 
                 cutData: _widthController
-                ),  
-
+                ),
                  const SizedBox(width: 10,),
-
                   createCutListCard(
                 title: 'Dept',
                 cutData: _deptController ,

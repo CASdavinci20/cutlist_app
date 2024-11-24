@@ -20,92 +20,11 @@ class Server {
 
   }
 
-  loadResources({AppBloc? appBloc, context}) async {
-    var hasResult = false;
-    if (await Server().getAction(url: Urls.resourcesPublic, appBloc: appBloc)) {
-      var res = appBloc!.mapSuccess;
-      appBloc.resources = res;
-      appBloc.hasResources = true;
-      if (!PublicVar.onProduction) print(appBloc.resources);
-      hasResult = true;
-    } else {
-      AppActions().showErrorToast(
-        text: appBloc!.errorMsg,
-        context: context,
-      );
-    }
-    return hasResult;
-  }
-
-  searchResources({AppBloc? appBloc, context, data}) async {
-    var hasResult = false;
-    if (await Server().getAction(
-        url: Urls.searchResources + "?query=${data}", appBloc: appBloc)) {
-      var res = appBloc!.mapSuccess;
-      appBloc.searchResources = res;
-      appBloc.hasSearch = true;
-      if (!PublicVar.onProduction) print(appBloc.searchResources);
-      hasResult = true;
-    } else {
-      AppActions().showErrorToast(
-        text: appBloc!.errorMsg,
-        context: context,
-      );
-    }
-    return hasResult;
-  }
-
-  loadCategoryResources({
-    AppBloc? appBloc,
-    context,
-    queryType,
-    queryData,
-  }) async {
-    var hasResult = false;
-    print(Urls.resourcesPublic + "?${queryType}=${queryData}");
-
-    if (await Server().getAction(
-        url: Urls.resourcesPublic + "?${queryType}=${queryData}",
-        appBloc: appBloc)) {
-      var res = appBloc!.mapSuccess;
-
-      appBloc.categoryResources = res;
-      appBloc.hasCategoryResources = true;
-
-      if (!PublicVar.onProduction) print(appBloc.categoryResources);
-      hasResult = true;
-    } else {
-      AppActions().showErrorToast(
-        text: appBloc!.errorMsg,
-        context: context,
-      );
-    }
-    return hasResult;
-  }
 
 
 
-  loadCategories({AppBloc? appBloc, context}) async {
-    var hasResult = false;
 
-    if (await Server().getAction(url: Urls.getCategories, appBloc: appBloc)) {
-      appBloc!.categories = appBloc!.mapSuccess;
-      await Server().getAction(url: Urls.resourcesTypes, appBloc: appBloc);
-      appBloc!.resourceTypes = appBloc!.mapSuccess;
 
-      appBloc.hasCategories = true;
-
-      if (!PublicVar.onProduction) print(appBloc.categories);
-      if (!PublicVar.onProduction) print(appBloc.mapSuccess);
-      hasResult = true;
-    } else {
-      AppActions().showErrorToast(
-        text: appBloc!.errorMsg,
-        context: context,
-      );
-    }
-    return hasResult;
-  }
 
   loadAData({AppBloc? appBloc, url}) async {
     var data =
@@ -246,12 +165,16 @@ class Server {
 
   Future<bool> deleteAction({AppBloc? appBloc, var url, var data}) async {
     bool sent = false;
+
     try {
+      if (PublicVar.appToken != "") {
+        data.addAll({"token": PublicVar.appToken});
+      }
       await _request.delete(url, data, (res) {
-        if (getDataType(res) &&
-            ErrorMessages().getStatus(status: res["type"])) {
+        print(res);
+        if (getDataType(data) && data["error"] != null) {
           sent = false;
-          appBloc!.errorMsg = res["error"];
+          appBloc!.errorMsg = data["error"];
         } else {
           appBloc!.mapSuccess = data;
           if (!PublicVar.onProduction) print('=========>>delete Success $res');

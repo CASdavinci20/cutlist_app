@@ -9,11 +9,12 @@ class Projects {
       required int totalproject,
       required Color backgroundColor,
       required Color iconBackgroundColor,
-      required VoidCallback onTap}) {
+      required VoidCallback onTap, onLongPress}) {
     return Padding(
         padding: EdgeInsets.all(7),
         child: GestureDetector(
             onTap: onTap,
+            onLongPress: onLongPress,
             child: Container(
                 height: 150,
                 width: 120,

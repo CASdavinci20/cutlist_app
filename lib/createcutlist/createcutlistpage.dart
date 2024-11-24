@@ -2,6 +2,7 @@ import 'package:cutlist/addcutlist/addcutlistpage.dart';
 import 'package:cutlist/createcutlist/containers/createcutlistinput.dart';
 import 'package:cutlist/createcutlist/containers/cuttypecard.dart';
 import 'package:cutlist/createcutlist/containers/explanation.dart';
+import 'package:cutlist/main_utils/widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,11 +27,11 @@ class CreateCutListPageState extends State<CreateCutListPage> {
   final Explanation explanation = Explanation();
   late AppBloc appBloc;
   late bool hasLoaded = false;
-  late String categoryName;
+  late String categoryName="";
   late String categoryId;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late List<String> cutList = [];
-
+  late bool loading=false;
   final TextEditingController _name = TextEditingController();
   final TextEditingController _height = TextEditingController();
   final TextEditingController _width = TextEditingController();
@@ -43,9 +44,16 @@ class CreateCutListPageState extends State<CreateCutListPage> {
   }
 
   validateCutForm() async {
+    if(categoryId==null){
+      AppActions().showErrorToast(
+        text: "Select the list category at the top",
+        context: context,
+      );
+    }else{
     FocusScope.of(context).unfocus();
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+      showLoading();
       if (await AppActions().checkInternetConnection()) {
         cutPreview();
       } else {
@@ -54,6 +62,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
           context: context,
         );
       }
+    }
     }
   }
 
@@ -69,14 +78,35 @@ class CreateCutListPageState extends State<CreateCutListPage> {
       },
       "material": "Plywood"
     };
+
     print('all cutlisdata:${cutListData}');
     if (await Server().postAction(
         url: Urls.createCutlist, data: cutListData, bloc: appBloc)) {
       print(' map success${appBloc.mapSuccess}');
+      AppActions().showSuccessToast(context: context, text: "Door Saved");
 
-      NextPage().nextRoute(context, AddCutListPage());
+        await Server().getAction(appBloc: appBloc, url: Urls.allCutList);
+        appBloc.cutlistData = appBloc.mapSuccess.where((item) {
+          return item['project'] == widget.projectID;
+        }).toList();
+        print(appBloc.cutlistData);
+
+      Navigator.pop(context);
+    }else{
+      showLoading();
+      AppActions().showErrorToast(context: context, text: appBloc.errorMsg);
     }
   }
+
+  showLoading() {
+    if (loading) {
+      loading = false;
+    } else {
+      loading = true;
+    }
+    setState(() {});
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -146,6 +176,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                                                 padding: const EdgeInsets.only(
                                                     right: 10.0),
                                                 child: cutTypeCard.cutTypeCard(
+                                                  selected:categoryName ,
                                                   title:
                                                       '${appBloc.cutCategories[i]['name']}',
                                                   onTap: () {
@@ -166,93 +197,99 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                           const SizedBox(
                             height: 20,
                           ),
-                          SizedBox(
-                            width: 350,
-                            height: 500,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                               Row(children: [
-                                 cutListInput.createCutListCard(
-                                   title: 'Door Name',
-                                   cutData: _name,
-                                 ),
-                               ],),
-                                SizedBox(height: 20,),
-                                const SizedBox(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Measurement',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600,
-                                          color: Color(0xFFE0f2851),
-                                        ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                             Row(children: [
+                               cutListInput.createCutListCard(
+                                 title: 'Door Name',
+                                 cutData: _name,
+                                 keyboardType: "text"
+                               ),
+                             ],),
+                              SizedBox(height: 20,),
+                              const SizedBox(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Measurement',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xFFE0f2851),
                                       ),
-                                      Text(
-                                        '(2 long)',
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600,
-                                          color: Color(0xFFEf5af71),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                const Text(
-                                  'All measurement should be in c.m',
-                                  style: TextStyle(fontSize: 10),
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      cutListInput.createCutListCard(
-                                          title: 'Height', cutData: _height),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      cutListInput.createCutListCard(
-                                          title: 'Width', cutData: _width),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      cutListInput.createCutListCard(
-                                        title: 'Dept',
-                                        cutData: _depth,
-                                      )
-                                    ]),
-                                SizedBox(
-                                  height: 50,
-                                ),
-                                Divider(height: 5, color: Color(0xFFE0b1b2b4)),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                explanation.explaination(),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                Center(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      validateCutForm();
-                                    },
-                                    child: Image.asset(
-                                      'assets/savebutton.png',
-                                      height: 50,
                                     ),
-                                  ),
-                                )
-                              ],
-                            ),
+                                    Text(
+                                      '(2 long)',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xFFEf5af71),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              const Text(
+                                'All measurement should be in c.m',
+                                style: TextStyle(fontSize: 10),
+                              ),
+                              const SizedBox(height: 5),
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    cutListInput.createCutListCard(
+                                        title: 'Height', cutData: _height),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    cutListInput.createCutListCard(
+                                        title: 'Width', cutData: _width),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    cutListInput.createCutListCard(
+                                      title: 'Dept',
+                                      cutData: _depth,
+                                    )
+                                  ]),
+                              SizedBox(
+                                height: 50,
+                              ),
+                              Divider(height: 5, color: Color(0xFFE0b1b2b4)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              explanation.explaination(),
+                              SizedBox(
+                                height: 30,
+                              ),
+
+
+                            ],
                           ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 10.0),
+                            child: ButtonWidget(
+                              onPress: () {
+                                if (!loading) {
+                                  validateCutForm();
+                                }
+                              },
+                              width: double.infinity,
+                              height: 50.0,
+                              txColor: Colors.black,
+                              bgColor: Color(PublicVar.primaryColor),
+                              loading: loading,
+                              text: "Save List",
+                              addIconBG: false,
+                            ),
+                          )
                         ],
                       ),
                     ],

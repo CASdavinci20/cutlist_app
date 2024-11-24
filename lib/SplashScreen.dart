@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:app_framework/app_framework.dart';
 import 'package:cutlist/WelcomePage.dart';
 import 'package:cutlist/home/containers/bottomnav.dart';
+import 'package:cutlist/main_utils/bloc/server.dart';
 import 'package:cutlist/main_utils/models/PublicVar.dart';
+import 'package:cutlist/main_utils/models/urls.dart';
+import 'package:cutlist/main_utils/utils/app_actions.dart';
 import 'package:flutter/material.dart'; 
 import 'package:provider/provider.dart';
  
@@ -48,6 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   checkStore() async {
 
+
     if (await SharedStore().getData(type: 'bool', key: 'accountApproved') !=
         null) {
       PublicVar.accountApproved =
@@ -58,10 +62,22 @@ class _SplashScreenState extends State<SplashScreen> {
       await SharedStore().getData(key: 'user_id', type: "string");
     }
 
+    if (await SharedStore().getData(key: 'fullName', type: "string") != null) {
+      PublicVar.userName =
+      await SharedStore().getData(key: 'fullName', type: "string");
+    }
+
     if (await SharedStore().getData(key: 'access_token', type: "string") != null) {
       PublicVar.appToken =
       await SharedStore().getData(key: 'access_token', type: "string");
+      var checkToken=await Server().loadAData(appBloc: appBloc, url: Urls.cutProjects);
+      if(checkToken["type"]!=null && checkToken["type"]=="UNAUTHORIZED"){
+        AppActions().showErrorToast(context: context, text: "Token Expired");
+        await SharedStore().removeData( key: 'accountApproved');
+        NextPage().nextRoute(context, WelcomePage());
+      }
     }
+
 
     if (await SharedStore().getData(type: 'bool', key: 'accountApproved') ==null) {
       //NextPage().clearPages(context, Login());

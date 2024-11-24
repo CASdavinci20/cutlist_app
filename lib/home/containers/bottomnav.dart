@@ -1,3 +1,4 @@
+import 'package:cutlist/addcutlist/addcutlistpage.dart';
 import 'package:cutlist/home/containers/addingtask.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -51,11 +52,17 @@ class _BottomNavState extends State<BottomNav> {
       "name":'${_controllerProjectName.text}',
       "userId": "${PublicVar.userAppID}"
     };
-    print(projectData);
+
     if(await Server().postAction(url:Urls.cutCreateProject,data:projectData,bloc:appBloc)){
-      print(appBloc.mapSuccess);
-        
-      NextPage().nextRoute(context, MyListPage());
+      var projectID=appBloc.mapSuccess["_id"];
+      await Server().loadMyProject(appBloc: appBloc, context: context);
+      AppActions().showSuccessToast(context: context, text: "Project Saved");
+      NextPage().nextRoute(
+          context,
+          AddCutListPage(
+            projectName: _controllerProjectName.text,
+            projectID: projectID,
+          ));
 
     }
 

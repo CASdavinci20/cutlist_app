@@ -74,6 +74,7 @@ class _LoginpageState extends State<Loginpage> {
       print(appBloc.mapSuccess);
       PublicVar.appToken = appBloc.mapSuccess["data"]["access_token"];
       PublicVar.userAppID = appBloc.mapSuccess["data"]["user"]["_id"];
+      PublicVar.userName = appBloc.mapSuccess["data"]["user"]["fullName"];
       PublicVar.userPhone = appBloc.mapSuccess["data"]["user"]["phoneNumber"];
       await SharedStore()
           .setData(type: 'bool', data: true, key: 'accountApproved');
@@ -81,6 +82,10 @@ class _LoginpageState extends State<Loginpage> {
           .setData(type: 'string', data: PublicVar.userAppID, key: "user_id");
       await SharedStore()
           .setData(type: 'string', data: PublicVar.appToken, key: "access_token");
+      await SharedStore()
+          .setData(type: 'string', data: PublicVar.userName, key: "fullName");
+      await SharedStore()
+          .setData(type: 'string', data: PublicVar.userPhone, key: "phoneNumber");
       // PublicVar.userName=appBloc.mapSuccess["data"]["user"]["fullName"];
       // PublicVar.userOtp = appBloc.mapSuccess["data"]["user"]["otp"];
 

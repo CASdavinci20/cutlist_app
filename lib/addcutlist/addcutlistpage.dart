@@ -86,9 +86,7 @@ class AddCutListPageState extends State<AddCutListPage> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
         child: Column(
           children: [
-            const SizedBox(
-              height: 20,
-            ),
+             
             appBloc.cutlistData == null
                 ? const Center(
                     child: CircularProgressIndicator(
