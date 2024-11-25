@@ -70,12 +70,12 @@ class _SplashScreenState extends State<SplashScreen> {
     if (await SharedStore().getData(key: 'access_token', type: "string") != null) {
       PublicVar.appToken =
       await SharedStore().getData(key: 'access_token', type: "string");
-      var checkToken=await Server().loadAData(appBloc: appBloc, url: Urls.cutProjects);
-      if(checkToken["type"]!=null && checkToken["type"]=="UNAUTHORIZED"&& checkToken["code"]==606){
-        AppActions().showErrorToast(context: context, text: "Token Expired");
-        await SharedStore().removeData( key: 'accountApproved');
-        NextPage().nextRoute(context, WelcomePage());
-      }
+      // var checkToken=await Server().loadAData(appBloc: appBloc, url: Urls.cutProjects);
+      // if(checkToken["type"]!=null && checkToken["type"]=="UNAUTHORIZED"&& checkToken["code"]==606){
+      //   AppActions().showErrorToast(context: context, text: "Token Expired");
+      //   await SharedStore().removeData( key: 'accountApproved');
+      //   NextPage().nextRoute(context, WelcomePage());
+      // }
     }
 
     if (await SharedStore().getData(type: 'bool', key: 'accountApproved') ==null) {

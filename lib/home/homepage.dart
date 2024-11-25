@@ -139,6 +139,10 @@ class HomePageState extends State<HomePage> {
                               color: Colors.grey,
                             ),
                           )
+                        :appBloc.cutProject.isEmpty
+                        ? const Center(
+                      child: Text('No project, please create one created'),
+                    )
                         : ListView.builder(
                             physics: ClampingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
@@ -235,8 +239,12 @@ class HomePageState extends State<HomePage> {
                             child: CircularProgressIndicator(
                             color: Colors.grey,
                           ))
-                        :
-                         SingleChildScrollView(
+                        :appBloc.cutProject.isEmpty
+                        ? const Center(
+                      child: Text('No list'),
+                    )
+:
+                    SingleChildScrollView(
                             child: Column(children: [
                             todoList.todoListCard(
                               todoTitle: appBloc.cutAllTask[0]['name'],

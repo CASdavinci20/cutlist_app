@@ -15,7 +15,7 @@ class Server {
 
   loadMyProject({AppBloc? appBloc, context}) async {
     await Server().getAction(appBloc: appBloc, url: Urls.cutProjects);
-    var data= appBloc!.mapSuccess;
+    var data= appBloc!.mapSuccess["projects"];
     appBloc.cutProject=data.reversed.toList();
     appBloc.hasProjects=true;
 
