@@ -48,10 +48,14 @@ class MyList {
                                   children: [
                                     Text(
                                       todoTitle,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
                                         color: Color(0xFFE0f2851),
                                         fontSize: 16,
+
                                         fontWeight: FontWeight.w600,
+
                                       ),
                                     ),
                                     Text(

@@ -35,7 +35,7 @@ class _BottomNavState extends State<BottomNav> {
     FocusScope.of(context).unfocus();
     if(_formKey.currentState!.validate()){
       _formKey.currentState!.save();
-
+      Navigator.pop(context);
      if (await AppActions().checkInternetConnection()) {
       sendToSever();
      }else{
@@ -57,6 +57,7 @@ class _BottomNavState extends State<BottomNav> {
       var projectID=appBloc.mapSuccess["_id"];
       await Server().loadMyProject(appBloc: appBloc, context: context);
       AppActions().showSuccessToast(context: context, text: "Project Saved");
+      await Server().loadAllTask(appBloc: appBloc, context: context, projectID: projectID);
       NextPage().nextRoute(
           context,
           AddCutListPage(

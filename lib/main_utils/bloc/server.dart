@@ -62,10 +62,7 @@ class Server {
         if (getDataType(res) && res["error"] != null ) {
           bloc!.errorMsg = res["error"];
           sent = false;
-        } else if ( res["msg"]!=null && res["data"] == null) {
-          bloc!.errorMsg = res["msg"];
-          sent = false;
-        } else if ( res["msg"]!=null && res["type"] != "SUCCESS" && res["code"] != null) {
+        }  else if ( res["msg"]!=null && res["type"] != "SUCCESS" && res["code"] != null) {
 
           bloc!.errorMsg = res["msg"];
           sent = false;

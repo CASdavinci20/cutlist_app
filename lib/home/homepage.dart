@@ -63,6 +63,7 @@ class HomePageState extends State<HomePage> {
       var projectID=appBloc.mapSuccess["_id"];
       await loadMyProject();
       AppActions().showSuccessToast(context: context, text: "Project Saved");
+      await Server().loadAllTask(appBloc: appBloc, context: context, projectID: projectID);
       NextPage().nextRoute(
           context,
           AddCutListPage(
@@ -239,7 +240,7 @@ class HomePageState extends State<HomePage> {
                             child: CircularProgressIndicator(
                             color: Colors.grey,
                           ))
-                        :appBloc.cutProject.isEmpty
+                        :appBloc.cutAllTask.isEmpty
                         ? const Center(
                       child: Text('No list'),
                     )
@@ -261,7 +262,7 @@ class HomePageState extends State<HomePage> {
                             const SizedBox(
                               height: 15,
                             ),
-                            todoList.todoListCard(
+                              appBloc.cutAllTask.length>1? todoList.todoListCard(
                               todoTitle: appBloc.cutAllTask[1]['name'],
                               todoTotal:
                                   appBloc.cutAllTask[1]['cutlist'].length,
@@ -272,11 +273,11 @@ class HomePageState extends State<HomePage> {
                                       cutData: appBloc.cutAllTask[1]),
                                 );
                               },
-                            ),
+                            ):SizedBox(),
                             const SizedBox(
                               height: 15,
                             ),
-                            todoList.todoListCard(
+                              appBloc.cutAllTask.length>2?todoList.todoListCard(
                               todoTitle: appBloc.cutAllTask[2]['name'],
                               todoTotal:
                                   appBloc.cutAllTask[2]['cutlist'].length,
@@ -287,11 +288,11 @@ class HomePageState extends State<HomePage> {
                                       cutData: appBloc.cutAllTask[2]),
                                 );
                               },
-                            ),
+                            ):SizedBox(),
                             const SizedBox(
                               height: 15,
                             ),
-                            todoList.todoListCard(
+                              appBloc.cutAllTask.length>3?todoList.todoListCard(
                               todoTitle: appBloc.cutAllTask[3]['name'],
                               todoTotal:
                                   appBloc.cutAllTask[3]['cutlist'].length,
@@ -302,11 +303,11 @@ class HomePageState extends State<HomePage> {
                                       cutData: appBloc.cutAllTask[3]),
                                 );
                               },
-                            ),
+                            ):SizedBox(),
                             const SizedBox(
                               height: 15,
                             ),
-                            todoList.todoListCard(
+                              appBloc.cutAllTask.length>4?todoList.todoListCard(
                               todoTitle: appBloc.cutAllTask[4]['name'],
                               todoTotal:
                                   appBloc.cutAllTask[4]['cutlist'].length,
@@ -317,7 +318,7 @@ class HomePageState extends State<HomePage> {
                                       cutData: appBloc.cutAllTask[4]),
                                 );
                               },
-                            ),
+                            ):SizedBox(),
                             const SizedBox(
                               height: 15,
                             ),

@@ -1,4 +1,5 @@
 import 'package:cutlist/createcutlist/createcutlistpage.dart';
+import 'package:cutlist/main_utils/models/PublicVar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
@@ -34,11 +35,11 @@ class AddCutListPageState extends State<AddCutListPage> {
   late AppBloc appBloc;
   late bool isloading = false;
 
-  loadAllTask()async{
-    appBloc.hasTasks=false;
-    await Server().loadAllTask(appBloc: appBloc, context: context, projectID: widget.projectID);
+  loadAllTask() async {
+    appBloc.hasTasks = false;
+    await Server().loadAllTask(
+        appBloc: appBloc, context: context, projectID: widget.projectID);
   }
-
 
   @override
   Widget build(BuildContextcontext) {
@@ -84,8 +85,7 @@ class AddCutListPageState extends State<AddCutListPage> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
         child: Column(
           children: [
-
-            appBloc.hasTasks==false
+            appBloc.hasTasks == false
                 ? const Center(
                     child: CircularProgressIndicator(
                       color: Colors.grey,
@@ -144,8 +144,18 @@ class AddCutListPageState extends State<AddCutListPage> {
     final pdf = pw.Document();
 
     pdf.addPage(
+
       pw.MultiPage(
         build: (context) => [
+          pw.Text(
+            "Vancutz",
+            textAlign: pw.TextAlign.center,
+            style: pw.TextStyle(
+                fontSize: 50,
+                fontWeight: pw.FontWeight.bold,
+                color: PdfColor.fromInt(PublicVar.primaryColor)),
+          ),
+          pw.SizedBox(height: 10),
           pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: data.map((project) {
@@ -153,44 +163,158 @@ class AddCutListPageState extends State<AddCutListPage> {
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
                   // Project Name
-                  pw.Text(
-                    "Project: ${widget.projectName ?? 'Unknown Project'} ",
-                    style: pw.TextStyle(
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    pw.TextSpan(text: "${project['name'] ?? 'Unknown Project'}  ", style: pw.TextStyle(
                       fontSize: 18,
                       fontWeight: pw.FontWeight.bold,
-                    ),
-                  ),
+                    )),
+                        pw.WidgetSpan(child: pw.Container(
+                          width: 30,
+                          child: pw.Divider(thickness: 1),
+                        ), ),
+                        pw.TextSpan(text: "  ${widget.projectName}", style: pw.TextStyle(
+                          fontSize: 18,
+                          fontWeight: pw.FontWeight.normal,
+                        )),
+                  ])),
                   pw.SizedBox(height: 10),
+                  pw.Container(
+                    child: pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Container(
+                        width: 140,
+                        child: pw.Text(
+                          "PART",
+                          style: pw.TextStyle(
+                            fontSize: 13,
+                            fontWeight: pw.FontWeight.bold,
+                              color: PdfColors.white
+                          ),
+                        ),
+                      ),
 
+                      pw.Container(
+                        width: 60,
+                        child: pw.Text(
+                          "LENGTH",
+                          // textAlign: pw.TextAlign.center,
+                          style: pw.TextStyle(
+                            fontSize: 13,
+                            fontWeight: pw.FontWeight.bold,
+                              color: PdfColors.white
+                          ),
+                        ),
+                      ),
+
+                      pw.Container(
+                        width: 60,
+                        child: pw.Text(
+                          "WIDTH",
+                          // textAlign: pw.TextAlign.center,
+                          style: pw.TextStyle(
+                            fontSize: 13,
+                            fontWeight: pw.FontWeight.bold,
+                              color: PdfColors.white
+                          ),
+                        ),
+                      ),
+
+                      pw.Container(
+                        width: 60,
+                        child: pw.Text(
+                          "DEPTH",
+                          // textAlign: pw.TextAlign.center,
+                          style: pw.TextStyle(
+                            fontSize: 13,
+                            fontWeight: pw.FontWeight.bold,
+                              color: PdfColors.white
+                          ),
+                        ),
+                      ),
+
+
+                    ],
+                  ), padding: pw.EdgeInsets.symmetric(vertical: 5, horizontal: 5), color: PdfColors.orange),
+                  pw.SizedBox(height: 10),
                   // Tasks for the Project
                   if (project['cutlist'] != null &&
                       project['cutlist'].isNotEmpty)
                     pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: project['cutlist'].map<pw.Widget>((task) {
-                        print(task);
-                        return pw.Column(
-                          crossAxisAlignment: pw.CrossAxisAlignment.start,
-                          children: [
-                            pw.Text(
-                              "${task['part'] ?? 'Unnamed Task'}",
-                              style: pw.TextStyle(
-                                fontSize: 16,
-                                fontWeight: pw.FontWeight.bold,
+                        return pw.Column(children: [
+
+                          pw.Row(
+                            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                            children: [
+                              pw.Container(
+                                width: 140,
+                                child: pw.Text(
+                                  "${task['part'] ?? 'Unnamed Task'} ",
+                                  style: pw.TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: pw.FontWeight.bold,
+                                  ),
+                                ),
                               ),
-                            ),
-                            pw.Text(
-                              "${task['length']?.toStringAsFixed(2) ?? '0.00'}",
-                            ),
-                            pw.Text(
-                              "${task['width']?.toStringAsFixed(2) ?? '0.00'}",
-                            ),
-                            pw.Text(
-                              "${task['quantity'] ?? 'Unknown'}",
-                            ),
-                            pw.SizedBox(height: 10),
-                          ],
-                        );
+                              pw.Container(
+                                  width: 1,
+                                  height: 20,
+                                  color: PdfColors.grey400
+
+                              ),
+                              pw.Container(
+                                width: 60,
+                                child: pw.Text(
+                                  "${task['length']?.toStringAsFixed(2) ?? '0.00'}",
+                                  // textAlign: pw.TextAlign.center,
+                                  style: pw.TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: pw.FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              pw.Container(
+                                  width: 1,
+                                  height: 20,
+                                  color: PdfColors.grey400
+
+                              ),
+                              pw.Container(
+                                width: 60,
+                                child: pw.Text(
+                                  "${task['width']?.toStringAsFixed(2) ?? '0.00'}",
+                                  // textAlign: pw.TextAlign.center,
+                                  style: pw.TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: pw.FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              pw.Container(
+                                width: 1,
+                                height: 20,
+                        color: PdfColors.grey400
+
+                              ),
+                              pw.Container(
+                                width: 60,
+                                child: pw.Text(
+                                  "${task['quantity']?.toStringAsFixed(2) ?? '0.00'}",
+                                  // textAlign: pw.TextAlign.center,
+                                  style: pw.TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: pw.FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+
+                            ],
+                          ),
+                          pw.Divider(thickness: 1, color: PdfColors.grey400),
+                        ]);
                       }).toList(),
                     )
                   else
@@ -201,8 +325,96 @@ class AddCutListPageState extends State<AddCutListPage> {
                         color: PdfColors.grey600,
                       ),
                     ),
-                  pw.Divider(thickness: 1),
-                  pw.SizedBox(height: 15),
+                  pw.SizedBox(height: 10),
+                  pw.Divider(thickness: 2),
+                  pw.Text(
+                    'All measurement are in c.m',
+                    style: pw.TextStyle(fontSize: 10),
+                  ),
+                  pw.SizedBox(height: 5),
+                  pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.RichText(
+                        textAlign:  pw.TextAlign.center,
+                        text:  pw.TextSpan(
+                          children: [
+                            pw.TextSpan(
+                              text: 'Height ',
+                              style:  pw.TextStyle(
+                                fontSize: 16,
+                                color: PdfColor.fromInt(0xFFEf5af71),
+                                fontWeight:  pw.FontWeight.bold,
+                              ),
+                            ),
+                            pw.TextSpan(
+                              text: '- Means(height of the door).',
+                              style:  pw.TextStyle(
+                                fontSize: 12,
+                                color: PdfColor.fromInt(0xFFE0f2851),
+                                fontWeight:  pw.FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                       pw.SizedBox(height: 10,),
+
+                      pw.RichText(
+                        textAlign:  pw.TextAlign.center,
+                        text:  pw.TextSpan(
+                          children: [
+                            pw.TextSpan(
+                              text: 'Width ',
+                              style:  pw.TextStyle(
+                                fontSize: 16,
+                                color: PdfColor.fromInt(0xFFEf5af71),
+                                fontWeight:  pw.FontWeight.bold,
+                              ),
+                            ),
+                            pw.TextSpan(
+                              text: '- Means(Width of the door),',
+                              style:  pw.TextStyle(
+                                fontSize: 12,
+                                color: PdfColor.fromInt(0xFFE0f2851),
+                                fontWeight:  pw.FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      pw.SizedBox(height: 10,),
+
+                      pw.RichText(
+                        textAlign:  pw.TextAlign.center,
+                        text:  pw.TextSpan(
+                          children: [
+                            pw.TextSpan(
+                              text: 'Depth ',
+                              style:  pw.TextStyle(
+                                fontSize: 16,
+                                color: PdfColor.fromInt(0xFFEf5af71),
+                                fontWeight:  pw.FontWeight.bold,
+                              ),
+                            ),
+                            pw.TextSpan(
+                              text: '- Means(Wall thickness).',
+                              style:  pw.TextStyle(
+                                fontSize: 12,
+                                color: PdfColor.fromInt(0xFFE0f2851),
+                                fontWeight:  pw.FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      pw.SizedBox(height: 10),
+                    ],
+                  ),
+                  pw.SizedBox(height: 20),
                 ],
               );
             }).toList(),

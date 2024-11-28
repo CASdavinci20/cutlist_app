@@ -45,6 +45,8 @@ class ToDoList {
                 children: [
                   Text(
                     todoTitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style:  TextStyle(
                     color: Color(0xFFE0f2851),
                     fontSize: 14,

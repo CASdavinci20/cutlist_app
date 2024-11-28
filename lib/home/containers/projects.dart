@@ -64,8 +64,8 @@ class Projects {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "${projectName.toLowerCase()}",
-                                  maxLines: 2,
+                                  "${projectName}",
+                                  maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: Colors.black,

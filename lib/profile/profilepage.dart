@@ -63,14 +63,14 @@ class ProfilePageState extends State<ProfilePage> {
                           const SizedBox(
                             width: 10,
                           ),
-                          const SizedBox(
+                           SizedBox(
                             height: 50,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Kelechi',
+                                  '${PublicVar.userName}',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
@@ -78,7 +78,7 @@ class ProfilePageState extends State<ProfilePage> {
                                   ),
                                 ),
                                 Text(
-                                  '0702344556677',
+                                  '${PublicVar.userPhone}',
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,
