@@ -194,7 +194,17 @@ class AddCutListPageState extends State<AddCutListPage> {
                           ),
                         ),
                       ),
-
+                      pw.Container(
+                        width: 140,
+                        child: pw.Text(
+                          "EDGING",
+                          style: pw.TextStyle(
+                              fontSize: 13,
+                              fontWeight: pw.FontWeight.bold,
+                              color: PdfColors.white
+                          ),
+                        ),
+                      ),
                       pw.Container(
                         width: 60,
                         child: pw.Text(
@@ -222,12 +232,12 @@ class AddCutListPageState extends State<AddCutListPage> {
                       ),
 
                       pw.Container(
-                        width: 60,
+                        width: 70,
                         child: pw.Text(
-                          "DEPTH",
+                          "QUANTITY",
                           // textAlign: pw.TextAlign.center,
                           style: pw.TextStyle(
-                            fontSize: 13,
+                            fontSize: 12,
                             fontWeight: pw.FontWeight.bold,
                               color: PdfColors.white
                           ),
@@ -244,6 +254,7 @@ class AddCutListPageState extends State<AddCutListPage> {
                     pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: project['cutlist'].map<pw.Widget>((task) {
+                        print(project['cutlist']);
                         return pw.Column(children: [
 
                           pw.Row(

@@ -243,17 +243,17 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     cutListInput.createCutListCard(
-                                        title: 'Height', cutData: _height),
+                                        title: 'Height(cm)', cutData: _height),
                                     const SizedBox(
                                       width: 10,
                                     ),
                                     cutListInput.createCutListCard(
-                                        title: 'Width', cutData: _width),
+                                        title: 'Width(cm)', cutData: _width),
                                     const SizedBox(
                                       width: 10,
                                     ),
                                     cutListInput.createCutListCard(
-                                      title: 'Dept',
+                                      title: 'Wall Thickness(cm)',
                                       cutData: _depth,
                                     )
                                   ]),
@@ -286,7 +286,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                               txColor: Colors.black,
                               bgColor: Color(PublicVar.primaryColor),
                               loading: loading,
-                              text: "Save List",
+                              text: "Create",
                               addIconBG: false,
                             ),
                           )

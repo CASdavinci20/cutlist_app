@@ -43,13 +43,13 @@ class Explanation {
       children: [
         explainationCard(
           word: 'Height ', 
-          meaning: '- Means(height of the door).'
+          meaning: '- Means(height of the door way).'
           ),
           const SizedBox(height: 10,),
        
         explainationCard(
           word: 'Width ', 
-          meaning: '- Means(Width of the door),'
+          meaning: '- Means(Width of the door way),'
           ),
           const SizedBox(height: 10,),
 
