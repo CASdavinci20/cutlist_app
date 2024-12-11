@@ -110,8 +110,8 @@ class AddCutListPageState extends State<AddCutListPage> {
                                   todoTitle: cutData['name'],
                                   todoTotal: "${tasks.length}",
                                   onTap: () {
-                                    NextPage().nextRoute(context,
-                                        CutListSummaryPage(cutData: cutData));
+                                    // NextPage().nextRoute(context,
+                                    //     CutListSummaryPage(cutData: cutData));
                                   }));
                         })
           ],

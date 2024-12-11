@@ -44,28 +44,28 @@ class MyList {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       todoTitle,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
-                                        color: Color(0xFFE0f2851),
-                                        fontSize: 16,
+                                        color: Colors.black87,
+                                        fontSize: 18,
 
                                         fontWeight: FontWeight.w600,
 
                                       ),
                                     ),
-                                    Text(
-                                      '$todoTotal List',
-                                      style: const TextStyle(
-                                        color: Color(0xFFE0000000),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    )
+                                    // Text(
+                                    //   '$todoTotal List',
+                                    //   style: const TextStyle(
+                                    //     color: Color(0xFFE0000000),
+                                    //     fontSize: 12,
+                                    //     fontWeight: FontWeight.w400,
+                                    //   ),
+                                    // )
                                   ],
                                 ),
                               ),
