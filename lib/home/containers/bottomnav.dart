@@ -35,7 +35,7 @@ class _BottomNavState extends State<BottomNav> {
     FocusScope.of(context).unfocus();
     if(_formKey.currentState!.validate()){
       _formKey.currentState!.save();
-      Navigator.pop(context);
+
      if (await AppActions().checkInternetConnection()) {
       sendToSever();
      }else{
@@ -47,27 +47,45 @@ class _BottomNavState extends State<BottomNav> {
     }
    }
 
-    sendToSever() async{
-     Map projectData= {
-      "name":'${_controllerProjectName.text}',
+
+  sendToSever() async {
+    Map projectName = {
+      "name": '${_controllerProjectName.text}',
       "userId": "${PublicVar.userAppID}"
     };
 
-    if(await Server().postAction(url:Urls.cutCreateProject,data:projectData,bloc:appBloc)){
-      var projectID=appBloc.mapSuccess["_id"];
+    if (await Server().postAction(
+        url: Urls.cutCreateProject, data: projectName, bloc: appBloc)) {
+      var projectID = appBloc.mapSuccess["_id"];
       await Server().loadMyProject(appBloc: appBloc, context: context);
-      AppActions().showSuccessToast(context: context, text: "Project Saved");
       await Server().loadAllTask(appBloc: appBloc, context: context, projectID: projectID);
-      NextPage().nextRoute(
-          context,
-          AddCutListPage(
-            projectName: _controllerProjectName.text,
-            projectID: projectID,
-          ));
-
+      Navigator.pop(context);
+      AppActions().showAppDialog(context,
+          title: "Project Saved",
+          descp: "Click the Add button below to start creating your List.",
+          singlAction: true,
+          okText: "Okay", okAction: () {
+            Navigator.pop(context);
+            NextPage().nextRoute(
+                context,
+                AddCutListPage(
+                  projectName: _controllerProjectName.text,
+                  projectID: projectID,
+                ));
+          });
+    } else {
+      Navigator.pop(context);
+      AppActions().showAppDialog(context,
+          title: "An Error occurred",
+          descp: appBloc.errorMsg + "....Please try again.",
+          singlAction: true,
+          okText: "Okay", okAction: () {
+            Navigator.pop(context);
+          });
     }
+  }
 
-   }
+
 
 
 

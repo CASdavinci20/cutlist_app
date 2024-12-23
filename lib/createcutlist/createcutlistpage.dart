@@ -131,6 +131,26 @@ class CreateCutListPageState extends State<CreateCutListPage> {
             style: TextStyle(fontWeight: FontWeight.w700),
           ),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: 20.0, horizontal: 10.0),
+          child: ButtonWidget(
+            onPress: () {
+              if (!loading) {
+                validateCutForm();
+              }
+            },
+            width: double.infinity,
+            height: 50.0,
+            txColor: Colors.black,
+            bgColor: Color(PublicVar.primaryColor),
+            loading: loading,
+            text: "Create",
+            addIconBG: false,
+          ),
+        ),
+
         body: SingleChildScrollView(
             child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
@@ -253,7 +273,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                                       width: 10,
                                     ),
                                     cutListInput.createCutListCard(
-                                      title: 'Wall Thickness(cm)',
+                                      title: 'Wall (cm)',
                                       cutData: _depth,
                                     )
                                   ]),
@@ -266,30 +286,13 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                               ),
                               explanation.explaination(),
                               SizedBox(
-                                height: 30,
+                                height: 300,
                               ),
 
 
                             ],
                           ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 20.0, horizontal: 10.0),
-                            child: ButtonWidget(
-                              onPress: () {
-                                if (!loading) {
-                                  validateCutForm();
-                                }
-                              },
-                              width: double.infinity,
-                              height: 50.0,
-                              txColor: Colors.black,
-                              bgColor: Color(PublicVar.primaryColor),
-                              loading: loading,
-                              text: "Create",
-                              addIconBG: false,
-                            ),
-                          )
+
                         ],
                       ),
                     ],
