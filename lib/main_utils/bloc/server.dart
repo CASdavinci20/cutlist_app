@@ -63,7 +63,6 @@ class Server {
           bloc!.errorMsg = res["error"];
           sent = false;
         }  else if ( res["msg"]!=null && res["type"] != "SUCCESS" && res["code"] != null) {
-
           bloc!.errorMsg = res["msg"];
           sent = false;
         } else {

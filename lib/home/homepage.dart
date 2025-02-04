@@ -4,7 +4,7 @@ import 'package:cutlist/home/containers/todolist.dart';
 import 'package:cutlist/home/containers/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../addcutlist/addcutlistpage.dart';
+import '../cutlist/cutlistpage.dart';
 import '../cutlistsummary/cutlistsummarypage.dart';
 import '../main_utils/bloc/app_bloc.dart';
 import '../main_utils/bloc/server.dart';
@@ -59,7 +59,9 @@ class HomePageState extends State<HomePage> {
 
     if (await Server().postAction(
         url: Urls.cutCreateProject, data: projectName, bloc: appBloc)) {
-      var projectID = appBloc.mapSuccess["_id"];
+      print(appBloc.mapSuccess);
+      var projectID = appBloc.mapSuccess["project"]["_id"];
+
       await loadMyProject();
       await Server().loadAllTask(
           appBloc: appBloc, context: context, projectID: projectID);
@@ -72,10 +74,12 @@ class HomePageState extends State<HomePage> {
             Navigator.pop(context);
         NextPage().nextRoute(
             context,
-            AddCutListPage(
+            CutListPage(
               projectName: _controllerProjectName.text,
               projectID: projectID,
             ));
+            _controllerProjectName.text="";
+            setState(() {});
       });
     } else {
       Navigator.pop(context);
@@ -104,6 +108,7 @@ class HomePageState extends State<HomePage> {
         data: {"projectId": projectID})) {
       print(appBloc.mapSuccess);
       await Server().loadMyProject(appBloc: appBloc, context: context);
+      AppActions().showSuccessToast(context: context, text: "Project Deleted");
     } else {
       AppActions().showErrorToast(context: context, text: appBloc.errorMsg);
     }
@@ -177,7 +182,7 @@ class HomePageState extends State<HomePage> {
                                       onTap: () {
                                         NextPage().nextRoute(
                                             context,
-                                            AddCutListPage(
+                                            CutListPage(
                                               projectName: project['name'],
                                               projectID: project['_id'],
                                             ));

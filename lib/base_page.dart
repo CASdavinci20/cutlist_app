@@ -1,9 +1,9 @@
+import 'package:cutlist/cutlist/mylistpage.dart';
 import 'package:cutlist/notifications/notificationpage.dart';
 import 'package:flutter/material.dart';
 
 import 'home/homepage.dart';
-import 'mylist/mylistpage.dart';
-import 'profile/profilepage.dart';
+ import 'profile/profilepage.dart';
 
 class BasePage extends StatefulWidget {
   const BasePage({Key? key}) : super(key: key);

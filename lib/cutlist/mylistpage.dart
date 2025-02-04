@@ -1,6 +1,7 @@
-import 'package:cutlist/addcutlist/addcutlistpage.dart';
+import 'package:cutlist/cutlist/cutlistpage.dart';
+import 'package:cutlist/main_utils/utils/app_actions.dart';
 import 'package:cutlist/main_utils/utils/next_page.dart';
-import 'package:cutlist/mylist/containers/mylist.dart';
+import 'package:cutlist/cutlist/containers/mylist.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,20 @@ class MyListPageState extends State<MyListPage> {
   loadMyProject() async {
     await Server().loadMyProject(appBloc: appBloc, context: context);
 
+  }
+
+  deleteProject({projectID}) async {
+    if (await Server().deleteAction(
+        appBloc: appBloc,
+        url: Urls.cutProjectUrl + "/$projectID",
+        data: {"projectId": projectID})) {
+      print(appBloc.mapSuccess);
+      await Server().loadMyProject(appBloc: appBloc, context: context);
+      AppActions().showSuccessToast(context: context, text: "Project Deleted");
+
+    } else {
+      AppActions().showErrorToast(context: context, text: appBloc.errorMsg);
+    }
   }
 
   @override
@@ -68,14 +83,31 @@ class MyListPageState extends State<MyListPage> {
                             padding: EdgeInsets.symmetric(vertical: 10),
                             child: myList.myListCard(
                               todoTitle: project['name'],
-                              todoTotal: '${tasks.length}',
+                              todoCat: '${tasks.length}',
                               onTap: () {
                                 NextPage().nextRoute(
                                     context,
-                                    AddCutListPage(
+                                    CutListPage(
                                       projectName: project['name'],
                                       projectID: project['_id'],
                                     ));
+                              },
+                              onLongPress: () {
+                                AppActions().showAppDialog(
+                                  context,
+                                  title:
+                                  "Do you want to delete ${project['name']} - Project",
+                                  descp:
+                                  "Please note!!! when you delete a project, all data with the project will be lost.",
+                                  okText: "Confirm",
+                                  cancleText: "Cancel",
+                                  danger: true,
+                                  okAction: () async {
+                                    Navigator.pop(context);
+                                    deleteProject(
+                                        projectID: project['_id']);
+                                  },
+                                );
                               },
                             ));
                       },

@@ -3,23 +3,17 @@ import 'package:flutter/material.dart';
 class MyList {
   Widget myListCard(
       {required String todoTitle,
-      required String todoTotal,
-      required VoidCallback onTap}) {
+      required String todoCat,
+      required VoidCallback onTap, onLongPress}) {
     return GestureDetector(
         onTap: onTap,
+        onLongPress: onLongPress,
         child: Container(
             width: 350,
             height: 80,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              //    boxShadow:[
-              //   // BoxShadow(
-              //   //   color: Colors.grey.withOpacity(0.5),
-              //   //   spreadRadius: 5,
-              //   //   blurRadius: 10,
-              //   //   offset: Offset(0, 3),
-              //   // ),
-              // ],
+
               color: const Color(0xFFEf9f9f9),
             ),
             child: Padding(
@@ -51,36 +45,35 @@ class MyList {
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
-                                        color: Colors.black87,
+                                        color: Colors.black,
                                         fontSize: 18,
-
                                         fontWeight: FontWeight.w600,
 
                                       ),
                                     ),
-                                    // Text(
-                                    //   '$todoTotal List',
-                                    //   style: const TextStyle(
-                                    //     color: Color(0xFFE0000000),
-                                    //     fontSize: 12,
-                                    //     fontWeight: FontWeight.w400,
-                                    //   ),
-                                    // )
+                                    Text(
+                                      '$todoCat',
+                                      style: const TextStyle(
+                                        color: Colors.black45,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),
                             ])),
-                    Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(
-                              color: Color(0xFFE0c1c3d0), width: 1.0)),
-                      child: Center(
-                        child: Icon(Icons.chevron_right),
-                      ),
-                    )
+                    // Container(
+                    //   height: 30,
+                    //   width: 30,
+                    //   decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(30),
+                    //       border: Border.all(
+                    //           color: Color(0xFFE0c1c3d0), width: 1.0)),
+                    //   child: Center(
+                    //     child: Icon(Icons.check),
+                    //   ),
+                    // )
                   ],
                 ),
               ),

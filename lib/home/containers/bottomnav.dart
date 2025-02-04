@@ -1,8 +1,8 @@
-import 'package:cutlist/addcutlist/addcutlistpage.dart';
+ import 'package:cutlist/cutlist/cutlistpage.dart';
+import 'package:cutlist/cutlist/mylistpage.dart';
 import 'package:cutlist/home/containers/addingtask.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// import 'package:cutlist/home/containers/addingtask.dart';
 
 import '../../main_utils/bloc/app_bloc.dart';
 import '../../main_utils/bloc/server.dart';
@@ -10,12 +10,9 @@ import '../../main_utils/models/PublicVar.dart';
 import '../../main_utils/models/urls.dart';
 import '../../main_utils/utils/app_actions.dart';
 import '../../main_utils/utils/next_page.dart';
-import '../../mylist/mylistpage.dart';
-import '../../notifications/notificationpage.dart';
+ import '../../notifications/notificationpage.dart';
 import '../../profile/profilepage.dart';
 import '../homepage.dart';
-// import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BottomNav extends StatefulWidget {
   final pageIndex;
@@ -56,7 +53,7 @@ class _BottomNavState extends State<BottomNav> {
 
     if (await Server().postAction(
         url: Urls.cutCreateProject, data: projectName, bloc: appBloc)) {
-      var projectID = appBloc.mapSuccess["_id"];
+      var projectID = appBloc.mapSuccess["project"]["_id"];
       await Server().loadMyProject(appBloc: appBloc, context: context);
       await Server().loadAllTask(appBloc: appBloc, context: context, projectID: projectID);
       Navigator.pop(context);
@@ -68,10 +65,12 @@ class _BottomNavState extends State<BottomNav> {
             Navigator.pop(context);
             NextPage().nextRoute(
                 context,
-                AddCutListPage(
+                CutListPage(
                   projectName: _controllerProjectName.text,
                   projectID: projectID,
                 ));
+            _controllerProjectName.text="";
+            setState(() {});
           });
     } else {
       Navigator.pop(context);

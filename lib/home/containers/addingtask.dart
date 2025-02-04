@@ -1,5 +1,4 @@
-import 'package:cutlist/mylist/mylistpage.dart';
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../main_utils/models/PublicVar.dart';

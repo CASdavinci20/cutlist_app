@@ -80,35 +80,40 @@ class CreateAccountPageState extends State<CreateAccountPage> {
     print(postdata);
     if (await Server()
         .postAction(url: Urls.cutUsers, data: postdata, bloc: appBloc)) {
+      if(appBloc.mapSuccess["data"]!=null){
+        var response=appBloc.mapSuccess["data"];
+        await Server().postAction(url: Urls.cutVerification, data: {"phoneNumber":response["phoneNumber"], "otp":response["otp"]}, bloc: appBloc);
+        await Server().postAction(url: Urls.cutLogin, data: {"phoneNumber":response["phoneNumber"]}, bloc: appBloc);
+
 
       print("Full mapSuccess: ${appBloc.mapSuccess}");
-      PublicVar.userAppID=appBloc.mapSuccess["data"]["user"]["_id"];
-      PublicVar.userName=appBloc.mapSuccess["data"]["user"]["fullName"];
-      PublicVar.userPhone=appBloc.mapSuccess["data"]["user"]["phoneNumber"];
-      PublicVar.appToken = appBloc.mapSuccess["data"]["access_token"];
-
-      await SharedStore()
-          .setData(type: 'bool', data: true, key: 'accountApproved');
-      await SharedStore()
-          .setData(type: 'string', data: PublicVar.userAppID, key: "user_id");
-      await SharedStore()
-          .setData(type: 'string', data: PublicVar.userName, key: "fullName");
-      await SharedStore()
-          .setData(type: 'string', data: PublicVar.appToken, key: "access_token");
-
+        PublicVar.appToken = appBloc.mapSuccess["data"]["access_token"];
+        PublicVar.userAppID = appBloc.mapSuccess["data"]["user"]["_id"];
+        PublicVar.userName = appBloc.mapSuccess["data"]["user"]["fullName"];
+        PublicVar.userPhone = appBloc.mapSuccess["data"]["user"]["phoneNumber"];
+        await SharedStore()
+            .setData(type: 'bool', data: true, key: 'accountApproved');
+        await SharedStore()
+            .setData(type: 'string', data: PublicVar.userAppID, key: "user_id");
+        await SharedStore()
+            .setData(type: 'string', data: PublicVar.appToken, key: "access_token");
+        await SharedStore()
+            .setData(type: 'string', data: PublicVar.userName, key: "fullName");
+        await SharedStore()
+            .setData(type: 'string', data: PublicVar.userPhone, key: "phoneNumber");
       AppActions().showSuccessToast(
         text: 'Registration Successful',
         context: context,
       );
-
-       NextPage().nextRoute(context, VerificationPage());
+       //NextPage().nextRoute(context, VerificationPage());
       NextPage().nextRoute(context, BottomNav());
-    }else {
-      showLoading();
-      AppActions().showErrorToast(
-        text: appBloc.errorMsg,
-        context: context,
-      );
+      }else {
+        showLoading();
+        AppActions().showErrorToast(
+          text: appBloc.mapSuccess["msg"],
+          context: context,
+        );
+      }
     }
   }
 

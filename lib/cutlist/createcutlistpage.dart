@@ -1,7 +1,8 @@
-import 'package:cutlist/addcutlist/addcutlistpage.dart';
-import 'package:cutlist/createcutlist/containers/createcutlistinput.dart';
-import 'package:cutlist/createcutlist/containers/cuttypecard.dart';
-import 'package:cutlist/createcutlist/containers/explanation.dart';
+import 'package:cutlist/cutlist/containers/createcutlistinput.dart';
+import 'package:cutlist/cutlist/containers/cuttypecard.dart';
+import 'package:cutlist/cutlist/containers/explanation.dart';
+import 'package:cutlist/cutlist/cutlistpage.dart';
+
 import 'package:cutlist/main_utils/widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,21 +15,21 @@ import '../main_utils/utils/app_actions.dart';
 import '../main_utils/utils/next_page.dart';
 
 class CreateCutListPage extends StatefulWidget {
-  final projectID;
-  const CreateCutListPage({super.key, this.projectID});
+  final projectID, catName, catID;
+  const CreateCutListPage({super.key, this.projectID, this.catName, this.catID});
 
   @override
   CreateCutListPageState createState() => CreateCutListPageState();
 }
 
 class CreateCutListPageState extends State<CreateCutListPage> {
-  final CutTypeCard cutTypeCard = CutTypeCard();
+
   final CreateCutListInput cutListInput = CreateCutListInput();
   final Explanation explanation = Explanation();
   late AppBloc appBloc;
   late bool hasLoaded = false;
-  late String categoryName="";
-  late String categoryId;
+
+
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late List<String> cutList = [];
   late bool loading=false;
@@ -37,19 +38,9 @@ class CreateCutListPageState extends State<CreateCutListPage> {
   final TextEditingController _width = TextEditingController();
   final TextEditingController _depth = TextEditingController();
 
-  loadAllCategories() async {
-    await Server().getAction(appBloc: appBloc, url: Urls.cutCategories);
-    appBloc.cutCategories = appBloc.mapSuccess;
-    print(appBloc.cutCategories);
-  }
+
 
   validateCutForm() async {
-    if(categoryId==null){
-      AppActions().showErrorToast(
-        text: "Select the list category at the top",
-        context: context,
-      );
-    }else{
     FocusScope.of(context).unfocus();
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -63,13 +54,12 @@ class CreateCutListPageState extends State<CreateCutListPage> {
         );
       }
     }
-    }
   }
 
   cutPreview() async {
     Map cutListData = {
       "projectId": '${widget.projectID}',
-      "categoryId": categoryId,
+      "categoryId": widget.catID,
       "name": _name.text,
       "measurement": {
         "height": double.parse(_height.text),
@@ -79,19 +69,20 @@ class CreateCutListPageState extends State<CreateCutListPage> {
       "material": "Plywood"
     };
 
-    print('all cutlisdata:${cutListData}');
     if (await Server().postAction(
         url: Urls.createCutlist, data: cutListData, bloc: appBloc)) {
-      print(' map success${appBloc.mapSuccess}');
-      AppActions().showSuccessToast(context: context, text: "Door Saved");
-
-        await Server().getAction(appBloc: appBloc, url: Urls.allCutList);
-        appBloc.cutlistData = appBloc.mapSuccess.where((item) {
-          return item['project'] == widget.projectID;
-        }).toList();
+      if(appBloc.mapSuccess["error"]!=null){
+        showLoading();
+        AppActions().showErrorToast(context: context, text: appBloc.mapSuccess["error"]);
+      }else{
+        print('Map success ${appBloc.mapSuccess}');
+        AppActions().showSuccessToast(context: context, text: "Item Saved");
+        await Server().loadMyProject(appBloc: appBloc, context: context);
+        await Server().loadAllTask(appBloc: appBloc, context: context, projectID: widget.projectID);
         print(appBloc.cutlistData);
+        Navigator.pop(context);
+      }
 
-      Navigator.pop(context);
     }else{
       showLoading();
       AppActions().showErrorToast(context: context, text: appBloc.errorMsg);
@@ -111,14 +102,10 @@ class CreateCutListPageState extends State<CreateCutListPage> {
   @override
   Widget build(BuildContext context) {
     appBloc = Provider.of<AppBloc>(context);
-    if (!hasLoaded) {
-      loadAllCategories();
-      hasLoaded = true;
-    }
     return Scaffold(
-        backgroundColor: Colors.grey[100],
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.white,
           centerTitle: false,
           leading: IconButton(
               onPressed: () => Navigator.pop(context),
@@ -127,7 +114,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                 size: 30,
               )),
           title: Text(
-            'Create New Door',
+            'Create new ${widget.catName}',
             style: TextStyle(fontWeight: FontWeight.w700),
           ),
         ),
@@ -146,7 +133,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
             txColor: Colors.black,
             bgColor: Color(PublicVar.primaryColor),
             loading: loading,
-            text: "Create",
+            text: "Save ${widget.catName}",
             addIconBG: false,
           ),
         ),
@@ -156,6 +143,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
                 child: Form(
                   key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Stack(
                     children: [
                       Column(
@@ -164,56 +152,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                           SizedBox(
                             height: 10,
                           ),
-                          SizedBox(
-                              width: 350,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Cut Type',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFFE0f2851),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  appBloc.cutCategories.isEmpty
-                                      ? const Center(
-                                          child: CircularProgressIndicator(
-                                              color: Colors.grey),
-                                        )
-                                      : SizedBox(
-                                          height: 40,
-                                          child: ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount:
-                                                appBloc.cutCategories.length,
-                                            itemBuilder: (ctx, i) {
-                                              return Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 10.0),
-                                                child: cutTypeCard.cutTypeCard(
-                                                  selected:categoryName ,
-                                                  title:
-                                                      '${appBloc.cutCategories[i]['name']}',
-                                                  onTap: () {
-                                                    setState(() {
-                                                      categoryName =
-                                                          '${appBloc.cutCategories[i]['name']}';
-                                                      categoryId =
-                                                          '${appBloc.cutCategories[i]['_id']}';
-                                                    });
-                                                  },
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                ],
-                              )),
+
                           const SizedBox(
                             height: 20,
                           ),
@@ -258,25 +197,27 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                                 style: TextStyle(fontSize: 10),
                               ),
                               const SizedBox(height: 5),
-                              Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    cutListInput.createCutListCard(
-                                        title: 'Height(cm)', cutData: _height),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    cutListInput.createCutListCard(
-                                        title: 'Width(cm)', cutData: _width),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    cutListInput.createCutListCard(
-                                      title: 'Wall (cm)',
-                                      cutData: _depth,
-                                    )
-                                  ]),
+                              Container(
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      cutListInput.createCutListCard(
+                                          title: 'Height(cm)', cutData: _height),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      cutListInput.createCutListCard(
+                                          title: 'Width(cm)', cutData: _width),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      cutListInput.createCutListCard(
+                                        title: 'Wall (cm)',
+                                        cutData: _depth,
+                                      )
+                                    ]),
+                              ),
                               SizedBox(
                                 height: 50,
                               ),

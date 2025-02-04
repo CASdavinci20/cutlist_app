@@ -1,5 +1,7 @@
-import 'package:cutlist/createcutlist/createcutlistpage.dart';
+import 'package:cutlist/cutlist/containers/cuttypecard.dart';
+import 'package:cutlist/cutlist/createcutlistpage.dart';
 import 'package:cutlist/main_utils/models/PublicVar.dart';
+import 'package:cutlist/main_utils/utils/app_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
@@ -12,40 +14,46 @@ import '../main_utils/bloc/app_bloc.dart';
 import '../main_utils/bloc/server.dart';
 import '../main_utils/models/urls.dart';
 import '../main_utils/utils/next_page.dart';
-import '../mylist/containers/mylist.dart';
+import 'containers/mylist.dart';
 
-class AddCutListPage extends StatefulWidget {
+class CutListPage extends StatefulWidget {
   final projectName;
   final projectID;
-  final projectIndex;
-  final cutData;
-  const AddCutListPage(
+
+  const CutListPage(
       {super.key,
       this.projectName,
-      this.projectID,
-      this.projectIndex,
-      this.cutData});
+      this.projectID, });
 
   @override
-  AddCutListPageState createState() => AddCutListPageState();
+  CutListPageState createState() => CutListPageState();
 }
 
-class AddCutListPageState extends State<AddCutListPage> {
+class CutListPageState extends State<CutListPage> {
   final MyList myList = MyList();
+  final CutTypeCard cutTypeCard = CutTypeCard();
   late AppBloc appBloc;
   late bool isloading = false;
 
   loadAllTask() async {
     appBloc.hasTasks = false;
+    print("Project ID: ${widget.projectID}");
     await Server().loadAllTask(
         appBloc: appBloc, context: context, projectID: widget.projectID);
+  }
+
+  loadAllCategories() async {
+    await Server().getAction(appBloc: appBloc, url: Urls.cutCategories);
+    appBloc.cutCategories = appBloc.mapSuccess;
   }
 
   @override
   Widget build(BuildContextcontext) {
     appBloc = Provider.of<AppBloc>(context);
     if (!isloading) {
+      appBloc.cutlistData=[];
       loadAllTask();
+      loadAllCategories();
       isloading = true;
     }
     return Scaffold(
@@ -64,7 +72,7 @@ class AddCutListPageState extends State<AddCutListPage> {
           style: TextStyle(fontWeight: FontWeight.w700),
         ),
         actions: [
-          TextButton(
+          appBloc.cutCategories.length>0? TextButton(
               onPressed: () {
                 final List<Map<String, dynamic>> typedData =
                     appBloc.cutlistData.cast<Map<String, dynamic>>();
@@ -78,7 +86,7 @@ class AddCutListPageState extends State<AddCutListPage> {
                   fontWeight: FontWeight.w700,
                   color: Color(0xFFE0f2c94c),
                 ),
-              )))
+              ))):SizedBox()
         ],
       ),
       body: SingleChildScrollView(
@@ -108,7 +116,7 @@ class AddCutListPageState extends State<AddCutListPage> {
                               padding: EdgeInsets.symmetric(vertical: 10),
                               child: myList.myListCard(
                                   todoTitle: cutData['name'],
-                                  todoTotal: "${tasks.length}",
+                                  todoCat: "Type - ${cutData['category']["name"].toString().toUpperCase()}",
                                   onTap: () {
                                     // NextPage().nextRoute(context,
                                     //     CutListSummaryPage(cutData: cutData));
@@ -117,25 +125,103 @@ class AddCutListPageState extends State<AddCutListPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:appBloc.cutCategories.length>0? FloatingActionButton(
           onPressed: () {
-            context;
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CreateCutListPage(
-                        projectID: widget.projectID,
-                      )),
-            );
+            openCategories();
+            // context;
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //       builder: (context) => CreateCutListPage(
+            //             projectID: widget.projectID,
+            //           )),
+            // );
           },
           child: Icon(
             Icons.add,
             size: 30,
           ),
           backgroundColor: Color(0xFFE0f2c94c),
-          shape: const CircleBorder()),
+          shape: const CircleBorder()):SizedBox(),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
+  }
+
+  openCategories(){
+    AppActions().showAppDialog(context,
+        title: "Choose Type",
+        descp: "Select the type of Cutlist you want to create",
+        child: Container(
+          child: ListView.separated(
+            separatorBuilder: (ctxx,ii){
+              return Divider();
+            },
+            itemCount:appBloc.cutCategories.length ,
+            itemBuilder: (ctx, i){
+              return ListTile(leading: Icon(Icons.list_alt), title: Text("${appBloc.cutCategories[i]['name'].toString().toUpperCase()}", style: TextStyle(fontWeight: FontWeight.bold, fontSize:20 ),),
+              onTap: (){
+                Navigator.pop(context);
+                NextPage().nextRoute(context, CreateCutListPage(projectID:widget.projectID, catID:appBloc.cutCategories[i]['_id'] , catName:appBloc.cutCategories[i]['name'] ,));
+              }, trailing: Icon(Icons.keyboard_arrow_right),);
+            },
+            shrinkWrap: true,
+            physics: ScrollPhysics(),
+
+          ),
+        ),
+        singlAction: true,
+        okText: "Close");
+
+    // return SizedBox(
+    //     width: 350,
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         const Text(
+    //           'Cut Type',
+    //           style: TextStyle(
+    //             fontSize: 20,
+    //             fontWeight: FontWeight.w600,
+    //             color: Color(0xFFE0f2851),
+    //           ),
+    //         ),
+    //         SizedBox(
+    //           height: 10,
+    //         ),
+    //         appBloc.cutCategories.isEmpty
+    //             ? const Center(
+    //           child: CircularProgressIndicator(
+    //               color: Colors.grey),
+    //         )
+    //             : SizedBox(
+    //           height: 40,
+    //           child: ListView.builder(
+    //             scrollDirection: Axis.horizontal,
+    //             itemCount:
+    //             appBloc.cutCategories.length,
+    //             itemBuilder: (ctx, i) {
+    //               return Padding(
+    //                 padding: const EdgeInsets.only(
+    //                     right: 10.0),
+    //                 child: cutTypeCard.cutTypeCard(
+    //                   selected:categoryName ,
+    //                   title:
+    //                   '${appBloc.cutCategories[i]['name']}',
+    //                   onTap: () {
+    //                     setState(() {
+    //                       categoryName =
+    //                       '${appBloc.cutCategories[i]['name']}';
+    //                       categoryId =
+    //                       '${appBloc.cutCategories[i]['_id']}';
+    //                     });
+    //                   },
+    //                 ),
+    //               );
+    //             },
+    //           ),
+    //         ),
+    //       ],
+    //     ));
   }
 
   Future<Uint8List> generatePdf(List<dynamic> rawData) async {
@@ -173,11 +259,22 @@ class AddCutListPageState extends State<AddCutListPage> {
                           width: 30,
                           child: pw.Divider(thickness: 1),
                         ), ),
+
                         pw.TextSpan(text: "  ${widget.projectName}", style: pw.TextStyle(
                           fontSize: 18,
                           fontWeight: pw.FontWeight.normal,
                         )),
+
                   ])),
+                  pw.SizedBox(height: 10),
+                  pw.Text(
+                    "TYPE: ${project['category']["name"].toString().toUpperCase()}",
+                    style: pw.TextStyle(
+                        fontSize: 18,
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColors.white
+                    ),
+                  ),
                   pw.SizedBox(height: 10),
                   pw.Container(
                     child: pw.Row(
@@ -195,7 +292,7 @@ class AddCutListPageState extends State<AddCutListPage> {
                         ),
                       ),
                       pw.Container(
-                        width: 140,
+                        width: 60,
                         child: pw.Text(
                           "EDGING",
                           style: pw.TextStyle(
@@ -209,7 +306,7 @@ class AddCutListPageState extends State<AddCutListPage> {
                         width: 60,
                         child: pw.Text(
                           "LENGTH",
-                          // textAlign: pw.TextAlign.center,
+                           textAlign: pw.TextAlign.center,
                           style: pw.TextStyle(
                             fontSize: 13,
                             fontWeight: pw.FontWeight.bold,
@@ -222,7 +319,7 @@ class AddCutListPageState extends State<AddCutListPage> {
                         width: 60,
                         child: pw.Text(
                           "WIDTH",
-                          // textAlign: pw.TextAlign.center,
+                           textAlign: pw.TextAlign.center,
                           style: pw.TextStyle(
                             fontSize: 13,
                             fontWeight: pw.FontWeight.bold,
@@ -235,7 +332,7 @@ class AddCutListPageState extends State<AddCutListPage> {
                         width: 70,
                         child: pw.Text(
                           "QUANTITY",
-                          // textAlign: pw.TextAlign.center,
+                           textAlign: pw.TextAlign.center,
                           style: pw.TextStyle(
                             fontSize: 12,
                             fontWeight: pw.FontWeight.bold,
@@ -243,8 +340,6 @@ class AddCutListPageState extends State<AddCutListPage> {
                           ),
                         ),
                       ),
-
-
                     ],
                   ), padding: pw.EdgeInsets.symmetric(vertical: 5, horizontal: 5), color: PdfColors.orange),
                   pw.SizedBox(height: 10),
@@ -279,8 +374,24 @@ class AddCutListPageState extends State<AddCutListPage> {
                               pw.Container(
                                 width: 60,
                                 child: pw.Text(
+                                  "${task['edging']?? '0.00'}",
+                                   textAlign: pw.TextAlign.center,
+                                  style: pw.TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: pw.FontWeight.bold,
+                                  ),
+                                ),
+                              ),pw.Container(
+                                  width: 1,
+                                  height: 20,
+                                  color: PdfColors.grey400
+
+                              ),
+                              pw.Container(
+                                width: 60,
+                                child: pw.Text(
                                   "${task['length']?.toStringAsFixed(2) ?? '0.00'}",
-                                  // textAlign: pw.TextAlign.center,
+                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     fontSize: 14,
                                     fontWeight: pw.FontWeight.bold,
@@ -297,7 +408,7 @@ class AddCutListPageState extends State<AddCutListPage> {
                                 width: 60,
                                 child: pw.Text(
                                   "${task['width']?.toStringAsFixed(2) ?? '0.00'}",
-                                  // textAlign: pw.TextAlign.center,
+                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     fontSize: 14,
                                     fontWeight: pw.FontWeight.bold,
@@ -314,7 +425,7 @@ class AddCutListPageState extends State<AddCutListPage> {
                                 width: 60,
                                 child: pw.Text(
                                   "${task['quantity']?.toStringAsFixed(2) ?? '0.00'}",
-                                  // textAlign: pw.TextAlign.center,
+                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     fontSize: 14,
                                     fontWeight: pw.FontWeight.bold,
@@ -444,4 +555,6 @@ class AddCutListPageState extends State<AddCutListPage> {
       onLayout: (format) async => pdfBytes,
     );
   }
+
+
 }
