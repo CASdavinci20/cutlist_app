@@ -133,7 +133,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
             txColor: Colors.black,
             bgColor: Color(PublicVar.primaryColor),
             loading: loading,
-            text: "Save ${widget.catName}",
+            text: "Save",
             addIconBG: false,
           ),
         ),
@@ -180,44 +180,37 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                                         color: Color(0xFFE0f2851),
                                       ),
                                     ),
-                                    Text(
-                                      '(2 long)',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xFFEf5af71),
-                                      ),
-                                    )
+
                                   ],
                                 ),
                               ),
                               const SizedBox(height: 5),
                               const Text(
-                                'All measurement should be in c.m',
+                                'All measurements should be in c.m',
                                 style: TextStyle(fontSize: 10),
                               ),
                               const SizedBox(height: 5),
-                              Container(
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      cutListInput.createCutListCard(
-                                          title: 'Height(cm)', cutData: _height),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      cutListInput.createCutListCard(
-                                          title: 'Width(cm)', cutData: _width),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      cutListInput.createCutListCard(
-                                        title: 'Wall (cm)',
-                                        cutData: _depth,
-                                      )
-                                    ]),
-                              ),
+
+                              Text("Height"),
+                              Container(child: Row(children: [
+                                cutListInput.createCutListCard(
+                                    title: 'Enter Height (cm)', cutData: _height),
+                              ],),),
+                              const SizedBox(height: 5),
+                              Text("Width"),
+                              Container(child: Row(children: [
+                                cutListInput.createCutListCard(
+                                    title: 'Enter Width (cm)', cutData: _width),
+                              ],),),
+                              const SizedBox(height: 5),
+                              Text("Wall Thickness"),
+                              Container(child: Row(children: [
+                                cutListInput.createCutListCard(
+                                  title: 'Enter Wall Thickness (cm)',
+                                  cutData: _depth,
+                                )
+                              ],),),
+
                               SizedBox(
                                 height: 50,
                               ),

@@ -80,7 +80,7 @@ class CutListPageState extends State<CutListPage> {
               },
               child: const Center(
                   child: Text(
-                'Export',
+                'Generate Cutlist',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,

@@ -147,7 +147,7 @@ class CreateAccountPageState extends State<CreateAccountPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'will need to verify your phone number',
+                        'we will need to verify your phone number',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 14,
@@ -182,7 +182,7 @@ class CreateAccountPageState extends State<CreateAccountPage> {
                         height: 20,
                       ),
                   Text(
-                      'By clicking on the registration button, you accept our Privacy Policy and Term of Use', textAlign: TextAlign.center,
+                      "By clicking on the registration button, you accept our Privacy Policy and Term's of Use", textAlign: TextAlign.center,
                 ),
                       SizedBox(
                         height: 20,

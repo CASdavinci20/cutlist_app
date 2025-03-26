@@ -134,6 +134,9 @@ class HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 20,
                 ),
+                BgPattern(child: Container(
+
+                )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -165,7 +168,7 @@ class HomePageState extends State<HomePage> {
                         : appBloc.cutProject.isEmpty
                             ? const Center(
                                 child: Text(
-                                    'No project, please create one created'),
+                                    'No project, please create one'),
                               )
                             : ListView.builder(
                                 physics: ClampingScrollPhysics(),
@@ -360,5 +363,24 @@ class HomePageState extends State<HomePage> {
             ),
           ),
         ));
+  }
+
+
+
+}
+
+
+class BgPattern extends StatelessWidget {
+  const BgPattern({super.key, this.child});
+  final child;
+  @override
+  Widget build(BuildContext context) {
+    return  Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+            image: DecorationImage(image: AssetImage("assets/back-4.png"),fit: BoxFit.cover)
+        ),
+        child:child);
   }
 }

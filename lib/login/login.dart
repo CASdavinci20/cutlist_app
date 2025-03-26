@@ -140,7 +140,7 @@ class _LoginpageState extends State<Loginpage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'will need to verify your phone number',
+                        'we will need to verify your phone number',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 14,
