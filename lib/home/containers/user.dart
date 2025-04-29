@@ -1,3 +1,4 @@
+import 'package:cutlist/main_utils/models/PublicVar.dart';
 import 'package:flutter/material.dart';
 
 class UserContainer {
@@ -12,10 +13,22 @@ class UserContainer {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.asset(
-                  'assets/logo.png',
-                  height: 40,
-                ),
+                // Image.asset(
+                //   'assets/logo.png',
+                //   height: 40,
+                // ),
+                CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.amberAccent[100],
+                child:   Text(
+                  PublicVar.userName.isNotEmpty ? PublicVar.userName[0].toUpperCase() : '',
+                  style: const TextStyle(
+                    fontSize: 25,
+                    // color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+                  ),
                 const SizedBox(
                   width: 20,
                 ),

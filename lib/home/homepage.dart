@@ -33,6 +33,7 @@ class HomePageState extends State<HomePage> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late AppBloc appBloc;
   late bool isloading = false;
+  late bool loading = false;
 
   TextEditingController _controllerProjectName = TextEditingController();
 
@@ -40,7 +41,7 @@ class HomePageState extends State<HomePage> {
     FocusScope.of(context).unfocus();
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-
+    showLoading();
       if (await AppActions().checkInternetConnection()) {
         sendToSever();
       } else {
@@ -62,14 +63,29 @@ class HomePageState extends State<HomePage> {
         url: Urls.cutCreateProject, data: projectName, bloc: appBloc)) {
       var projectID=appBloc.mapSuccess["_id"];
       await loadMyProject();
-      AppActions().showSuccessToast(context: context, text: "Project Saved");
+      // AppActions().showSuccessToast(context: context, text: "Project Saved");
       await Server().loadAllTask(appBloc: appBloc, context: context, projectID: projectID);
-      NextPage().nextRoute(
-          context,
-          AddCutListPage(
-            projectName: _controllerProjectName.text,
-            projectID: projectID,
-          ));
+        Navigator.pop(context);
+      AppActions().showAppDialog(
+        context,
+        title: "Project Saved",
+        descp: "You can now create your cutlist.",
+        okText: "Confirm",
+        cancleText: "Cancel",
+        danger: false,
+        singlAction: true,
+        okAction: () async {
+           Navigator.pop(context);
+          NextPage().nextRoute(
+              context,
+              AddCutListPage(
+                projectName: _controllerProjectName.text,
+                projectID: projectID,
+              ));
+        },
+      );
+
+     
 
     }
   }
@@ -90,6 +106,16 @@ class HomePageState extends State<HomePage> {
     }else{
       AppActions().showErrorToast(context: context, text: appBloc.errorMsg);
     }
+  }
+
+  
+  showLoading() {
+    if (loading) {
+      loading = false;
+    } else {
+      loading = true;
+    }
+    setState(() {});
   }
 
   @override
@@ -205,10 +231,11 @@ class HomePageState extends State<HomePage> {
                           addTask.addTask(
                               projectName: _controllerProjectName,
                               context: context,
-                              onTap: () {
-                                AppActions().showLoadingToast(context: context, text: "Creating Project ...");
-                                Navigator.pop(context);
-                                createProject();
+                              onTap: (showLoading) async{
+                                // AppActions().showLoadingToast(context: context, text: "Creating Project ...");
+                                // Navigator.pop(context);
+                                // showLoading();
+                               await createProject();
                               });
                         },
                         child: Row(

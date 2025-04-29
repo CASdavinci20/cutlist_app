@@ -30,57 +30,81 @@ class _BottomNavState extends State<BottomNav> {
   TextEditingController _controllerProjectName = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late AppBloc appBloc;
+  late bool loading = false;
 
-   createProject()async{
+  createProject() async {
     FocusScope.of(context).unfocus();
-    if(_formKey.currentState!.validate()){
+    if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      Navigator.pop(context);
-     if (await AppActions().checkInternetConnection()) {
-      sendToSever();
-     }else{
-      AppActions().showErrorToast(
-        text: PublicVar.checkInternet,
-        context: context,
-      );
-     }
+      showLoading();
+      if (await AppActions().checkInternetConnection()) {
+        sendToSever();
+      
+      } else {
+        AppActions().showErrorToast(
+          text: PublicVar.checkInternet,
+          context: context,
+        );
+      }
     }
-   }
+  }
 
-    sendToSever() async{
-     Map projectData= {
-      "name":'${_controllerProjectName.text}',
+  sendToSever() async {
+    Map projectData = {
+      "name": '${_controllerProjectName.text}',
       "userId": "${PublicVar.userAppID}"
     };
 
-    if(await Server().postAction(url:Urls.cutCreateProject,data:projectData,bloc:appBloc)){
-      var projectID=appBloc.mapSuccess["_id"];
+    if (await Server().postAction(
+        url: Urls.cutCreateProject, data: projectData, bloc: appBloc)) {
+      CircularProgressIndicator(
+        color: Colors.grey,
+      );
+      var projectID = appBloc.mapSuccess["_id"];
       await Server().loadMyProject(appBloc: appBloc, context: context);
-      AppActions().showSuccessToast(context: context, text: "Project Saved");
-      await Server().loadAllTask(appBloc: appBloc, context: context, projectID: projectID);
-      NextPage().nextRoute(
-          context,
-          AddCutListPage(
-            projectName: _controllerProjectName.text,
-            projectID: projectID,
-          ));
-
+      await Server().loadAllTask(
+          appBloc: appBloc, context: context, projectID: projectID);
+   Navigator.pop(context);
+      AppActions().showAppDialog(
+        context,
+        title: "Project Saved",
+        descp:
+            "You can now create your cutlist.",
+        okText: "Confirm",
+        cancleText: "Cancel",
+        danger: false,
+        singlAction: true,
+        okAction: () async {
+           Navigator.pop(context);
+          NextPage().nextRoute(
+              context,
+              AddCutListPage(
+                projectName: _controllerProjectName.text,
+                projectID: projectID,
+              ));
+        },
+      );
     }
+  }
 
-   }
-
-
-
+  showLoading() {
+    if (loading) {
+      loading = false;
+    } else {
+      loading = true;
+    }
+    setState(() {});
+  }
 
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
- GlobalKey _fabKey = GlobalObjectKey("fab");
-  final PageStorageBucket bucket =PageStorageBucket();
+  GlobalKey _fabKey = GlobalObjectKey("fab");
+  final PageStorageBucket bucket = PageStorageBucket();
   late Widget currentPage;
-  List bottomItems =[
-    {'icons': Icons.home,'text': "Home"},
-    {'icons': Icons.folder,'text': "Project"},
-    {'icons': Icons.notifications,'text': "Notification"},
-    {'icons': Icons.person,'text': "Profile"},
+  List bottomItems = [
+    {'icons': Icons.home, 'text': "Home"},
+    {'icons': Icons.folder, 'text': "Project"},
+    {'icons': Icons.notifications, 'text': "Notification"},
+    {'icons': Icons.person, 'text': "Profile"},
   ];
 
   int currentIndex = 0;
@@ -88,34 +112,22 @@ class _BottomNavState extends State<BottomNav> {
   final Key key2 = PageStorageKey('page2');
   final Key key3 = PageStorageKey('page3');
   final Key key4 = PageStorageKey('page4');
-  final navigationIconSize =25.0;
-  late HomePage  page1;
+  final navigationIconSize = 25.0;
+  late HomePage page1;
   late MyListPage page2;
   late NotificationPage page3;
   late ProfilePage page4;
-  List<Widget> pages =[];
+  List<Widget> pages = [];
 
   @override
-  void initState(){
-    page1 =HomePage(
-      scaffoldKey: _scaffoldKey,
-      key: key1
-    );
+  void initState() {
+    page1 = HomePage(scaffoldKey: _scaffoldKey, key: key1);
 
-     page2 =MyListPage(
-      scaffoldKey: _scaffoldKey,
-      key: key2
-    );
+    page2 = MyListPage(scaffoldKey: _scaffoldKey, key: key2);
 
-     page3 =NotificationPage(
-      scaffoldKey: _scaffoldKey,
-      key: key3
-    );
+    page3 = NotificationPage(scaffoldKey: _scaffoldKey, key: key3);
 
-     page4 =ProfilePage(
-      scaffoldKey: _scaffoldKey,
-      key: key4
-    );
+    page4 = ProfilePage(scaffoldKey: _scaffoldKey, key: key4);
 
     pages = [page1, page2, page3, page4];
     if (widget.pageIndex != null) {
@@ -140,69 +152,57 @@ class _BottomNavState extends State<BottomNav> {
     super.initState();
   }
 
-  @override 
+  @override
   Widget build(BuildContext context) {
-     appBloc = Provider.of<AppBloc>(context);
-    return  Scaffold(
+    appBloc = Provider.of<AppBloc>(context);
+    return Scaffold(
       key: _scaffoldKey,
       body: PageStorage(
-        bucket: bucket, 
-        child:Form(
-          key: _formKey,
-      child: currentPage
-      ),
+        bucket: bucket,
+        child: Form(key: _formKey, child: currentPage),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        key: _fabKey,
-        backgroundColor:Colors.white, 
-        showSelectedLabels:true ,
-        selectedItemColor: Color(0xFFE0f2c94c),
-        unselectedItemColor:Color(0xFFEb0b2c3) ,
-        showUnselectedLabels:true,
-        elevation: 2.5,
-        unselectedFontSize: 10,
-        selectedFontSize: 12,
-        type: BottomNavigationBarType.fixed,
-        iconSize: navigationIconSize,
-        currentIndex: currentIndex,
-        onTap: (int index){
-          setState(() {
-            currentIndex =index;
-            currentPage = pages[index];
-          });
-        },
-        items:List.generate(bottomItems.length, (i){
-          return BottomNavigationBarItem(
-            icon: Icon(bottomItems[i]['icons']),
-            label: bottomItems[i]["text"]
-            );
-        }
-        )
-        ),
-          floatingActionButton: FloatingActionButton(
-        onPressed: () {
-        
-        
-          context;
-             addTask.addTask(
-              projectName: _controllerProjectName, 
-              context: context,
-              onTap: (){
-               createProject();
-              }
-              );
-        },
-        child: const Icon(Icons.add,size: 30,),
-        backgroundColor: Color(0xFFE0f2c94c),
-        shape: CircleBorder()
-      ),
+          key: _fabKey,
+          backgroundColor: Colors.white,
+          showSelectedLabels: true,
+          selectedItemColor: Color(0xFFE0f2c94c),
+          unselectedItemColor: Color(0xFFEb0b2c3),
+          showUnselectedLabels: true,
+          elevation: 2.5,
+          unselectedFontSize: 10,
+          selectedFontSize: 12,
+          type: BottomNavigationBarType.fixed,
+          iconSize: navigationIconSize,
+          currentIndex: currentIndex,
+          onTap: (int index) {
+            setState(() {
+              currentIndex = index;
+              currentPage = pages[index];
+            });
+          },
+          items: List.generate(bottomItems.length, (i) {
+            return BottomNavigationBarItem(
+                icon: Icon(bottomItems[i]['icons']),
+                label: bottomItems[i]["text"]);
+          })),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            context;
+            addTask.addTask(
+                projectName: _controllerProjectName,
+                context: context,
+                onTap: (showLoading) async {
+                  // showLoading();
+                  await createProject();
+                });
+          },
+          child: const Icon(
+            Icons.add,
+            size: 30,
+          ),
+          backgroundColor: Color(0xFFE0f2c94c),
+          shape: CircleBorder()),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
-
-
-
-
-
-

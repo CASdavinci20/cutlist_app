@@ -9,12 +9,17 @@ class AddTask {
   Future addTask({
     required TextEditingController projectName,
     required BuildContext context,
-    required VoidCallback onTap 
+      required Future<void> Function(VoidCallback showLoading) onTap,
+    // required VoidCallback onTap 
   }) {
-    late bool loading = false;
+    bool loading = false;
+    
     return showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext context,) {
+        return StatefulBuilder(
+        builder: (context, setState) {
+          //  bool loading = false;
         return AlertDialog(
           backgroundColor: const Color(0xFFEf9f9f9) ,
           contentPadding: EdgeInsets.zero, 
@@ -64,25 +69,39 @@ class AddTask {
                     ),
                     SizedBox(height: 30),
                     Center(
-                      // child: ButtonWidget(
-                      //     onPress:()=> onTap,
-                      //     width: double.infinity,
-                      //     height: 50.0,
-                      //   radius: 50.0,
-                      //     txColor: Colors.black,
-                      //     bgColor: Color(PublicVar.primaryColor),
-                      //     loading: loading,
-                      //     text: "Save",
-                      //     addIconBG: false,
-                      //   ),
-                      
-                      child: GestureDetector(
-                        onTap:onTap,
-                        child: Image.asset(
-                          'assets/createtaskbutton.png',
-                          height: 100,
+                      child: ButtonWidget(
+                      onPress:   () async {
+                        // onTap;
+                            setState(() {
+                              loading = true;
+                            });
+                            // await Future.delayed(Duration(milliseconds: 700)); 
+                            await onTap(() {
+                              setState(() {
+                                loading = false;
+                              });
+                            });
+                          },
+
+                          // onPress: onTap,
+                          width: double.infinity,
+                          height: 50.0,
+                        radius: 50.0,
+                          txColor: Colors.black,
+                          bgColor: Color(0xFFEf9f9f9),
+                           border:  Border.all(width: 1, color: Color(PublicVar.primaryColor)),
+                          loading: loading,
+                          text: "Create Project",
+                          addIconBG: false,
                         ),
-                      ),
+                      
+                      // child: GestureDetector(
+                      //   onTap:onTap,
+                      //   child: Image.asset(
+                      //     'assets/createtaskbutton.png',
+                      //     height: 100,
+                      //   ),
+                      // ),
                     ),
                   ],
                 ),
@@ -125,5 +144,8 @@ class AddTask {
       },
     );
   }
+  
+    );
 }
 
+}

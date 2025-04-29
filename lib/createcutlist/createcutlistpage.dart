@@ -199,14 +199,17 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                             Row(children: [
+                            //  Row(children: [
                                cutListInput.createCutListCard(
+                                tag: 'Door name',
+                                explaination: '',
                                  title: 'Door Name',
                                  cutData: _name,
                                  keyboardType: "text"
                                ),
-                             ],),
+                            //  ],),
                               SizedBox(height: 20,),
                               const SizedBox(
                                 child: Row(
@@ -238,21 +241,28 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                                 style: TextStyle(fontSize: 10),
                               ),
                               const SizedBox(height: 5),
-                              Row(
+                              Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     cutListInput.createCutListCard(
+                                      tag: 'Height of Door',
+                                      explaination: 'Measure the height of the doorway on the Left and Right. Input the higher figure.',
                                         title: 'Height(cm)', cutData: _height),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
+                                    // const SizedBox(
+                                    //   width: 10,
+                                    // ),
                                     cutListInput.createCutListCard(
+                                      tag: 'Width of door',
+                                      explaination: 'Measure the width of the doorway at the Top, Middle and Bottom. Input the highest figure.',
                                         title: 'Width(cm)', cutData: _width),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
+                                    // const SizedBox(
+                                    //   width: 10,
+                                    // ),
                                     cutListInput.createCutListCard(
+                                      tag: 'Wall thickness',
+                                      explaination: 'Measure the wall thickness of the doorway at the Top, Middle and Bottom on both sides of the doorway (Left and Right) and input the highest figure',
                                       title: 'Wall Thickness(cm)',
                                       cutData: _depth,
                                     )

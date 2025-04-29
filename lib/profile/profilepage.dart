@@ -25,6 +25,9 @@ class ProfilePageState extends State<ProfilePage> {
   late AppBloc appBloc;
   late bool isLoading = false;
 
+
+  
+
   // loadCredit()async{
   //   await Server().getAction(appBloc:appBloc, url: Urls.cutCreditStat);
   //   appBloc.cutCredit = appBloc.mapSuccess;
@@ -54,12 +57,28 @@ class ProfilePageState extends State<ProfilePage> {
                         children: [
                           GestureDetector(
                               onTap: () {},
-                              child: Image.asset(
-                                'assets/Ellipse.png',
-                                width: 60,
-                                height: 60,
-                                fit: BoxFit.cover,
-                              )),
+                              // child: Image.asset(
+                              //   'assets/Ellipse.png',
+                              //   width: 60,
+                              //   height: 60,
+                              //   fit: BoxFit.cover,
+                              // )
+
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.amberAccent[100],
+                            child:   Text(
+                              PublicVar.userName.isNotEmpty ? PublicVar.userName[0].toUpperCase() : '',
+                              style: const TextStyle(
+                                fontSize: 25,
+                                // color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+        
+                              ),
+                              
+                              ),
                           const SizedBox(
                             width: 10,
                           ),
