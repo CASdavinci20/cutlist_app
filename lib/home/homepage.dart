@@ -57,37 +57,15 @@ class HomePageState extends State<HomePage> {
       "name": '${_controllerProjectName.text}',
       "userId": "${PublicVar.userAppID}"
     };
+    var projectID = appBloc.mapSuccess["project"]["_id"];
 
     if (await Server().postAction(
         url: Urls.cutCreateProject, data: projectName, bloc: appBloc)) {
       print(appBloc.mapSuccess);
+
       var projectID = appBloc.mapSuccess["project"]["_id"];
 
       await loadMyProject();
-      // AppActions().showSuccessToast(context: context, text: "Project Saved");
-      await Server().loadAllTask(appBloc: appBloc, context: context, projectID: projectID);
-        Navigator.pop(context);
-      AppActions().showAppDialog(
-        context,
-        title: "Project Saved",
-        descp: "You can now create your cutlist.",
-        okText: "Confirm",
-        cancleText: "Cancel",
-        danger: false,
-        singlAction: true,
-        okAction: () async {
-           Navigator.pop(context);
-          NextPage().nextRoute(
-              context,
-              AddCutListPage(
-                projectName: _controllerProjectName.text,
-                projectID: projectID,
-              ));
-        },
-      );
-
-     
-
       await Server().loadAllTask(
           appBloc: appBloc, context: context, projectID: projectID);
       Navigator.pop(context);
@@ -115,6 +93,30 @@ class HomePageState extends State<HomePage> {
           okText: "Okay", okAction: () {
         Navigator.pop(context);
       });
+      AppActions().showSuccessToast(context: context, text: "Project Saved");
+      await Server().loadAllTask(appBloc: appBloc, context: context, projectID: projectID);
+        Navigator.pop(context);
+      AppActions().showAppDialog(
+        context,
+        title: "Project Saved",
+        descp: "You can now create your cutlist.",
+        okText: "Confirm",
+        cancleText: "Cancel",
+        danger: false,
+        singlAction: true,
+        okAction: () async {
+           Navigator.pop(context);
+          NextPage().nextRoute(
+              context,
+              CutListPage(
+                projectName: _controllerProjectName.text,
+                projectID: projectID,
+              ));
+        },
+      );
+
+     
+
     }
   }
 
@@ -160,7 +162,8 @@ class HomePageState extends State<HomePage> {
     return Scaffold(
         backgroundColor: const Color(0xFFEf1f1fc),
         body: SingleChildScrollView(
-          child: Form(
+
+        child: Form(
             key: _formKey,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
@@ -169,9 +172,9 @@ class HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 20,
                 ),
-                BgPattern(child: Container(
+                // BgPattern(child: Container(
 
-                )),
+                // )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -191,8 +194,9 @@ class HomePageState extends State<HomePage> {
                 ConstrainedBox(
                   constraints: BoxConstraints(
                     maxHeight: 150,
+                 
                   ),
-                  child: SizedBox(
+                 child:   SizedBox(
                     width: 350,
                     child: appBloc.hasProjects == false
                         ? const Center(
@@ -270,8 +274,6 @@ class HomePageState extends State<HomePage> {
                                 // Navigator.pop(context);
                                 // showLoading();
                                await createProject();
-                              onTap: () {
-                                createProject();
                               });
                         },
                         child: Row(
@@ -402,7 +404,9 @@ class HomePageState extends State<HomePage> {
               ]),
             ),
           ),
-        ));
+        
+        )
+        );
   }
 
 
@@ -410,17 +414,19 @@ class HomePageState extends State<HomePage> {
 }
 
 
-class BgPattern extends StatelessWidget {
-  const BgPattern({super.key, this.child});
-  final child;
-  @override
-  Widget build(BuildContext context) {
-    return  Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-            image: DecorationImage(image: AssetImage("assets/back-4.png"),fit: BoxFit.cover)
-        ),
-        child:child);
-  }
-}
+// class BgPattern extends StatelessWidget {
+//   const BgPattern({super.key, this.child});
+//   final child;
+//   @override
+//   Widget build(BuildContext context) {
+//     return  
+//     Container(
+//         width: 40.0,
+//         height: 40.0,
+//         decoration: BoxDecoration(
+//             image: DecorationImage(image: AssetImage("assets/back-4.png"),fit: BoxFit.cover)
+//         ),
+//         child:child
+//         );
+//   }
+// }

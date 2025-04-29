@@ -1,7 +1,10 @@
-import 'package:cutlist/addcutlist/addcutlistpage.dart';
-import 'package:cutlist/createcutlist/containers/createcutlistinput.dart';
-import 'package:cutlist/createcutlist/containers/cuttypecard.dart';
-import 'package:cutlist/createcutlist/containers/explanation.dart';
+// import 'package:cutlist/addcutlist/addcutlistpage.dart';
+// import 'package:cutlist/createcutlist/containers/createcutlistinput.dart';
+// import 'package:cutlist/createcutlist/containers/cuttypecard.dart';
+// import 'package:cutlist/createcutlist/containers/explanation.dart';
+import 'package:cutlist/cutlist/containers/createcutlistinput.dart';
+import 'package:cutlist/cutlist/containers/cuttypecard.dart';
+import 'package:cutlist/cutlist/containers/explanation.dart' show Explanation;
 import 'package:cutlist/main_utils/widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

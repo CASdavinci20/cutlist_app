@@ -118,8 +118,8 @@ class CutListPageState extends State<CutListPage> {
                                   todoTitle: cutData['name'],
                                   todoCat: "Type - ${cutData['category']["name"].toString().toUpperCase()}",
                                   onTap: () {
-                                    // NextPage().nextRoute(context,
-                                    //     CutListSummaryPage(cutData: cutData));
+                                    NextPage().nextRoute(context,
+                                        CutListSummaryPage(cutData: cutData));
                                   }));
                         })
           ],
@@ -128,14 +128,8 @@ class CutListPageState extends State<CutListPage> {
       floatingActionButton:appBloc.cutCategories.length>0? FloatingActionButton(
           onPressed: () {
             openCategories();
-            // context;
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //       builder: (context) => CreateCutListPage(
-            //             projectID: widget.projectID,
-            //           )),
-            // );
+            context;
+          
           },
           child: Icon(
             Icons.add,
@@ -162,7 +156,8 @@ class CutListPageState extends State<CutListPage> {
               onTap: (){
                 Navigator.pop(context);
                 NextPage().nextRoute(context, CreateCutListPage(projectID:widget.projectID, catID:appBloc.cutCategories[i]['_id'] , catName:appBloc.cutCategories[i]['name'] ,));
-              }, trailing: Icon(Icons.keyboard_arrow_right),);
+              }, 
+              trailing: Icon(Icons.keyboard_arrow_right),);
             },
             shrinkWrap: true,
             physics: ScrollPhysics(),
