@@ -1,11 +1,11 @@
 import 'package:cutlist/cutlistsummary/containers/mesurmentcontainer.dart';
-import 'package:cutlist/mylist/mylistpage.dart';
+import 'package:cutlist/cutlist/mylistpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 
-import '../createcutlist/createcutlistpage.dart';
+import '../cutlist/createcutlistpage.dart';
 import '../main_utils/bloc/app_bloc.dart';
 import '../main_utils/bloc/server.dart';
 import '../main_utils/models/PublicVar.dart';

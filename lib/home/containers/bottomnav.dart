@@ -1,8 +1,8 @@
-import 'package:cutlist/addcutlist/addcutlistpage.dart';
+ import 'package:cutlist/cutlist/cutlistpage.dart';
+import 'package:cutlist/cutlist/mylistpage.dart';
 import 'package:cutlist/home/containers/addingtask.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// import 'package:cutlist/home/containers/addingtask.dart';
 
 import '../../main_utils/bloc/app_bloc.dart';
 import '../../main_utils/bloc/server.dart';
@@ -10,12 +10,9 @@ import '../../main_utils/models/PublicVar.dart';
 import '../../main_utils/models/urls.dart';
 import '../../main_utils/utils/app_actions.dart';
 import '../../main_utils/utils/next_page.dart';
-import '../../mylist/mylistpage.dart';
-import '../../notifications/notificationpage.dart';
+ import '../../notifications/notificationpage.dart';
 import '../../profile/profilepage.dart';
 import '../homepage.dart';
-// import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BottomNav extends StatefulWidget {
   final pageIndex;
@@ -36,65 +33,62 @@ class _BottomNavState extends State<BottomNav> {
     FocusScope.of(context).unfocus();
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      showLoading();
-      if (await AppActions().checkInternetConnection()) {
-        sendToSever();
-      
-      } else {
-        AppActions().showErrorToast(
-          text: PublicVar.checkInternet,
-          context: context,
-        );
-      }
+
+     if (await AppActions().checkInternetConnection()) {
+      sendToSever();
+     }else{
+      AppActions().showErrorToast(
+        text: PublicVar.checkInternet,
+        context: context,
+      );
+     }
     }
   }
 
+
   sendToSever() async {
-    Map projectData = {
+    Map projectName = {
       "name": '${_controllerProjectName.text}',
       "userId": "${PublicVar.userAppID}"
     };
 
     if (await Server().postAction(
-        url: Urls.cutCreateProject, data: projectData, bloc: appBloc)) {
-      CircularProgressIndicator(
-        color: Colors.grey,
-      );
-      var projectID = appBloc.mapSuccess["_id"];
+        url: Urls.cutCreateProject, data: projectName, bloc: appBloc)) {
+      var projectID = appBloc.mapSuccess["project"]["_id"];
       await Server().loadMyProject(appBloc: appBloc, context: context);
-      await Server().loadAllTask(
-          appBloc: appBloc, context: context, projectID: projectID);
-   Navigator.pop(context);
-      AppActions().showAppDialog(
-        context,
-        title: "Project Saved",
-        descp:
-            "You can now create your cutlist.",
-        okText: "Confirm",
-        cancleText: "Cancel",
-        danger: false,
-        singlAction: true,
-        okAction: () async {
-           Navigator.pop(context);
-          NextPage().nextRoute(
-              context,
-              AddCutListPage(
-                projectName: _controllerProjectName.text,
-                projectID: projectID,
-              ));
-        },
-      );
+      await Server().loadAllTask(appBloc: appBloc, context: context, projectID: projectID);
+      Navigator.pop(context);
+      AppActions().showAppDialog(context,
+          title: "Project Saved",
+          descp: "Click the Add button below to start creating your List.",
+          singlAction: true,
+          okText: "Okay", okAction: () {
+            Navigator.pop(context);
+            NextPage().nextRoute(
+                context,
+                CutListPage(
+                  projectName: _controllerProjectName.text,
+                  projectID: projectID,
+                ));
+            _controllerProjectName.text="";
+            setState(() {});
+          });
+    } else {
+      Navigator.pop(context);
+      AppActions().showAppDialog(context,
+          title: "An Error occurred",
+          descp: appBloc.errorMsg + "....Please try again.",
+          singlAction: true,
+          okText: "Okay", okAction: () {
+            Navigator.pop(context);
+          });
     }
   }
 
-  showLoading() {
-    if (loading) {
-      loading = false;
-    } else {
-      loading = true;
-    }
-    setState(() {});
-  }
+
+
+
+
 
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
   GlobalKey _fabKey = GlobalObjectKey("fab");

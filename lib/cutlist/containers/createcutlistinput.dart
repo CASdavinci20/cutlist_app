@@ -1,3 +1,4 @@
+import 'package:app_framework/app_framework.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 
@@ -41,6 +42,7 @@ class CreateCutListInput {
             SizedBox(height: 5,),
         TextFormField(
           controller: cutData,
+          validator: Validation().text,
           textCapitalization: TextCapitalization.words,
           keyboardType: keyboardType=="text"?TextInputType.text:TextInputType.numberWithOptions(decimal: true),
           decoration: InputDecoration(

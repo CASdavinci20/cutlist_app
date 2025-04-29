@@ -87,11 +87,12 @@ class _LoginpageState extends State<Loginpage> {
           .setData(type: 'string', data: PublicVar.userName, key: "fullName");
       await SharedStore()
           .setData(type: 'string', data: PublicVar.userPhone, key: "phoneNumber");
-      // PublicVar.userName=appBloc.mapSuccess["data"]["user"]["fullName"];
-      // PublicVar.userOtp = appBloc.mapSuccess["data"]["user"]["otp"];
 
-      double creditValue = appBloc.mapSuccess["data"]["user"]["credits"];
-      PublicVar.creditAmount = creditValue.roundToDouble();
+      if(appBloc.mapSuccess["data"]["user"]["credits"] > 0){
+        double creditValue = appBloc.mapSuccess["data"]["user"]["credits"];
+        PublicVar.creditAmount = creditValue.roundToDouble();
+      }
+
 
       print(PublicVar.userOtp);
       print(PublicVar.creditAmount);
@@ -140,7 +141,7 @@ class _LoginpageState extends State<Loginpage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'will need to verify your phone number',
+                        'we will need to verify your phone number',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 14,

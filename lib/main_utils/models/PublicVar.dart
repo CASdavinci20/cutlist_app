@@ -45,7 +45,7 @@ class PublicVar {
 
 
       static Map<dynamic,dynamic> allList = {};
-      static double creditAmount = 0;
+      static double creditAmount = 0.0;
     
    
 }

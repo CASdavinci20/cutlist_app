@@ -25,11 +25,21 @@ class _WelcomePageState extends State<WelcomePage> {
         backgroundColor: const Color(0xFFEf9f9f9),
         body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 100, 20, 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 40),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    SizedBox(height: 20,),
+                    Text(
+                      "Vantcutz",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.w900,
+                          color: Color(PublicVar.primaryColor)),
+                    ),
+                    SizedBox(height: 20,),
                     SizedBox(
                       height: 300,
                       width: 250,
@@ -42,7 +52,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       width: 300,
                       height: 100,
                       child: Text(
-                        'Elevate your craftsmanship ',
+                        'From concept To Cut - In Seconds',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Color(0xFFE0f2851),
@@ -51,19 +61,15 @@ class _WelcomePageState extends State<WelcomePage> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 400,
-                      height: 30,
-                      child: Text(
-                        'Perfect cut lists at your fingertips.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Color(0xFFE0f2851),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
+                Text(
+                  'Designed for woodworkers, by woodworkers.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Color(0xFFE0f2851),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                     const SizedBox(
                       height: 70,
                     ),

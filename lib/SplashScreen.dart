@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
     appBloc = Provider.of<AppBloc>(context);
     return Scaffold(
       body: Center(child: Text(
-        "Vancutz",
+        "Vantcutz",
         textAlign: TextAlign.center,
         style: TextStyle(
             fontSize: 50,
