@@ -64,15 +64,57 @@ class HomePageState extends State<HomePage> {
       var projectID = appBloc.mapSuccess["project"]["_id"];
 
       await loadMyProject();
-      AppActions().showSuccessToast(context: context, text: "Project Saved");
+      // AppActions().showSuccessToast(context: context, text: "Project Saved");
       await Server().loadAllTask(appBloc: appBloc, context: context, projectID: projectID);
-      NextPage().nextRoute(
-          context,
-          AddCutListPage(
-            projectName: _controllerProjectName.text,
-            projectID: projectID,
-          ));
+        Navigator.pop(context);
+      AppActions().showAppDialog(
+        context,
+        title: "Project Saved",
+        descp: "You can now create your cutlist.",
+        okText: "Confirm",
+        cancleText: "Cancel",
+        danger: false,
+        singlAction: true,
+        okAction: () async {
+           Navigator.pop(context);
+          NextPage().nextRoute(
+              context,
+              AddCutListPage(
+                projectName: _controllerProjectName.text,
+                projectID: projectID,
+              ));
+        },
+      );
 
+     
+
+      await Server().loadAllTask(
+          appBloc: appBloc, context: context, projectID: projectID);
+      Navigator.pop(context);
+      AppActions().showAppDialog(context,
+          title: "Project Saved",
+          descp: "Click the Add button below to start creating your List.",
+          singlAction: true,
+          okText: "Okay", okAction: () {
+            Navigator.pop(context);
+        NextPage().nextRoute(
+            context,
+            CutListPage(
+              projectName: _controllerProjectName.text,
+              projectID: projectID,
+            ));
+            _controllerProjectName.text="";
+            setState(() {});
+      });
+    } else {
+      Navigator.pop(context);
+      AppActions().showAppDialog(context,
+          title: "An Error occurred",
+          descp: appBloc.errorMsg + "....Please try again.",
+          singlAction: true,
+          okText: "Okay", okAction: () {
+        Navigator.pop(context);
+      });
     }
   }
 
@@ -223,9 +265,12 @@ class HomePageState extends State<HomePage> {
                           addTask.addTask(
                               projectName: _controllerProjectName,
                               context: context,
+                              onTap: (showLoading) async{
+                                // AppActions().showLoadingToast(context: context, text: "Creating Project ...");
+                                // Navigator.pop(context);
+                                // showLoading();
+                               await createProject();
                               onTap: () {
-                                AppActions().showLoadingToast(context: context, text: "Creating Project ...");
-                                Navigator.pop(context);
                                 createProject();
                               });
                         },
