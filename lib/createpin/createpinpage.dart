@@ -1,5 +1,7 @@
 import 'package:cutlist/createpin/containers/createpininput.dart';
+import 'package:cutlist/main_utils/models/PublicVar.dart';
 import 'package:flutter/material.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 
 class CreatePinPage extends StatefulWidget {
@@ -65,28 +67,51 @@ class CreatePinPageState extends State<CreatePinPage> {
 
           const  SizedBox(height: 10,),
 
-             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-              createPinInput.createPinInput(
-               inputNumber:  _controllerPin1
-              ),
-               createPinInput.createPinInput(
-               inputNumber:  _controllerPin2
-              ),
-               createPinInput.createPinInput(
-               inputNumber:  _controllerPin3
-              ),
-                createPinInput.createPinInput(
-               inputNumber:  _controllerPin4
-              ),
-               createPinInput.createPinInput(
-               inputNumber:  _controllerPin5
-              ),
-                             createPinInput.createPinInput(
-               inputNumber:  _controllerPin6
-              ),
-            ],
+            //  Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //   createPinInput.createPinInput(
+            //    inputNumber:  _controllerPin1
+            //   ),
+            //    createPinInput.createPinInput(
+            //    inputNumber:  _controllerPin2
+            //   ),
+            //    createPinInput.createPinInput(
+            //    inputNumber:  _controllerPin3
+            //   ),
+            //     createPinInput.createPinInput(
+            //    inputNumber:  _controllerPin4
+            //   ),
+            //    createPinInput.createPinInput(
+            //    inputNumber:  _controllerPin5
+            //   ),
+            //                  createPinInput.createPinInput(
+            //    inputNumber:  _controllerPin6
+            //   ),
+            // ],
+            // ),
+
+             Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+            child:PinCodeTextField(
+                  appContext: context,
+                  length: 6,
+                  onChanged: (value) {
+                    print("Current code: $value");
+                  },
+                  onCompleted: (value) {
+                    print("Completed code: $value");
+                  },
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.box,
+                    borderRadius: BorderRadius.circular(10),
+                    fieldHeight: 50,
+                    fieldWidth: 40,
+                    activeColor: Color(PublicVar.primaryColor),
+                    selectedColor: Color(PublicVar.primaryColor),
+                    inactiveColor: Colors.grey,
+                  ),
+                ),
             ),
           ]
         )

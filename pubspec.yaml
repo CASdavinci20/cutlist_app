@@ -26,12 +26,14 @@ dependencies:
   flutter_launcher_icons:
   cupertino_icons: ^1.0.6
   # flutter_paystack: ^1.0.7
+  
 
   app_framework:
     path: app_framework
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  pin_code_fields: ^8.0.0
 
 flutter_icons:
   android: "launcher_icon"
