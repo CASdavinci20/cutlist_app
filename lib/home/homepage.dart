@@ -57,7 +57,7 @@ class HomePageState extends State<HomePage> {
       "name": '${_controllerProjectName.text}',
       "userId": "${PublicVar.userAppID}"
     };
-    var projectID = appBloc.mapSuccess["project"]["_id"];
+    
 
     if (await Server().postAction(
         url: Urls.cutCreateProject, data: projectName, bloc: appBloc)) {
@@ -66,9 +66,8 @@ class HomePageState extends State<HomePage> {
       var projectID = appBloc.mapSuccess["project"]["_id"];
 
       await loadMyProject();
-      await Server().loadAllTask(
-          appBloc: appBloc, context: context, projectID: projectID);
-      Navigator.pop(context);
+      await Server().loadAllTask( appBloc: appBloc, context: context, projectID: projectID);
+     Navigator.pop(context);
       AppActions().showAppDialog(context,
           title: "Project Saved",
           descp: "Click the Add button below to start creating your List.",
@@ -93,27 +92,27 @@ class HomePageState extends State<HomePage> {
           okText: "Okay", okAction: () {
         Navigator.pop(context);
       });
-      AppActions().showSuccessToast(context: context, text: "Project Saved");
-      await Server().loadAllTask(appBloc: appBloc, context: context, projectID: projectID);
-        Navigator.pop(context);
-      AppActions().showAppDialog(
-        context,
-        title: "Project Saved",
-        descp: "You can now create your cutlist.",
-        okText: "Confirm",
-        cancleText: "Cancel",
-        danger: false,
-        singlAction: true,
-        okAction: () async {
-           Navigator.pop(context);
-          NextPage().nextRoute(
-              context,
-              CutListPage(
-                projectName: _controllerProjectName.text,
-                projectID: projectID,
-              ));
-        },
-      );
+      // AppActions().showSuccessToast(context: context, text: "Project Saved");
+      // await Server().loadAllTask(appBloc: appBloc, context: context, projectID: projectID);
+      //   Navigator.pop(context);
+      // AppActions().showAppDialog(
+      //   context,
+      //   title: "Project Saved",
+      //   descp: "You can now create your cutlist.",
+      //   okText: "Confirm",
+      //   cancleText: "Cancel",
+      //   danger: false,
+      //   singlAction: true,
+      //   okAction: () async {
+      //      Navigator.pop(context);
+      //     NextPage().nextRoute(
+      //         context,
+      //         CutListPage(
+      //           projectName: _controllerProjectName.text,
+      //           projectID: projectID,
+      //         ));
+      //   },
+      // );
 
      
 
