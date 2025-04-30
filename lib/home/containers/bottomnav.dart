@@ -3,6 +3,7 @@ import 'package:cutlist/cutlist/mylistpage.dart';
 import 'package:cutlist/home/containers/addingtask.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../main_utils/bloc/app_bloc.dart';
 import '../../main_utils/bloc/server.dart';
@@ -13,6 +14,8 @@ import '../../main_utils/utils/next_page.dart';
  import '../../notifications/notificationpage.dart';
 import '../../profile/profilepage.dart';
 import '../homepage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class BottomNav extends StatefulWidget {
   final pageIndex;
@@ -23,6 +26,68 @@ class BottomNav extends StatefulWidget {
 }
 
 class _BottomNavState extends State<BottomNav> {
+   GlobalKey  addButton = GlobalKey();
+  
+
+  
+  List <TargetFocus> myTarget = [];
+
+  TutorialCoachMark? tutorialCoachMark;
+  bool _tutorialShown = false;
+
+
+
+
+
+    // startTime(_)async{
+    //  await Future.delayed(Duration(seconds: 1));
+    //  tutorialCoachMark = TutorialCoachMark(targets: myTarget)..show(context: context);
+    // }
+//     startTime(_) async {
+//   if (_tutorialShown) return;
+
+//   _tutorialShown = true;
+//   await Future.delayed(Duration(seconds: 1));
+//   tutorialCoachMark = TutorialCoachMark(targets: myTarget)..show(context: context);
+// }
+
+startTime(_) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool hasShownTutorial = prefs.getBool('hasShownTutorial') ?? false;
+
+  if (!hasShownTutorial) {
+    await Future.delayed(Duration(seconds: 1));
+    tutorialCoachMark = TutorialCoachMark(targets: myTarget)..show(context: context);
+    await prefs.setBool('hasShownTutorial', true);
+  }
+}
+
+
+  allTargets(){
+    myTarget.add(
+      TargetFocus(
+        keyTarget: addButton,
+        
+        identify: 'addprojects',
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            child: Text(
+              'you can add projects here',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            )
+          )
+        ]
+      )
+    );
+
+  }
+
+
+
+
   final AddTask addTask = AddTask();
   TextEditingController _controllerProjectName = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -95,7 +160,7 @@ class _BottomNavState extends State<BottomNav> {
   final PageStorageBucket bucket = PageStorageBucket();
   late Widget currentPage;
   List bottomItems = [
-    {'icons': Icons.home, 'text': "Home"},
+    {'icons': Icons.home, 'text': "Home",},
     {'icons': Icons.folder, 'text': "Project"},
     {'icons': Icons.notifications, 'text': "Notification"},
     {'icons': Icons.person, 'text': "Profile"},
@@ -115,7 +180,7 @@ class _BottomNavState extends State<BottomNav> {
 
   @override
   void initState() {
-    page1 = HomePage(scaffoldKey: _scaffoldKey, key: key1);
+    page1 = HomePage(scaffoldKey: _scaffoldKey, key: key1,);
 
     page2 = MyListPage(scaffoldKey: _scaffoldKey, key: key2);
 
@@ -144,6 +209,8 @@ class _BottomNavState extends State<BottomNav> {
       currentPage = page1;
     }
     super.initState();
+      allTargets();
+      WidgetsBinding.instance.addPostFrameCallback(startTime);
   }
 
   @override
@@ -180,6 +247,7 @@ class _BottomNavState extends State<BottomNav> {
                 label: bottomItems[i]["text"]);
           })),
       floatingActionButton: FloatingActionButton(
+          key: addButton,
           onPressed: () {
             context;
             addTask.addTask(

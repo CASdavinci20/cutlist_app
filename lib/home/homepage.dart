@@ -12,6 +12,8 @@ import '../main_utils/models/PublicVar.dart';
 import '../main_utils/models/urls.dart';
 import '../main_utils/utils/app_actions.dart';
 import '../main_utils/utils/next_page.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   final scaffoldKey;
@@ -22,6 +24,105 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+
+  GlobalKey  target = GlobalKey();
+  GlobalKey  text = GlobalKey();
+
+  List <TargetFocus> myTarget = [];
+
+  TutorialCoachMark? tutorialCoachMark;
+
+
+
+  @override
+    void initState(){
+      super.initState();
+      allTargets();
+      WidgetsBinding.instance.addPostFrameCallback(startTime);
+    }
+
+
+    // startTime(_)async{
+    //  await Future.delayed(Duration(seconds: 1));
+    //  tutorialCoachMark = TutorialCoachMark(targets: myTarget)..show(context: context);
+    // }
+
+    startTime(_) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool hasShownTutorial = prefs.getBool('hasShownTutorial') ?? false;
+
+  if (!hasShownTutorial) {
+    await Future.delayed(Duration(seconds: 1));
+    tutorialCoachMark = TutorialCoachMark(targets: myTarget)..show(context: context);
+    await prefs.setBool('hasShownTutorial', true);
+  }
+}
+
+
+
+  allTargets(){
+    myTarget.add(
+      TargetFocus(
+        keyTarget: target,
+        
+        identify: 'addprojects',
+        contents: [
+          TargetContent(
+            builder: (context, controller){
+               return  Column(
+              children: [
+                  Text(
+              'you can add projects here',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+              ElevatedButton.icon(onPressed: (){
+               controller.next();
+            }, 
+            
+            icon: Icon(Icons.next_plan),label: Text('next'), ),
+
+            ElevatedButton.icon(onPressed: (){
+             controller.skip();
+              
+            }, 
+            
+            icon: Icon(Icons.skip_next),label: Text('skip'), )
+              ],
+            );
+
+            }
+         
+           
+          )
+        ]
+      )
+    );
+
+      myTarget.add(
+      TargetFocus(
+        keyTarget: text,
+        
+        identify: 'user name',
+        contents: [
+          TargetContent(
+            child: Text(
+              'your user name here',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            )
+          )
+        ]
+      )
+    );
+  }
+
+
+  
+
+
   final UserContainer userContainer = UserContainer();
 
   final Projects projects = Projects();
@@ -167,7 +268,8 @@ class HomePageState extends State<HomePage> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
               child: Column(children: [
-                userContainer.userContainer(userName: '${PublicVar.userName}'),
+                userContainer.userContainer(
+                  userName: '${PublicVar.userName}'),
                 SizedBox(
                   height: 20,
                 ),
@@ -177,7 +279,8 @@ class HomePageState extends State<HomePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                     Text(
+                      key: text,
                       'Recent Projects',
                       style: TextStyle(
                         color: Colors.black,
@@ -204,7 +307,7 @@ class HomePageState extends State<HomePage> {
                             ),
                           )
                         : appBloc.cutProject.isEmpty
-                            ? const Center(
+                            ?  Center(
                                 child: Text(
                                     'No project, please create one'),
                               )
@@ -264,6 +367,7 @@ class HomePageState extends State<HomePage> {
                       ),
                     ),
                     GestureDetector(
+                       key: target,
                         onTap: () {
                           addTask.addTask(
                               projectName: _controllerProjectName,
