@@ -1,9 +1,12 @@
+import 'package:app_framework/utils/sharedStore.dart';
 import 'package:cutlist/cutlist/cutlistpage.dart';
 import 'package:cutlist/main_utils/utils/app_actions.dart';
 import 'package:cutlist/main_utils/utils/next_page.dart';
 import 'package:cutlist/cutlist/containers/mylist.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main_utils/bloc/app_bloc.dart';
 import '../main_utils/bloc/server.dart';
@@ -21,6 +24,80 @@ class MyListPageState extends State<MyListPage> {
   final MyList myList = MyList();
   late AppBloc appBloc;
   late bool isloading = false;
+
+  
+  GlobalKey  projectsFloder = GlobalKey();
+  
+
+  List <TargetFocus> myTarget = [];
+
+  TutorialCoachMark? tutorialCoachMark;
+
+
+   void initState(){
+      super.initState();
+      allTargets();
+      WidgetsBinding.instance.addPostFrameCallback(startTime);
+    }
+
+    startTime(_) async {
+  bool hasShownTutorial = SharedStore().getData( type: 'bool',key: 'hasShownTutorial') ?? false;
+  if (!hasShownTutorial) {
+    await Future.delayed(Duration(seconds: 2));
+    tutorialCoachMark = TutorialCoachMark(targets: myTarget)..show(context: context);
+    await SharedStore().setData(type: true,key: 'hasShownTutorial');
+  }
+}
+
+
+ allTargets(){
+    myTarget.add(
+      TargetFocus(
+        keyTarget: projectsFloder,
+        
+        identify: 'myProject',
+        contents: [
+          TargetContent(
+            builder: (context, controller){
+               return  Column(
+              children: [
+                  Text(
+              '${Icon(Icons.arrow_left)}Tap here to view projects',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+              ],
+            );
+
+            }
+         
+           
+          )
+        ]
+      )
+    );
+
+      // myTarget.add(
+      // TargetFocus(
+      //   keyTarget: text,
+        
+      //   identify: 'user name',
+      //   contents: [
+      //     TargetContent(
+      //       child: Text(
+      //         'your user name here',
+      //         style: TextStyle(
+      //           color: Colors.grey,
+      //         ),
+      //       )
+      //     )
+      //   ]
+      // )
+    // );
+  }
+
+
 
   loadMyProject() async {
     await Server().loadMyProject(appBloc: appBloc, context: context);
@@ -54,10 +131,14 @@ class MyListPageState extends State<MyListPage> {
         backgroundColor: Colors.transparent,
         centerTitle: false,
         leading: SizedBox(),
-        title: Text(
+        title: Container(
+          key:projectsFloder ,
+         child:    Text(
           'My Projects',
           style: TextStyle(fontWeight: FontWeight.w700),
         ),
+        )
+     
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -80,6 +161,7 @@ class MyListPageState extends State<MyListPage> {
                         var project = appBloc.cutProject[i];
                         var tasks = project['tasks'] as List<dynamic>;
                         return Padding(
+                          //  key:projectsFloder,
                             padding: EdgeInsets.symmetric(vertical: 10),
                             child: myList.myListCard(
                               todoTitle: project['name'],

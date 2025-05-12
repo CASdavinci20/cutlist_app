@@ -1,3 +1,4 @@
+import 'package:app_framework/utils/sharedStore.dart';
 import 'package:cutlist/cutlist/containers/cuttypecard.dart';
 import 'package:cutlist/cutlist/createcutlistpage.dart';
 import 'package:cutlist/main_utils/models/PublicVar.dart';
@@ -8,6 +9,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../cutlistsummary/cutlistsummarypage.dart';
 import '../main_utils/bloc/app_bloc.dart';
@@ -34,6 +36,88 @@ class CutListPageState extends State<CutListPage> {
   final CutTypeCard cutTypeCard = CutTypeCard();
   late AppBloc appBloc;
   late bool isloading = false;
+
+  GlobalKey  listData = GlobalKey();
+  GlobalKey  keyList = GlobalKey();
+
+  List <TargetFocus> myTarget = [];
+
+  TutorialCoachMark? tutorialCoachMark;
+
+
+   void initState(){
+      super.initState();
+      allTargets();
+      WidgetsBinding.instance.addPostFrameCallback(startTime);
+    }
+
+    startTime(_) async {
+  bool hasShownTutorial = SharedStore().getData( type: 'bool',key: 'hasShownTutorial') ?? false;
+  if (!hasShownTutorial) {
+    await Future.delayed(Duration(seconds: 1));
+    tutorialCoachMark = TutorialCoachMark(targets: myTarget)..show(context: context);
+    await SharedStore().setData(type: true,key: 'hasShownTutorial');
+  }
+}
+
+
+ allTargets(){
+    myTarget.add(
+      TargetFocus(
+        keyTarget: listData,
+        
+        identify: 'myTask',
+        contents: [
+          TargetContent(
+            builder: (context, controller){
+               return  Column(
+              children: [
+                  Text(
+              '${Icon(Icons.arrow_left)}Tap here to view cutlist data',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+              ],
+            );
+
+            }
+         
+           
+          )
+        ]
+      )
+    );
+
+      myTarget.add(
+      TargetFocus(
+        keyTarget: keyList,
+        
+        identify: 'myList',
+        contents: [
+          TargetContent(
+            builder: (context, controller){
+               return  Column(
+              children: [
+                  Text(
+              '${Icon(Icons.arrow_left)}Tap here to create a cutlist',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+              ],
+            );
+
+            }
+         
+           
+          )
+        ]
+      )
+    );
+  }
+
+
 
   loadAllTask() async {
     appBloc.hasTasks = false;
@@ -104,6 +188,7 @@ class CutListPageState extends State<CutListPage> {
                         child: Text('No list created'),
                       )
                     : ListView.builder(
+                     
                         physics: ScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: appBloc.cutlistData.length,
@@ -113,6 +198,7 @@ class CutListPageState extends State<CutListPage> {
                           var cutData = appBloc.cutlistData[i];
                           var cutList = cutData['cutlist'];
                           return Padding(
+                             key: listData,
                               padding: EdgeInsets.symmetric(vertical: 10),
                               child: myList.myListCard(
                                   todoTitle: cutData['name'],
@@ -126,6 +212,7 @@ class CutListPageState extends State<CutListPage> {
         ),
       ),
       floatingActionButton:appBloc.cutCategories.length>0? FloatingActionButton(
+        key: keyList,
           onPressed: () {
             openCategories();
             context;

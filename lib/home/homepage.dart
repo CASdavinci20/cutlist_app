@@ -1,3 +1,4 @@
+import 'package:app_framework/utils/sharedStore.dart';
 import 'package:cutlist/home/containers/addingtask.dart';
 import 'package:cutlist/home/containers/projects.dart';
 import 'package:cutlist/home/containers/todolist.dart';
@@ -41,22 +42,35 @@ class HomePageState extends State<HomePage> {
       WidgetsBinding.instance.addPostFrameCallback(startTime);
     }
 
+//     startTime(_) async {
+ 
+//   bool hasShownTutorial = SharedStore().getData( type: 'bool',key: 'hasShownTutorial') ?? false;
 
-    // startTime(_)async{
-    //  await Future.delayed(Duration(seconds: 1));
-    //  tutorialCoachMark = TutorialCoachMark(targets: myTarget)..show(context: context);
-    // }
+//   if (!hasShownTutorial) {
+//     await Future.delayed(Duration(seconds: 1));
+//     tutorialCoachMark = TutorialCoachMark(targets: myTarget)..show(context: context);
+//     await SharedStore().setData(type: true,key: 'hasShownTutorial');
+//     print(tutorialCoachMark);
+//   }
+// }
 
-    startTime(_) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool hasShownTutorial = prefs.getBool('hasShownTutorial') ?? false;
+startTime(_) async {
+  await Future.delayed(Duration(seconds: 2)); 
+  bool hasShownTutorial = SharedStore().getData(type: 'bool', key: 'hasShownTutorial') ?? false;
+
+  print('Tutorial shown before? $hasShownTutorial');
 
   if (!hasShownTutorial) {
-    await Future.delayed(Duration(seconds: 1));
-    tutorialCoachMark = TutorialCoachMark(targets: myTarget)..show(context: context);
-    await prefs.setBool('hasShownTutorial', true);
+
+
+    tutorialCoachMark?.show(context: context);
+    await SharedStore().setData(type: true, key: 'hasShownTutorial');
   }
 }
+
+
+
+
 
 
 

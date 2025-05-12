@@ -241,12 +241,14 @@
 // import 'package:cutlist/createcutlist/containers/createcutlistinput.dart';
 // import 'package:cutlist/createcutlist/containers/cuttypecard.dart';
 // import 'package:cutlist/createcutlist/containers/explanation.dart';
+import 'package:app_framework/utils/sharedStore.dart';
 import 'package:cutlist/cutlist/containers/createcutlistinput.dart';
 import 'package:cutlist/cutlist/containers/cuttypecard.dart';
 import 'package:cutlist/cutlist/containers/explanation.dart' show Explanation;
 import 'package:cutlist/main_utils/widgets/global_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../main_utils/bloc/app_bloc.dart';
 import '../main_utils/bloc/server.dart';
@@ -280,6 +282,207 @@ class CreateCutListPageState extends State<CreateCutListPage> {
   final TextEditingController _height = TextEditingController();
   final TextEditingController _width = TextEditingController();
   final TextEditingController _depth = TextEditingController();
+
+
+  
+  GlobalKey  cutType = GlobalKey();
+  GlobalKey  typeName = GlobalKey();
+   GlobalKey  heightInput = GlobalKey();
+   GlobalKey  widthInput = GlobalKey();
+   GlobalKey  thicknessInput = GlobalKey();
+   GlobalKey  createListButton = GlobalKey();
+
+
+  List <TargetFocus> myTarget = [];
+
+  TutorialCoachMark? tutorialCoachMark;
+
+
+   void initState(){
+      super.initState();
+      allTargets();
+      WidgetsBinding.instance.addPostFrameCallback(startTime);
+    }
+
+    startTime(_) async {
+  bool hasShownTutorial = SharedStore().getData( type: 'bool',key: 'hasShownTutorial') ?? false;
+  if (!hasShownTutorial) {
+    await Future.delayed(Duration(seconds: 1));
+    tutorialCoachMark = TutorialCoachMark(targets: myTarget)..show(context: context);
+    await SharedStore().setData(type: true,key: 'hasShownTutorial');
+    print(tutorialCoachMark);
+  }
+}
+
+
+ allTargets(){
+    myTarget.add(
+      TargetFocus(
+        keyTarget: cutType,
+        
+        identify: 'cutType',
+        contents: [
+          TargetContent(
+            builder: (context, controller){
+               return  Column(
+              children: [
+                  Text(
+              '${Icon(Icons.arrow_left)}Tap here to select what you want to cut',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+              ],
+            );
+
+            }
+         
+           
+          )
+        ]
+      )
+    );
+
+      myTarget.add(
+      TargetFocus(
+        keyTarget: typeName,
+        
+        identify: 'typeName',
+        contents: [
+          TargetContent(
+            builder: (context, controller){
+               return  Column(
+              children: [
+                  Text(
+              '${Icon(Icons.arrow_left)}Tap here to input the name ',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+              ],
+            );
+
+            }
+         
+           
+          )
+        ]
+      )
+    );
+
+     myTarget.add(
+      TargetFocus(
+        keyTarget: heightInput,
+        
+        identify: 'heightInput',
+        contents: [
+          TargetContent(
+            builder: (context, controller){
+               return  Column(
+              children: [
+                  Text(
+              '${Icon(Icons.arrow_left)}Tap here to input the height of the door by cm',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+              ],
+            );
+
+            }
+         
+           
+          )
+        ]
+      )
+    );
+
+
+     myTarget.add(
+      TargetFocus(
+        keyTarget: widthInput,
+        
+        identify: 'widthInput',
+        contents: [
+          TargetContent(
+            builder: (context, controller){
+               return  Column(
+              children: [
+                  Text(
+              '${Icon(Icons.arrow_left)}Tap here to input the width of the door cm cm',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+              ],
+            );
+
+            }
+         
+           
+          )
+        ]
+      )
+    );
+
+     myTarget.add(
+      TargetFocus(
+        keyTarget: thicknessInput,
+        
+        identify: 'thicknessInput',
+        contents: [
+          TargetContent(
+            builder: (context, controller){
+               return  Column(
+              children: [
+                  Text(
+              '${Icon(Icons.arrow_left)}Tap here to input the thickness of the wall by cm',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+              ],
+            );
+
+            }
+         
+           
+          )
+        ]
+      )
+    );
+
+      myTarget.add(
+      TargetFocus(
+        keyTarget: createListButton,
+        
+        identify: 'createList',
+        contents: [
+          TargetContent(
+            builder: (context, controller){
+               return  Column(
+              children: [
+                  Text(
+              '${Icon(Icons.arrow_left)}Tap here to input the thickness of the wall by cm',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+              ],
+            );
+
+            }
+         
+           
+          )
+        ]
+      )
+    );
+
+
+  }
+
+
 
   loadAllCategories() async {
     await Server().getAction(appBloc: appBloc, url: Urls.cutCategories);
@@ -412,6 +615,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                                                 appBloc.cutCategories.length,
                                             itemBuilder: (ctx, i) {
                                               return Padding(
+                                                key: cutType,
                                                 padding: const EdgeInsets.only(
                                                     right: 10.0),
                                                 child: cutTypeCard.cutTypeCard(
@@ -442,6 +646,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                             children: [
                             //  Row(children: [
                                cutListInput.createCutListCard(
+                                key: typeName,
                                 tag: 'Door name',
                                 explaination: '',
                                  title: 'Door Name',
@@ -486,6 +691,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     cutListInput.createCutListCard(
+                                      key: heightInput,
                                       tag: 'Height of Door',
                                       explaination: 'Measure the height of the doorway on the Left and Right. Input the higher figure.',
                                         title: 'Height(cm)', cutData: _height),
@@ -493,6 +699,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                                     //   width: 10,
                                     // ),
                                     cutListInput.createCutListCard(
+                                      key: widthInput,
                                       tag: 'Width of door',
                                       explaination: 'Measure the width of the doorway at the Top, Middle and Bottom. Input the highest figure.',
                                         title: 'Width(cm)', cutData: _width),
@@ -500,6 +707,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                                     //   width: 10,
                                     // ),
                                     cutListInput.createCutListCard(
+                                      key: thicknessInput,
                                       tag: 'Wall thickness',
                                       explaination: 'Measure the wall thickness of the doorway at the Top, Middle and Bottom on both sides of the doorway (Left and Right) and input the highest figure',
                                       title: 'Wall Thickness(cm)',
@@ -525,6 +733,7 @@ class CreateCutListPageState extends State<CreateCutListPage> {
                             padding: EdgeInsets.symmetric(
                                 vertical: 20.0, horizontal: 10.0),
                             child: ButtonWidget(
+                              key: createListButton,
                               onPress: () {
                                 if (!loading) {
                                   validateCutForm();

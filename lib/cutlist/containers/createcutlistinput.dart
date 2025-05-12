@@ -13,6 +13,7 @@ class CreateCutListInput {
     required String tag,
     required String explaination,
     required TextEditingController cutData,
+    Key? key,
      keyboardType
 
   }){

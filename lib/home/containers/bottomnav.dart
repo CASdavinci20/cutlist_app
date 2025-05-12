@@ -1,4 +1,5 @@
- import 'package:cutlist/cutlist/cutlistpage.dart';
+ import 'package:app_framework/utils/sharedStore.dart';
+import 'package:cutlist/cutlist/cutlistpage.dart';
 import 'package:cutlist/cutlist/mylistpage.dart';
 import 'package:cutlist/home/containers/addingtask.dart';
 import 'package:flutter/material.dart';
@@ -51,14 +52,26 @@ class _BottomNavState extends State<BottomNav> {
 //   tutorialCoachMark = TutorialCoachMark(targets: myTarget)..show(context: context);
 // }
 
-startTime(_) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool hasShownTutorial = prefs.getBool('hasShownTutorial') ?? false;
+// startTime(_) async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   bool hasShownTutorial = prefs.getBool('hasShownTutorial') ?? false;
+
+//   if (!hasShownTutorial) {
+//     await Future.delayed(Duration(seconds: 1));
+//     tutorialCoachMark = TutorialCoachMark(targets: myTarget)..show(context: context);
+//     await prefs.setBool('hasShownTutorial', true);
+//   }
+// }
+
+    startTime(_) async {
+ 
+  bool hasShownTutorial = SharedStore().getData( type: 'bool',key: 'hasShownTutorial') ?? false;
 
   if (!hasShownTutorial) {
     await Future.delayed(Duration(seconds: 1));
     tutorialCoachMark = TutorialCoachMark(targets: myTarget)..show(context: context);
-    await prefs.setBool('hasShownTutorial', true);
+    await SharedStore().setData(type: true,key: 'hasShownTutorial');
+    print(tutorialCoachMark);
   }
 }
 
